@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=1920, initial-scale=1" name="viewport"/>
-<title>노른자국어 관리자센터 v5.44 - 재방문 추이 그래프 개선</title>
+<title>노른자국어 관리자센터 v5.45 - 운영 기능 보강</title>
 <!-- 통합 최종안 v2: 국어팀 관리자 구조 + 확정 결제/학습 정책 + 전문 학습결과 모달 반영 /  결제실패 3회/유예없음/24시 학습제한, 연환불 취소일 일할, 이용권 보유 학생 삭제불가, 홀딩 익일부터 00시 적용, 환불·상태 보호자만 변경, 이관 미지원 -->
 <style>
 :root{
@@ -5777,6 +5777,19 @@ table td,
 #acquisition-cohort .d1-dot{background:#7d88ff}
 #acquisition-cohort .d7-dot{background:#8db8a3}
 #acquisition-cohort .d30-dot{background:#d0a874}
+
+/* v5.45 missing admin functions */
+.btn.danger-soft{background:#fff3f4;border-color:#ffd7db;color:#a8444d}
+.btn.danger-soft:hover{background:#ffe9eb;border-color:#ffc9ce}
+.terms-guide{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin-bottom:18px;border:1px solid #eee3b8;border-radius:12px;background:#fffaf0;font-size:14px;line-height:1.55;color:#6f612c}
+.terms-guide strong{white-space:nowrap;color:#5e501d}
+.terms-table td:first-child{min-width:250px}
+.terms-table td:last-child{min-width:150px}
+#terms-management .terms-kpis .value{font-size:26px}
+#learning-analysis .age-hbars .learning-hbar-row{grid-template-columns:86px minmax(0,1fr) 82px}
+.password-reset-summary{display:grid;grid-template-columns:110px 1fr;gap:10px 14px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfc;margin-bottom:14px;font-size:14px}
+.password-reset-summary .k{color:var(--muted);font-weight:700}
+.terms-editor textarea{min-height:220px!important;line-height:1.6}
 </style>
 </head>
 <body>
@@ -5828,7 +5841,7 @@ table td,
 <button class="nav-item" data-page="cs"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"></path><path d="M8 9h8M8 13h5"></path></svg></span>1:1 문의</button>
 <button class="nav-item" data-page="phone-cs"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11 11 0 0 0 3.4.54 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.5 21 3 13.5 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .54 3.4 1 1 0 0 1-.24 1z"></path></svg></span>전화 문의 이력</button>
 <div class="nav-group">운영 관리</div>
-<button class="nav-item" data-page="notices"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8"></path></svg></span>공지사항</button>
+<button class="nav-item" data-page="terms-management"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 11h6M9 15h6"></path></svg></span>약관 관리</button><button class="nav-item" data-page="notices"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8"></path></svg></span>공지사항</button>
 <button class="nav-item" data-page="resources"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h5M8 16h6"></path></svg></span>자료실</button>
 <button class="nav-item" data-page="service-popups"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 8h18"></path><path d="M7 6h.01M11 6h.01"></path></svg></span>팝업 관리</button>
 <button class="nav-item" data-page="main-banners"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M7 9h10"></path><path d="M7 13h6"></path><path d="M17 16l2-2-2-2"></path></svg></span>메인 배너 관리</button>
@@ -6215,9 +6228,9 @@ table td,
 <table>
 <thead><tr><th>보호자</th><th>연락처</th><th>연결 학생</th><th>이용중 학생</th><th>이용권/결제</th><th>배송지</th><th>최근 결제일</th><th>가입일</th><th>상태</th><th></th></tr></thead>
 <tbody>
-<tr><td>김민정</td><td>010-2345-6789</td><td>5명</td><td>4명</td><td>월 3 / 연 1</td><td>서울 구로구 경인로 00</td><td>2026.09.04</td><td>2026.03.12</td><td><span class="badge green">정상</span></td><td><button class="btn detail-btn" data-name="김민정" data-type="guardian">상세</button></td></tr>
-<tr><td>박지훈</td><td>010-8821-1204</td><td>2명</td><td>2명</td><td>연 2</td><td>인천 부평구 부평대로 00</td><td>2026.09.01</td><td>2026.02.09</td><td><span class="badge green">정상</span></td><td><button class="btn detail-btn" data-name="박지훈" data-type="guardian">상세</button></td></tr>
-<tr><td>이서연</td><td>010-4410-7712</td><td>1명</td><td>0명</td><td>-</td><td>미등록</td><td>-</td><td>2026.08.21</td><td><span class="badge gray">휴면</span></td><td><button class="btn detail-btn" data-name="이서연" data-type="guardian">상세</button></td></tr>
+<tr><td>김민정</td><td>010-2345-6789</td><td>5명</td><td>4명</td><td>월 3 / 연 1</td><td>서울 구로구 경인로 00</td><td>2026.09.04</td><td>2026.03.12</td><td><span class="badge green">정상</span></td><td><div class="row-actions"><button class="btn" data-account-name="김민정" data-account-type="보호자" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="김민정" data-type="guardian">상세</button></div></td></tr>
+<tr><td>박지훈</td><td>010-8821-1204</td><td>2명</td><td>2명</td><td>연 2</td><td>인천 부평구 부평대로 00</td><td>2026.09.01</td><td>2026.02.09</td><td><span class="badge green">정상</span></td><td><div class="row-actions"><button class="btn" data-account-name="박지훈" data-account-type="보호자" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="박지훈" data-type="guardian">상세</button></div></td></tr>
+<tr><td>이서연</td><td>010-4410-7712</td><td>1명</td><td>0명</td><td>-</td><td>미등록</td><td>-</td><td>2026.08.21</td><td><span class="badge gray">휴면</span></td><td><div class="row-actions"><button class="btn" data-account-name="이서연" data-account-type="보호자" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="이서연" data-type="guardian">상세</button></div></td></tr>
 </tbody>
 </table>
 </div>
@@ -6256,9 +6269,9 @@ table td,
 </tr>
 </thead>
 <tbody>
-<tr><td>김하늘</td><td>010-3456-7890</td><td>김민정</td><td>3급</td><td>2단락 8매듭</td><td><strong>68%</strong></td><td>AB12C3</td><td><span class="badge green">정상</span></td><td>오늘 08:41</td><td><button class="btn detail-btn" data-name="김하늘" data-type="student">상세</button></td></tr>
-<tr><td>김별</td><td>010-7834-2281</td><td>김민정</td><td>5급</td><td>1단락 4매듭</td><td><strong>32%</strong></td><td>DF44K8</td><td><span class="badge yellow">홀딩</span></td><td>2026.09.02</td><td><button class="btn detail-btn" data-name="김별" data-type="student">상세</button></td></tr>
-<tr><td>이로운</td><td>010-9901-4412</td><td>이서연</td><td>-</td><td>미시작</td><td><strong>0%</strong></td><td>QW88P1</td><td><span class="badge gray">휴면</span></td><td>-</td><td><button class="btn detail-btn" data-name="이로운" data-type="student">상세</button></td></tr>
+<tr><td>김하늘</td><td>010-3456-7890</td><td>김민정</td><td>3급</td><td>2단락 8매듭</td><td><strong>68%</strong></td><td>AB12C3</td><td><span class="badge green">정상</span></td><td>오늘 08:41</td><td><div class="row-actions"><button class="btn" data-account-name="김하늘" data-account-type="학생" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="김하늘" data-type="student">상세</button></div></td></tr>
+<tr><td>김별</td><td>010-7834-2281</td><td>김민정</td><td>5급</td><td>1단락 4매듭</td><td><strong>32%</strong></td><td>DF44K8</td><td><span class="badge yellow">홀딩</span></td><td>2026.09.02</td><td><div class="row-actions"><button class="btn" data-account-name="김별" data-account-type="학생" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="김별" data-type="student">상세</button></div></td></tr>
+<tr><td>이로운</td><td>010-9901-4412</td><td>이서연</td><td>-</td><td>미시작</td><td><strong>0%</strong></td><td>QW88P1</td><td><span class="badge gray">휴면</span></td><td>-</td><td><div class="row-actions"><button class="btn" data-account-name="이로운" data-account-type="학생" data-modal="비밀번호 재설정">비밀번호 재설정</button><button class="btn detail-btn" data-name="이로운" data-type="student">상세</button></div></td></tr>
 </tbody>
 </table>
 </div>
@@ -7012,17 +7025,14 @@ table td,
 </div>
 </div>
 <div class="panel">
-<div class="panel-title">연령대별 학습 현황</div>
-<div class="panel-sub">등록한 생년월일 기준</div>
-<table style="margin-top:16px">
-<thead><tr><th>연령대</th><th>학습자</th><th>평균 급수</th><th>완료율</th></tr></thead>
-<tbody>
-<tr><td>7~8세</td><td>4,280명</td><td>2.1급</td><td>76%</td></tr>
-<tr><td>9~10세</td><td>7,140명</td><td>3.4급</td><td>74%</td></tr>
-<tr><td>11~12세</td><td>5,680명</td><td>4.7급</td><td>71%</td></tr>
-<tr><td>13세 이상</td><td>1,220명</td><td>3.8급</td><td>69%</td></tr>
-</tbody>
-</table>
+<div class="panel-title">나이대별 학습자 수</div>
+<div class="panel-sub">등록한 생년월일 기준 · 현재 학습 중인 학생 · 단위: 명</div>
+<div class="learning-hbars age-hbars">
+<div class="learning-hbar-row"><span>7~8세</span><div><i style="width:60%"></i></div><strong>4,280명</strong></div>
+<div class="learning-hbar-row"><span>9~10세</span><div><i style="width:100%"></i></div><strong>7,140명</strong></div>
+<div class="learning-hbar-row"><span>11~12세</span><div><i style="width:80%"></i></div><strong>5,680명</strong></div>
+<div class="learning-hbar-row"><span>13세 이상</span><div><i style="width:17%"></i></div><strong>1,220명</strong></div>
+</div>
 </div>
 </div>
 <div class="grid2">
@@ -7136,7 +7146,7 @@ table td,
 <td><strong>너구리 사탕 대소동</strong><span class="row-sub">기본 학습 · 필수 어휘 5 · 문제 3</span><span class="row-sub">어휘 특강 · 문장 5</span></td>
 <td>09.11 09:42<span class="row-sub">김콘텐츠</span></td>
 <td><span class="badge green">게시중</span></td>
-<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="b">수정</button><button class="btn" data-modal="기본 학습 미리보기">미리보기</button></div></td>
+<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="b">수정</button><button class="btn" data-modal="기본 학습 미리보기">미리보기</button><button class="btn danger-soft" data-content-title="너구리 사탕 대소동" data-modal="콘텐츠 삭제">삭제</button></div></td>
 </tr>
 <tr>
 <td><input type="checkbox"/></td>
@@ -7145,7 +7155,7 @@ table td,
 <td><strong>4급 문해력 진단</strong><span class="row-sub">메타인지 5 · 어휘 50 · 문장 5 · 문단 5 · 독해 5</span></td>
 <td>09.10 16:18<span class="row-sub">이국어</span></td>
 <td><span class="badge green">게시중</span></td>
-<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="lt">수정</button><button class="btn" data-modal="진단 테스트 미리보기">미리보기</button></div></td>
+<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="lt">수정</button><button class="btn" data-modal="진단 테스트 미리보기">미리보기</button><button class="btn danger-soft" data-content-title="4급 문해력 진단" data-modal="콘텐츠 삭제">삭제</button></div></td>
 </tr>
 <tr>
 <td><input type="checkbox"/></td>
@@ -7154,7 +7164,7 @@ table td,
 <td><strong>아리랑의 시작은?</strong><span class="row-sub">메타인지 5 · 어휘 100 · 독해 문항</span></td>
 <td>09.10 15:03<span class="row-sub">박국어</span></td>
 <td><span class="badge green">게시중</span></td>
-<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="assessment">수정</button><button class="btn" data-modal="단락 평가 미리보기">미리보기</button></div></td>
+<td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="assessment">수정</button><button class="btn" data-modal="단락 평가 미리보기">미리보기</button><button class="btn danger-soft" data-content-title="아리랑의 시작은?" data-modal="콘텐츠 삭제">삭제</button></div></td>
 </tr>
 </tbody>
 </table>
@@ -9111,6 +9121,48 @@ table td,
 <tr><td>09.07 13:02</td><td>박지훈</td><td>박도윤</td><td>010-8821-1204</td><td>학습</td><td class="call-summary">학습코드 재발급 및 앱 로그인 문의</td><td>최민서</td><td><span class="badge blue">처리중</span></td><td><button class="btn detail-btn" data-name="박지훈 전화문의" data-type="phoneCs">상세</button></td></tr>
 </tbody></table>
 </div>
+</section><section class="page" id="terms-management">
+<div class="page-head">
+<div>
+<h1 class="page-title">약관 관리</h1>
+<div class="page-desc">회원가입·학생 등록에 사용하는 약관과 동의 문서의 버전 및 적용 상태 관리</div>
+</div>
+<div class="filters">
+<button class="btn" data-modal="약관 이력">전체 변경 이력</button>
+<button class="btn primary" data-modal="약관 등록">약관 등록</button>
+</div>
+</div>
+<div class="kpis terms-kpis">
+<div class="kpi"><div class="label">운영 중 약관</div><div class="value">6개</div><div class="kpi-helper">현재 적용 버전</div></div>
+<div class="kpi"><div class="label">필수 동의</div><div class="value">4개</div><div class="kpi-helper">가입·학생 등록 필수</div></div>
+<div class="kpi"><div class="label">선택 동의</div><div class="value">2개</div><div class="kpi-helper">마케팅·추가 동의</div></div>
+<div class="kpi"><div class="label">최근 개정</div><div class="value">2026.09.01</div><div class="kpi-helper">서비스 이용약관 v1.3</div></div>
+</div>
+<div class="terms-guide">
+<strong>적용 기준</strong>
+<span>새 버전을 게시하면 적용일 이후 신규 동의부터 해당 버전으로 저장하며, 기존 동의 이력은 당시 버전을 그대로 보관합니다.</span>
+</div>
+<div class="table-wrap">
+<div class="table-tools">
+<div class="table-tools-left">
+<input class="table-search wide-search" placeholder="약관명 검색"/>
+<select class="filter"><option>전체 구분</option><option>필수</option><option>선택</option></select>
+<select class="filter"><option>전체 상태</option><option>적용중</option><option>적용예정</option><option>종료</option></select>
+</div>
+<div class="table-tools-right"><span class="learning-result-count">총 6개</span></div>
+</div>
+<table class="terms-table">
+<thead><tr><th>약관명</th><th>대상</th><th>구분</th><th>현재 버전</th><th>적용일</th><th>상태</th><th>최근 수정</th><th>관리</th></tr></thead>
+<tbody>
+<tr><td><strong>서비스 이용약관</strong></td><td>보호자</td><td><span class="badge red">필수</span></td><td>v1.3</td><td>2026.09.01</td><td><span class="badge green">적용중</span></td><td>09.01 · 김관리자</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="서비스 이용약관">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="서비스 이용약관">이력</button></div></td></tr>
+<tr><td><strong>보호자 개인정보 수집·이용 동의</strong></td><td>보호자</td><td><span class="badge red">필수</span></td><td>v1.2</td><td>2026.08.01</td><td><span class="badge green">적용중</span></td><td>08.01 · 김관리자</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="보호자 개인정보 수집·이용 동의">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="보호자 개인정보 수집·이용 동의">이력</button></div></td></tr>
+<tr><td><strong>법정대리인 확인</strong></td><td>보호자/학생</td><td><span class="badge red">필수</span></td><td>v1.2</td><td>2026.08.01</td><td><span class="badge green">적용중</span></td><td>08.01 · 김관리자</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="법정대리인 확인">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="법정대리인 확인">이력</button></div></td></tr>
+<tr><td><strong>학생 개인정보 수집·이용 동의</strong></td><td>학생</td><td><span class="badge red">필수</span></td><td>v1.2</td><td>2026.08.01</td><td><span class="badge green">적용중</span></td><td>08.01 · 김관리자</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="학생 개인정보 수집·이용 동의">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="학생 개인정보 수집·이용 동의">이력</button></div></td></tr>
+<tr><td><strong>마케팅 정보 수신 동의</strong></td><td>보호자</td><td><span class="badge gray">선택</span></td><td>v1.1</td><td>2026.07.01</td><td><span class="badge green">적용중</span></td><td>07.01 · 이운영</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="마케팅 정보 수신 동의">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="마케팅 정보 수신 동의">이력</button></div></td></tr>
+<tr><td><strong>개인정보 국외 이전 동의</strong></td><td>보호자/학생</td><td><span class="badge gray">선택</span></td><td>v1.0</td><td>2026.08.06</td><td><span class="badge green">적용중</span></td><td>08.06 · 김관리자</td><td><div class="row-actions"><button class="btn" data-modal="약관 수정" data-terms-name="개인정보 국외 이전 동의">수정</button><button class="btn" data-modal="약관 이력" data-terms-name="개인정보 국외 이전 동의">이력</button></div></td></tr>
+</tbody>
+</table>
+</div>
 </section><section class="page" id="notices">
 <div class="page-head">
 <div><h1 class="page-title">공지사항</h1><div class="page-desc">서비스 공지 등록·수정·노출기간·상단 고정 관리</div></div>
@@ -9771,6 +9823,7 @@ function detailTemplate(type,name){
       <div class="inline-field"><span class="label">이메일</span><span class="value">minjung@example.com</span></div>
       <div class="inline-field"><span class="label">가입일</span><span class="value">2026.03.12</span></div>
       <div class="inline-field"><span class="label">회원 상태</span><div class="toggle-wrap"><button class="toggle on"></button><span class="toggle-label">정상</span></div></div>
+      <div class="operation-actions"><button class="btn" data-modal="비밀번호 재설정" data-account-type="보호자" data-account-name="${name}">비밀번호 재설정</button></div>
     </div>
     <div class="operation-card"><h4>연결 학생</h4>
       <table class="info-table"><thead><tr><th>학생</th><th>학년</th><th>이용권</th><th>상태</th></tr></thead><tbody>
@@ -9831,7 +9884,7 @@ function detailTemplate(type,name){
     </div>
     <div class="operation-card"><h4>학습 이력</h4>
       <div class="history-list"><div class="history-row"><div class="history-time">오늘 08:41</div><div>3급 2단락 8매듭 완료</div><span class="badge green">완료</span></div><div class="history-row"><div class="history-time">어제 18:20</div><div>어휘특강 완료</div><span class="badge green">완료</span></div></div>
-      <div class="operation-actions"><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button><button class="btn" data-modal="알림톡 재발송">알림톡 재발송</button></div>
+      <div class="operation-actions"><button class="btn" data-modal="비밀번호 재설정" data-account-type="학생" data-account-name="${name}">비밀번호 재설정</button><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button><button class="btn" data-modal="알림톡 재발송">알림톡 재발송</button></div>
     </div>
     <div class="danger-note">유효 이용권 보유 중에는 학생 삭제 불가</div>
   
@@ -10670,6 +10723,7 @@ const modalBackdrop = document.getElementById('modalBackdrop');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
 let currentModalAction = '';
+let currentModalTrigger = null;
 
 function creationForm(title){
   const forms = {
@@ -10780,6 +10834,17 @@ function creationForm(title){
         <label>노출 상태</label><div class="toggle-wrap"><button class="toggle on" type="button"></button><span class="toggle-label">노출</span></div>
         <label>노출 순서</label><input type="number" min="1" value="1">
       </div>`,
+    '약관 등록': `
+      <div class="create-form terms-editor">
+        <div class="form-section">약관 기본 정보</div>
+        <label>약관명</label><input id="createName" placeholder="약관명 입력">
+        <label>대상</label><select><option>보호자</option><option>학생</option><option>보호자/학생</option></select>
+        <label>동의 구분</label><div class="segmented"><button class="active" type="button">필수</button><button type="button">선택</button></div>
+        <label>버전</label><input placeholder="예: v1.0">
+        <label>적용일</label><input type="date">
+        <label>약관 내용</label><textarea placeholder="약관 전문 입력"></textarea>
+        <div class="full form-help">새 버전 게시 후 기존 동의 이력의 문서 버전은 변경되지 않습니다.</div>
+      </div>`,
     '관리자 계정 추가': `
       <div class="create-form admin-create-form">
         <div class="form-section">기본 정보</div>
@@ -10810,6 +10875,7 @@ function creationForm(title){
 
 function openModal(title, trigger=null){
   currentModalAction = title;
+  currentModalTrigger = trigger;
   modalTitle.textContent = title;
   modalConfirm.style.display = '';
   modalCancel.style.display = '';
@@ -10824,6 +10890,60 @@ function openModal(title, trigger=null){
   const form = creationForm(title);
   if(form){
     modalBody.innerHTML = form;
+  } else if(title === '비밀번호 재설정'){
+    const accountType = trigger?.dataset?.accountType || '회원';
+    const accountName = trigger?.dataset?.accountName || '선택 회원';
+    modalConfirm.textContent = '재설정';
+    modalBody.innerHTML = `
+      <div class="password-reset-summary">
+        <div class="k">대상</div><div><strong>${accountName}</strong></div>
+        <div class="k">계정 구분</div><div>${accountType}</div>
+      </div>
+      <div class="note">비밀번호를 재설정합니다. 재설정 완료 후 기존 비밀번호로는 로그인할 수 없습니다.</div>`;
+  } else if(title === '학습 진도 변경 요청'){
+    modalConfirm.textContent = '변경';
+    document.querySelector('#modalBackdrop .modal').classList.add('form-modal');
+    modalBody.innerHTML = `
+      <div class="create-form">
+        <div class="form-section">학습 진도 변경</div>
+        <label>학생</label><input id="createName" value="김하늘" placeholder="학생명 검색">
+        <label>현재 진도</label><input value="3급 · 2단락 · 8매듭" readonly>
+        <label>변경 급수</label><select><option>3급</option><option>1급</option><option>2급</option><option>4급</option><option>5급</option><option>6급</option></select>
+        <label>변경 단락</label><select><option>2단락</option><option>1단락</option><option>3단락</option><option>4단락</option><option>5단락</option><option>6단락</option><option>7단락</option><option>8단락</option><option>9단락</option><option>10단락</option></select>
+        <label>변경 매듭</label><select><option>8매듭</option><option>1매듭</option><option>2매듭</option><option>3매듭</option><option>4매듭</option><option>5매듭</option><option>10매듭</option><option>20매듭</option></select>
+        <label>변경 사유</label><textarea placeholder="변경 사유 입력"></textarea>
+        <div class="full form-help">변경 전·후 진도, 처리자, 처리 일시는 운영자 처리 이력에 기록됩니다.</div>
+      </div>`;
+  } else if(title === '콘텐츠 삭제'){
+    const contentTitle = trigger?.dataset?.contentTitle || '선택 콘텐츠';
+    modalConfirm.textContent = '삭제';
+    modalBody.innerHTML = `<div class="danger-note"><strong>${contentTitle}</strong><br>콘텐츠를 삭제하시겠습니까? 삭제 처리 내용은 콘텐츠 변경 이력에 기록됩니다.</div>`;
+  } else if(title === '약관 수정'){
+    const termsName = trigger?.dataset?.termsName || '서비스 이용약관';
+    modalConfirm.textContent = '저장';
+    document.querySelector('#modalBackdrop .modal').classList.add('form-modal');
+    modalBody.innerHTML = `
+      <div class="create-form terms-editor">
+        <div class="form-section">약관 수정</div>
+        <label>약관명</label><input value="${termsName}" readonly>
+        <label>현재 버전</label><input value="v1.3" readonly>
+        <label>새 버전</label><input placeholder="예: v1.4">
+        <label>적용일</label><input type="date" value="2026-10-01">
+        <label>동의 구분</label><div class="segmented"><button class="active" type="button">필수</button><button type="button">선택</button></div>
+        <label>약관 내용</label><textarea>약관 내용을 입력합니다.</textarea>
+        <div class="full form-help">기존 버전을 덮어쓰지 않고 새 버전으로 저장합니다.</div>
+      </div>`;
+  } else if(title === '약관 이력'){
+    const termsName = trigger?.dataset?.termsName || '전체 약관';
+    modalConfirm.style.display = 'none';
+    modalCancel.textContent = '닫기';
+    modalBody.innerHTML = `
+      <div class="panel-title" style="margin-bottom:12px">${termsName} 변경 이력</div>
+      <table class="info-table"><thead><tr><th>버전</th><th>적용일</th><th>변경 내용</th><th>처리자</th><th>상태</th></tr></thead><tbody>
+        <tr><td>v1.3</td><td>2026.09.01</td><td>개정 문구 반영</td><td>김관리자</td><td><span class="badge green">적용중</span></td></tr>
+        <tr><td>v1.2</td><td>2026.08.01</td><td>개인정보 관련 문구 개정</td><td>김관리자</td><td><span class="badge gray">종료</span></td></tr>
+        <tr><td>v1.1</td><td>2026.07.01</td><td>최초 개정</td><td>이운영</td><td><span class="badge gray">종료</span></td></tr>
+      </tbody></table>`;
   } else if(title === '결제 변경 이력'){
     modalConfirm.style.display = 'none';
     modalCancel.textContent = '닫기';
@@ -11048,6 +11168,10 @@ function addDemoRowForAction(action){
 
 modalConfirm.onclick=()=>{
   const action=currentModalAction;
+  if(action === '콘텐츠 삭제' && currentModalTrigger){
+    const row=currentModalTrigger.closest('tr');
+    if(row) row.remove();
+  }
   addDemoRowForAction(action);
 
   const completion = {
@@ -11064,7 +11188,12 @@ modalConfirm.onclick=()=>{
     '메인 배너 등록':'메인 배너가 등록되었습니다.',
     '관리자 계정 추가':'관리자 계정이 추가되었습니다.',
     '환불 대신 접수':'환불 접수가 완료되어 학생 학습이 제한되었습니다.',
-    '환불 처리':'환불 처리가 완료되었습니다.'
+    '환불 처리':'환불 처리가 완료되었습니다.',
+    '비밀번호 재설정':'비밀번호가 재설정되었습니다.',
+    '학습 진도 변경 요청':'학습 진도가 변경되었습니다.',
+    '콘텐츠 삭제':'콘텐츠가 삭제되었습니다.',
+    '약관 등록':'약관이 등록되었습니다.',
+    '약관 수정':'새 약관 버전이 저장되었습니다.'
   };
   closeModal();
   showToast(completion[action] || `${action} 처리가 완료되었습니다.`);
