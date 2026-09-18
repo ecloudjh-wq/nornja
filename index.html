@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=1920, initial-scale=1" name="viewport"/>
-<title>노른자국어 관리자센터 v5.45 - 운영 기능 보강</title>
+<title>노른자국어 관리자센터 v5.48 - 학습 이력과 학습 결과 역할 분리</title>
 <!-- 통합 최종안 v2: 국어팀 관리자 구조 + 확정 결제/학습 정책 + 전문 학습결과 모달 반영 /  결제실패 3회/유예없음/24시 학습제한, 연환불 취소일 일할, 이용권 보유 학생 삭제불가, 홀딩 익일부터 00시 적용, 환불·상태 보호자만 변경, 이관 미지원 -->
 <style>
 :root{
@@ -5790,6 +5790,93 @@ table td,
 .password-reset-summary{display:grid;grid-template-columns:110px 1fr;gap:10px 14px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfc;margin-bottom:14px;font-size:14px}
 .password-reset-summary .k{color:var(--muted);font-weight:700}
 .terms-editor textarea{min-height:220px!important;line-height:1.6}
+
+/* v5.46 학습 결과 탭 버튼 인지 강화 */
+#reports .learning-result-tabs{
+  display:flex;
+  gap:10px;
+  width:max-content;
+  margin-bottom:18px;
+  padding:0;
+  background:transparent;
+  border-radius:0;
+}
+
+#reports .learning-result-tabs button{
+  position:relative;
+  min-width:210px;
+  height:46px;
+  padding:0 20px;
+  border:1px solid #d9dee6;
+  border-radius:10px;
+  background:#fff;
+  color:#596273;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 2px 7px rgba(31,42,68,.05);
+  transition:.16s ease;
+}
+
+#reports .learning-result-tabs button:hover{
+  border-color:#aeb7c5;
+  background:#fafbfc;
+  color:#263246;
+  transform:translateY(-1px);
+  box-shadow:0 5px 12px rgba(31,42,68,.08);
+}
+
+#reports .learning-result-tabs button.active{
+  border-color:var(--navy);
+  background:var(--navy);
+  color:#fff;
+  box-shadow:0 5px 14px rgba(31,42,68,.18);
+}
+
+#reports .learning-result-tabs button::after{
+  content:"›";
+  display:inline-block;
+  margin-left:10px;
+  font-size:18px;
+  line-height:1;
+  opacity:.55;
+  transform:translateY(1px);
+}
+
+#reports .learning-result-tabs button.active::after{
+  opacity:.9;
+}
+
+
+/* v5.48 학습 이력 상세 / 학습 결과 역할 분리 */
+.history-detail-hero{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:18px;
+  margin-bottom:14px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fff
+}
+.history-detail-title{margin-top:8px;font-size:18px;font-weight:800}
+.history-detail-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;
+  margin-bottom:14px;padding:5px 18px;border:1px solid var(--line);border-radius:14px;background:#fff
+}
+.history-detail-grid>div{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  min-height:52px;border-bottom:1px solid #eef0f3
+}
+.history-detail-grid>div:nth-last-child(-n+2){border-bottom:0}
+.history-detail-grid span{font-size:14px;color:var(--muted)}
+.history-detail-grid strong{font-size:15px;text-align:right}
+.history-detail-note{
+  padding:13px 15px;border-radius:11px;background:#f7f8fa;border:1px solid #eceff3;
+  font-size:14px;line-height:1.55;color:#687181
+}
+.history-result-link{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:15px 16px;border:1px solid #dfe4ec;border-radius:12px;background:#f9fafb
+}
+.history-result-link strong{display:block;font-size:15px}
+.history-result-link span{display:block;margin-top:5px;font-size:13px;color:var(--muted)}
+.history-result-link .btn{flex:0 0 auto}
+
 </style>
 </head>
 <body>
@@ -6780,7 +6867,7 @@ table td,
 <td>3급 · 2단락 · 8매듭</td>
 <td><strong>최초 67% → 최종 100%</strong><span class="row-sub">다시 풀기 1회</span></td>
 <td><span class="badge green">완료</span></td>
-<td><button class="btn detail-btn" data-name="김하늘" data-type="basic">상세</button></td>
+<td><button class="btn detail-btn" data-name="김하늘" data-type="historyBasic">상세</button></td>
 </tr>
 <tr data-history-type="vocab">
 <td>09.11 10:18</td>
@@ -6789,7 +6876,7 @@ table td,
 <td>3급 · 2단락 · 8매듭</td>
 <td><strong>5개 어휘 완료</strong><span class="row-sub">최종 5/5 정답</span></td>
 <td><span class="badge green">완료</span></td>
-<td><button class="btn detail-btn" data-name="김하늘" data-type="vocab">상세</button></td>
+<td><button class="btn detail-btn" data-name="김하늘" data-type="historyVocab">상세</button></td>
 </tr>
 <tr data-history-type="diagnostic">
 <td>09.11 09:40</td>
@@ -6798,7 +6885,7 @@ table td,
 <td>진단 테스트</td>
 <td><strong>82 / 100점</strong><span class="row-sub">추천 급수 3급</span></td>
 <td><span class="badge green">완료</span></td>
-<td><button class="btn detail-btn" data-name="이로운" data-type="diagnostic">상세</button></td>
+<td><button class="btn detail-btn" data-name="이로운" data-type="historyDiagnostic">상세</button></td>
 </tr>
 <tr data-history-type="paragraph">
 <td>09.10 18:22</td>
@@ -6807,7 +6894,7 @@ table td,
 <td>5급 · 1단락</td>
 <td><strong>86 / 100점</strong><span class="row-sub">어휘 36/40 · 독해 50/60</span></td>
 <td><span class="badge green">완료</span></td>
-<td><button class="btn detail-btn" data-name="박도윤" data-type="paragraph">상세</button></td>
+<td><button class="btn detail-btn" data-name="박도윤" data-type="historyParagraph">상세</button></td>
 </tr>
 <tr data-history-type="basic">
 <td>09.10 16:05</td>
@@ -6816,7 +6903,7 @@ table td,
 <td>4급 · 1단락 · 3매듭</td>
 <td><strong>지문 읽기에서 종료</strong><span class="row-sub">30분 내 이어하기 가능</span></td>
 <td><span class="badge yellow">학습 중 종료</span></td>
-<td><button class="btn detail-btn" data-name="최서윤" data-type="basic">상세</button></td>
+<td><button class="btn detail-btn" data-name="최서윤" data-type="historyBasic">상세</button></td>
 </tr>
 <tr data-history-type="paragraph">
 <td>09.09 15:30</td>
@@ -6825,13 +6912,13 @@ table td,
 <td>3급 · 1단락</td>
 <td><strong>35분 제한시간 초과</strong><span class="row-sub">미응답 문항 포함 결과 산출</span></td>
 <td><span class="badge red">제한시간 초과</span></td>
-<td><button class="btn detail-btn" data-name="정하린" data-type="paragraph">상세</button></td>
+<td><button class="btn detail-btn" data-name="정하린" data-type="historyParagraph">상세</button></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="learning-page-footnote">
-    유형별 상세에서는 최초·최종 결과, 다시 풀기, 학습 중 종료·제한시간 초과, 메타인지 및 콘텐츠 코드/버전을 확인
+    상세에서는 학습 일시, 진행 상태, 소요시간과 처리 이력을 확인합니다. 진단·단락 분석 결과는 학습 결과에서 확인합니다.
   </div>
 </section>
 <section class="page" id="reports">
@@ -6892,7 +6979,7 @@ table td,
 <td>16 / 20</td>
 <td>15 / 20</td>
 <td>25 / 30</td>
-<td>4.2 / 5</td>
+<td>21 / 25</td>
 <td><span class="badge blue">3급</span></td>
 <td><button class="btn detail-btn" data-name="이로운" data-type="diagnostic">결과지 보기</button></td>
 </tr>
@@ -6905,7 +6992,7 @@ table td,
 <td>15 / 20</td>
 <td>14 / 20</td>
 <td>24 / 30</td>
-<td>3.8 / 5</td>
+<td>19 / 25</td>
 <td><span class="badge blue">3급</span></td>
 <td><button class="btn detail-btn" data-name="김하늘" data-type="diagnostic">결과지 보기</button></td>
 </tr>
@@ -6918,7 +7005,7 @@ table td,
 <td>18 / 20</td>
 <td>17 / 20</td>
 <td>25 / 30</td>
-<td>4.4 / 5</td>
+<td>22 / 25</td>
 <td><span class="badge blue">4급</span></td>
 <td><button class="btn detail-btn" data-name="최서윤" data-type="diagnostic">결과지 보기</button></td>
 </tr>
@@ -6973,7 +7060,7 @@ table td,
 <td>78% → 92%</td>
 <td>6회</td>
 <td><strong>86 / 100점</strong><span class="row-sub">어휘 36/40 · 독해 50/60</span></td>
-<td>4.0 / 5<span class="row-sub">평가점수와 별도</span></td>
+<td>20 / 25<span class="row-sub">평가점수와 별도</span></td>
 <td><button class="btn detail-btn" data-name="박도윤" data-type="report">분석지 보기</button></td>
 </tr>
 <tr>
@@ -6985,7 +7072,7 @@ table td,
 <td>81% → 94%</td>
 <td>4회</td>
 <td><strong>90 / 100점</strong><span class="row-sub">어휘 38/40 · 독해 52/60</span></td>
-<td>4.4 / 5<span class="row-sub">평가점수와 별도</span></td>
+<td>22 / 25<span class="row-sub">평가점수와 별도</span></td>
 <td><button class="btn detail-btn" data-name="한서진" data-type="report">분석지 보기</button></td>
 </tr>
 </tbody>
@@ -9789,6 +9876,17 @@ function goPage(id){
 navItems.forEach(n=>n.addEventListener('click',()=>goPage(n.dataset.page)));
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.go)));
 
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.history-result-go');
+  if(!btn) return;
+  const target = btn.dataset.resultTarget || 'diagnostic';
+  if(detailModalBackdrop) detailModalBackdrop.classList.remove('open');
+  goPage('reports');
+  const tab = document.querySelector(`#learningResultTabs [data-result-tab="${target}"]`);
+  if(tab) tab.click();
+});
+
+
 const detailModalBackdrop = document.getElementById('detailModalBackdrop');
 const detailModal = document.getElementById('detailModal');
 const detailModalTitle = document.getElementById('detailModalTitle');
@@ -9806,6 +9904,97 @@ function detailTemplate(type,name){
       </div>
     </div>`;
   const maps = {
+
+    historyBasic: `
+      <div class="history-detail-hero">
+        <div>
+          <span class="learning-type-chip basic">기본 학습</span>
+          <div class="history-detail-title">${name} · 3급 2단락 8매듭</div>
+          <div class="panel-sub">해당 학습 회차의 진행 기록을 확인합니다.</div>
+        </div>
+        <span class="badge green">완료</span>
+      </div>
+      <div class="history-detail-grid">
+        <div><span>학습 시작</span><strong>2026.09.11 10:18</strong></div>
+        <div><span>학습 완료</span><strong>2026.09.11 10:42</strong></div>
+        <div><span>소요시간</span><strong>24분</strong></div>
+        <div><span>학습 상태</span><strong>완료</strong></div>
+        <div><span>처음 정답률</span><strong>67%</strong></div>
+        <div><span>최종 정답률</span><strong>100%</strong></div>
+        <div><span>다시 풀기</span><strong>1회</strong></div>
+        <div><span>학습 중 종료</span><strong>없음</strong></div>
+      </div>
+      <div class="history-detail-note">학습 이력에서는 해당 회차의 실행 상태와 처리 기록까지만 확인합니다.</div>
+    `,
+    historyVocab: `
+      <div class="history-detail-hero">
+        <div>
+          <span class="learning-type-chip vocab">어휘 특강</span>
+          <div class="history-detail-title">${name} · 3급 2단락 8매듭</div>
+          <div class="panel-sub">해당 어휘 특강 회차의 진행 기록을 확인합니다.</div>
+        </div>
+        <span class="badge green">완료</span>
+      </div>
+      <div class="history-detail-grid">
+        <div><span>학습 시작</span><strong>2026.09.11 10:04</strong></div>
+        <div><span>학습 완료</span><strong>2026.09.11 10:18</strong></div>
+        <div><span>소요시간</span><strong>14분</strong></div>
+        <div><span>학습 상태</span><strong>완료</strong></div>
+        <div><span>대상 어휘</span><strong>5개</strong></div>
+        <div><span>완료 어휘</span><strong>5개</strong></div>
+        <div><span>최종 결과</span><strong>5 / 5</strong></div>
+        <div><span>중도 종료</span><strong>없음</strong></div>
+      </div>
+      <div class="history-detail-note">어휘 특강은 기본 학습에 포함된 선택 학습이며 다음 매듭 오픈 조건에는 포함되지 않습니다.</div>
+    `,
+    historyDiagnostic: `
+      <div class="history-detail-hero">
+        <div>
+          <span class="learning-type-chip diagnostic">문해력 진단</span>
+          <div class="history-detail-title">${name} · 문해력 진단 응시 이력</div>
+          <div class="panel-sub">응시 시간과 완료 상태를 확인합니다.</div>
+        </div>
+        <span class="badge green">완료</span>
+      </div>
+      <div class="history-detail-grid">
+        <div><span>응시 시작</span><strong>2026.09.11 09:11</strong></div>
+        <div><span>응시 완료</span><strong>2026.09.11 09:40</strong></div>
+        <div><span>소요시간</span><strong>29분</strong></div>
+        <div><span>응시 상태</span><strong>완료</strong></div>
+        <div><span>결과 요약</span><strong>82 / 100점</strong></div>
+        <div><span>배정 급수</span><strong>3급</strong></div>
+        <div><span>제한시간 초과</span><strong>없음</strong></div>
+        <div><span>재응시</span><strong>없음</strong></div>
+      </div>
+      <div class="history-result-link">
+        <div><strong>점수 영역별 분석은 학습 결과에서 확인</strong><span>어휘 · 문장 이해 · 문단 이해 · 독해 · 메타인지</span></div>
+        <button class="btn primary history-result-go" data-result-target="diagnostic" type="button">학습 결과에서 보기</button>
+      </div>
+    `,
+    historyParagraph: `
+      <div class="history-detail-hero">
+        <div>
+          <span class="learning-type-chip paragraph">단락 평가</span>
+          <div class="history-detail-title">${name} · 5급 1단락 평가 이력</div>
+          <div class="panel-sub">응시 시간과 완료 상태를 확인합니다.</div>
+        </div>
+        <span class="badge green">완료</span>
+      </div>
+      <div class="history-detail-grid">
+        <div><span>응시 시작</span><strong>2026.09.10 17:50</strong></div>
+        <div><span>응시 완료</span><strong>2026.09.10 18:22</strong></div>
+        <div><span>소요시간</span><strong>32분</strong></div>
+        <div><span>응시 상태</span><strong>완료</strong></div>
+        <div><span>결과 요약</span><strong>86 / 100점</strong></div>
+        <div><span>제한시간 초과</span><strong>없음</strong></div>
+        <div><span>미응답 문항</span><strong>없음</strong></div>
+        <div><span>결과 산출</span><strong>완료</strong></div>
+      </div>
+      <div class="history-result-link">
+        <div><strong>단락별 학습 분석은 학습 결과에서 확인</strong><span>기본 학습 정답률 · 다시 풀기 · 단락 평가 · 메타인지</span></div>
+        <button class="btn primary history-result-go" data-result-target="paragraph" type="button">학습 결과에서 보기</button>
+      </div>
+    `,
     guardian: `
 <div class="account-shell">
   <aside class="account-side">
@@ -9961,7 +10150,7 @@ function detailTemplate(type,name){
         <div class="metric-card"><div class="metric-label">총점</div><div class="metric-value">82 / 100</div></div>
         <div class="metric-card"><div class="metric-label">추천 급수</div><div class="metric-value">3급</div></div>
         <div class="metric-card"><div class="metric-label">시작 급수</div><div class="metric-value">3급</div></div>
-        <div class="metric-card"><div class="metric-label">메타인지</div><div class="metric-value">4.2 / 5</div><div class="metric-caption">평가점수와 별도</div></div>
+        <div class="metric-card"><div class="metric-label">메타인지</div><div class="metric-value">21 / 25</div><div class="metric-caption">평가점수와 별도</div></div>
       </div>
 
       <div class="result-grid">
@@ -10154,7 +10343,7 @@ function detailTemplate(type,name){
         <div class="metric-card"><div class="metric-label">총점</div><div class="metric-value">86 / 100</div></div>
         <div class="metric-card"><div class="metric-label">어휘</div><div class="metric-value">36 / 40</div></div>
         <div class="metric-card"><div class="metric-label">독해</div><div class="metric-value">50 / 60</div></div>
-        <div class="metric-card"><div class="metric-label">메타인지</div><div class="metric-value">4.0 / 5</div><div class="metric-caption">총점과 별도</div></div>
+        <div class="metric-card"><div class="metric-label">메타인지</div><div class="metric-value">20 / 25</div><div class="metric-caption">총점과 별도</div></div>
       </div>
 
       <div class="result-grid">
@@ -10163,7 +10352,7 @@ function detailTemplate(type,name){
           <table class="result-table">
             <thead><tr><th>구성</th><th>문항</th><th>결과</th><th>점수 반영</th></tr></thead>
             <tbody>
-              <tr><td>메타인지</td><td>5문항</td><td>평균 4.0 / 5</td><td>별도</td></tr>
+              <tr><td>메타인지</td><td>5문항</td><td>평균 20 / 25</td><td>별도</td></tr>
               <tr><td>어휘</td><td>20문항</td><td>18 / 20</td><td>36 / 40</td></tr>
               <tr><td>독해</td><td>6문항</td><td>5 / 6</td><td>50 / 60</td></tr>
             </tbody>
@@ -10221,7 +10410,7 @@ function detailTemplate(type,name){
         </div>
         <div class="result-card">
           <h4>메타인지 <span class="result-head-note">평가점수와 별도</span></h4>
-          <div class="meta-score-large">4.0 <small>/ 5</small></div>
+          <div class="meta-score-large">20 <small>/ 25</small></div>
           <div class="panel-sub" style="margin-top:8px">5개 자기평가 문항의 응답 결과를 별도 지표로 표시</div>
         </div>
       </div>
