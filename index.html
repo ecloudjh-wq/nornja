@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=1920, initial-scale=1" name="viewport"/>
-<title>노른자국어 관리자센터 v5.48 - 학습 이력과 학습 결과 역할 분리</title>
+<title>노른자국어 관리자센터 v5.67 - 주문·결제 내역 명칭 변경</title>
 <!-- 통합 최종안 v2: 국어팀 관리자 구조 + 확정 결제/학습 정책 + 전문 학습결과 모달 반영 /  결제실패 3회/유예없음/24시 학습제한, 연환불 취소일 일할, 이용권 보유 학생 삭제불가, 홀딩 익일부터 00시 적용, 환불·상태 보호자만 변경, 이관 미지원 -->
 <style>
 :root{
@@ -5877,6 +5877,858 @@ table td,
 .history-result-link span{display:block;margin-top:5px;font-size:13px;color:var(--muted)}
 .history-result-link .btn{flex:0 0 auto}
 
+
+/* v5.49 계정 관리 / 학습 통계 / FAQ */
+.account-management-tabs{display:flex;gap:10px;margin-bottom:18px}
+.account-management-tabs button{min-width:170px;height:44px;border:1px solid #d9dee6;border-radius:10px;background:#fff;color:#596273;font-size:15px;font-weight:800}
+.account-management-tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(31,42,68,.15)}
+.account-management-panel{display:none}
+.account-management-panel.active{display:block}
+.account-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.account-panel-head strong{display:block;font-size:18px}
+.account-panel-head span{display:block;margin-top:5px;font-size:14px;color:var(--muted)}
+.learning-stat-filters{flex-wrap:wrap;justify-content:flex-end}
+.learning-stat-compare{display:flex;align-items:center;gap:18px;margin:-6px 0 18px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.learning-stat-compare>div:not(.compare-vs){display:flex;align-items:center;gap:10px}
+.learning-stat-compare span{font-size:13px;color:var(--muted)}
+.learning-stat-compare strong{font-size:15px}
+.learning-stat-compare .compare-vs{font-size:12px;font-weight:900;color:#9aa1af}
+.learning-stat-compare small{margin-left:auto;font-size:13px;color:#7b8390}
+.faq-table th:nth-child(1){width:70px}.faq-table th:nth-child(2){width:140px}.faq-table th:nth-child(4){width:100px}.faq-table th:nth-child(5){width:120px}.faq-table th:nth-child(6){width:84px}
+.faq-editor-form textarea{min-height:180px}
+
+
+/* v5.50 콘텐츠 게시/예약 반영 설정 */
+.content-publish-setting{
+  margin-top:14px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fafbfc;
+}
+.content-publish-setting-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.content-publish-setting-head strong{
+  display:block;
+  font-size:15px;
+}
+.content-publish-setting-head>div:first-child>span{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.45;
+  color:var(--muted);
+}
+.content-apply-setting{
+  margin-top:16px;
+}
+.content-setting-label{
+  display:block;
+  margin-bottom:8px;
+  font-size:13px;
+  font-weight:800;
+  color:#596171;
+}
+.content-apply-segment{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.content-apply-segment button{
+  width:100%;
+  height:36px;
+}
+.content-schedule-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+.content-schedule-fields[hidden]{display:none!important}
+.content-schedule-fields label span{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+}
+.content-schedule-fields input{
+  width:100%;
+  height:38px;
+  padding:0 9px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  color:var(--text);
+}
+.content-publish-help{
+  margin-top:11px;
+  padding:10px 11px;
+  border-radius:9px;
+  background:#fff;
+  border:1px solid #eceff3;
+  color:#6f7784;
+  font-size:12px;
+  line-height:1.5;
+}
+.content-publish-setting.is-unpublished .content-publish-help{
+  background:#fff6f6;
+  border-color:#f2dcdc;
+  color:#94545b;
+}
+.content-publish-setting.is-scheduled{
+  border-color:#d9dff6;
+  background:#f8f9ff;
+}
+.content-publish-setting.is-scheduled .content-publish-help{
+  background:#fff;
+  border-color:#e0e4f2;
+}
+.content-scheduled-badge{
+  display:inline-flex;
+  align-items:center;
+  height:26px;
+  padding:0 9px;
+  border-radius:999px;
+  background:#eef0ff;
+  color:#4e59ca;
+  font-size:12px;
+  font-weight:700;
+}
+
+
+/* v5.51 계정 관리 전체 탭 */
+.account-all-table th:nth-child(1){width:110px}
+.account-all-table th:nth-child(2){width:130px}
+.account-all-table th:nth-child(3){width:170px}
+.account-all-table th:nth-child(4){width:220px}
+.account-all-table th:nth-child(5){width:220px}
+.account-all-table th:nth-child(6){width:170px}
+.account-all-table th:nth-child(7){width:110px}
+.account-all-table th:last-child{width:90px}
+
+
+/* v5.52 매출·구독 통계 기간/비교 기능 */
+#business-stats .business-stat-filters{
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+#business-stats .business-stat-compare{
+  margin:-6px 0 18px;
+}
+#business-stats .business-stat-compare.is-no-compare .compare-vs,
+#business-stats .business-stat-compare.is-no-compare > div:nth-child(3){
+  opacity:.45;
+}
+
+
+/* v5.53 전체 학습 현황 상세 단순화 */
+.simple-learning-hero{margin-bottom:14px}
+.learning-overview-simple-grid{margin-bottom:12px}
+.learning-overview-simple-grid>div{min-height:50px}
+
+
+/* v5.54 콘텐츠 등록/수정 게시·예약 반영 설정 가시성 개선 */
+.content-release-card{
+  margin:16px 0 18px;
+  padding:18px 20px;
+  border:1px solid #dfe4ec;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.content-release-card.is-scheduled{
+  border-color:#cfd7f1;
+  background:#fafbff;
+}
+.content-release-card.is-unpublished{
+  border-color:#ead7d9;
+}
+.content-release-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding-bottom:15px;
+  border-bottom:1px solid #edf0f3;
+}
+.content-release-head strong{
+  display:block;
+  font-size:18px;
+}
+.content-release-head>div:first-child>span{
+  display:block;
+  margin-top:5px;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.content-release-body{
+  display:grid;
+  grid-template-columns:minmax(340px,520px) minmax(340px,520px);
+  gap:18px;
+  align-items:end;
+  margin-top:15px;
+}
+.content-release-mode .content-setting-label{
+  font-size:14px;
+}
+.content-release-card .content-apply-segment{
+  width:100%;
+  grid-template-columns:1fr 1fr;
+}
+.content-release-card .content-apply-segment button{
+  height:42px;
+  font-size:14px;
+}
+.content-release-card .content-release-datetime{
+  margin-top:0;
+}
+.content-release-card .content-release-datetime input{
+  height:42px;
+  font-size:14px;
+}
+.content-release-card .content-publish-help{
+  margin-top:14px;
+  font-size:13px;
+  padding:11px 13px;
+}
+
+
+/* v5.55 공지사항 + 이벤트·프로모션 통합 게시판 */
+.board-kpis{margin-bottom:18px}
+.board-category-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:84px;height:28px;padding:0 10px;border-radius:999px;
+  font-size:12px;font-weight:800;white-space:nowrap
+}
+.board-category-badge.notice{background:#eef4ff;color:#4966a5}
+.board-category-badge.event{background:#fff2d9;color:#8a6617}
+.board-table th:nth-child(1){width:70px}
+.board-table th:nth-child(2){width:140px}
+.board-table th:nth-child(4){width:150px}
+.board-table th:nth-child(5){width:110px}
+.board-table th:nth-child(6){width:100px}
+.board-table th:nth-child(7){width:110px}
+.board-table th:nth-child(8){width:100px}
+.board-table th:nth-child(9){width:100px}
+.board-table th:last-child{width:150px}
+.board-optional-label{font-size:12px;font-weight:600;color:var(--muted);margin-left:6px}
+.board-category-guide{margin-top:14px;font-size:13px;line-height:1.55}
+
+
+/* v5.56 1:1 문의 상세 - 대화형 UI 제거 / 답변 수정 */
+.cs-modal .detail-modal-body{
+  background:#f5f6f8;
+}
+.cs-case-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 300px;
+  gap:16px;
+  align-items:start;
+}
+.cs-case-main{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.cs-case-side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.cs-case-card,
+.cs-case-info{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+}
+.cs-case-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:15px;
+}
+.cs-case-card-head h4{
+  margin:4px 0 0;
+  font-size:17px;
+  color:#39414d;
+}
+.cs-section-kicker{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#8b93a0;
+}
+.cs-inquiry-meta{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 22px;
+  padding:4px 0 12px;
+  border-bottom:1px solid #edf0f3;
+}
+.cs-inquiry-meta>div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  min-height:39px;
+}
+.cs-inquiry-meta span{
+  font-size:13px;
+  color:#8a929e;
+}
+.cs-inquiry-meta strong{
+  font-size:14px;
+  color:#454d59;
+  text-align:right;
+}
+.cs-inquiry-content{
+  min-height:118px;
+  padding:16px 2px 8px;
+  font-size:15px;
+  line-height:1.75;
+  color:#434b57;
+}
+.cs-file-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:10px;
+  padding:11px 13px;
+  border:1px solid #edf0f3;
+  border-radius:10px;
+  background:#fafbfc;
+}
+.cs-file-row span{
+  font-size:12px;
+  color:#8b93a0;
+}
+.cs-file-row strong{
+  font-size:13px;
+  color:#5a6370;
+}
+.cs-answer-meta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin:-3px 0 12px;
+  font-size:12px;
+  color:#9098a4;
+}
+.cs-answer-meta strong{
+  color:#5d6571;
+}
+.cs-answer-textarea{
+  min-height:220px;
+  font-size:14px;
+  line-height:1.7;
+}
+.cs-answer-textarea[readonly]{
+  border-color:#e7eaee;
+  background:#fafbfc;
+  color:#4c5561;
+  resize:none;
+}
+.cs-answer-textarea.is-editing{
+  background:#fff;
+  border-color:#d4b95d;
+  box-shadow:0 0 0 3px rgba(240,185,77,.12);
+}
+.cs-answer-tools{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:8px;
+}
+.cs-answer-edit-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:14px;
+}
+.cs-answer-edit-actions[hidden],
+.cs-template-chips[hidden],
+.cs-answer-tools .cs-edit-only[hidden]{
+  display:none!important;
+}
+.cs-template-chips{
+  margin-bottom:10px;
+  justify-content:flex-start;
+}
+.cs-template-btn{
+  height:31px;
+  padding:0 11px;
+  font-size:12px;
+}
+.cs-attach-btn,
+.cs-reply-count{
+  font-size:12px;
+}
+.cs-internal-note-textarea{
+  width:100%;
+  min-height:95px;
+  padding:12px 13px;
+  border:1px solid #dfe3e8;
+  border-radius:10px;
+  background:#fff;
+  color:#4f5763;
+  font:inherit;
+  font-size:14px;
+  line-height:1.6;
+  resize:vertical;
+}
+.cs-internal-note-textarea:focus{
+  outline:none;
+  border-color:#d7b955;
+  box-shadow:0 0 0 3px rgba(240,185,77,.12);
+}
+.cs-private-label{
+  font-size:12px;
+  color:#9aa2ad;
+}
+.cs-note-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:10px;
+}
+.cs-case-info{
+  padding:16px;
+}
+.cs-case-info h4{
+  margin:0 0 12px;
+  font-size:15px;
+}
+
+
+/* v5.57 1:1 문의 답변 등록 예시 */
+.cs-answer-empty-guide{
+  margin-bottom:12px;
+  padding:12px 13px;
+  border:1px solid #e8ebef;
+  border-radius:10px;
+  background:#fafbfc;
+  color:#737c89;
+  font-size:13px;
+  line-height:1.55;
+}
+.cs-answer-empty-guide[hidden],
+.cs-answer-meta[hidden],
+.cs-create-answer-actions[hidden]{
+  display:none!important;
+}
+.cs-create-answer-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:14px;
+}
+
+
+/* v5.59 팝업 노출 대상 클릭 다중 선택 */
+.popup-audience-block{width:100%}
+.popup-audience-picker{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.popup-audience-option{
+  min-height:66px;
+  padding:10px 12px;
+  border:1px solid #dfe3e8;
+  border-radius:10px;
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.popup-audience-option:hover{
+  border-color:#aeb7c3;
+  background:#fafbfc;
+}
+.popup-audience-option.active{
+  border-color:#2f3b55;
+  background:#f2f5fa;
+  box-shadow:0 0 0 1px rgba(47,59,85,.05);
+}
+.popup-audience-option strong{
+  display:block;
+  font-size:14px;
+  color:#3f4753;
+}
+.popup-audience-option small{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:#969eaa;
+}
+.popup-audience-option.active strong{color:#263247}
+.popup-audience-option.active::after{
+  content:"선택";
+  display:inline-flex;
+  align-items:center;
+  height:20px;
+  margin-top:7px;
+  padding:0 7px;
+  border-radius:999px;
+  background:#2f3b55;
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+.popup-audience-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid #edf0f3;
+}
+.popup-audience-footer span{
+  font-size:12px;
+  color:#858e9a;
+}
+.popup-audience-footer strong{color:#4b5461}
+.popup-location-summary{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  padding:9px 11px;
+  border:1px solid #e4e7eb;
+  border-radius:9px;
+  background:#f7f8fa;
+  color:#596273;
+  font-size:13px;
+}
+.popup-flex-note{margin-top:14px;font-size:12px;line-height:1.55}
+.scope-chip-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.scope-badge.guest{background:#eef7ff;color:#43739b}
+
+
+/* v5.60 팝업 노출 날짜·시간 */
+.popup-datetime-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 130px;
+  gap:8px;
+  width:100%;
+}
+.popup-datetime-row input{
+  width:100%;
+  min-width:0;
+}
+.popup-datetime-help{
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  padding:9px 11px;
+  border-radius:9px;
+  background:#f7f8fa;
+  color:#7b8491;
+  font-size:12px;
+  line-height:1.45;
+}
+.popup-datetime-help.invalid{
+  background:#fff3f3;
+  color:#a24d55;
+  border:1px solid #efd5d8;
+}
+#service-popups table td:nth-child(3){
+  white-space:nowrap;
+}
+
+
+/* v5.63 유입·전환 분석 UI 정리 */
+#acquisition-conversion .acq-page-head{margin-bottom:14px}
+
+.acq-control-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:12px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.acq-control-group{display:flex;align-items:center;gap:8px}
+.acq-control-label{
+  margin-right:4px;
+  font-size:14px;
+  font-weight:800;
+  color:#5f6875;
+}
+.acq-control-divider{width:1px;height:28px;background:#e7eaee}
+
+.acq-period-summary{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  min-height:52px;
+  margin-bottom:16px;
+  padding:10px 15px;
+  border:1px solid #e7eaee;
+  border-radius:11px;
+  background:#fafbfc;
+}
+.acq-period-summary>div{display:flex;align-items:center;gap:9px}
+.acq-period-summary span{font-size:13px;color:#858e9b}
+.acq-period-summary strong{font-size:15px;color:#414a57}
+.acq-period-vs{
+  font-size:11px!important;
+  font-weight:900;
+  color:#a1a8b2!important;
+}
+.acq-period-summary small{
+  margin-left:auto;
+  font-size:12px;
+  color:#949ca7;
+}
+.acq-period-summary.is-no-compare .acq-period-compare,
+.acq-period-summary.is-no-compare .acq-period-vs{opacity:.4}
+
+.acq-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.acq-kpi-card{
+  min-height:132px;
+  padding:17px 18px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.acq-kpi-card>span{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  color:#767f8c;
+}
+.acq-kpi-card>strong{
+  display:inline-block;
+  margin-top:9px;
+  font-size:25px;
+  color:#303946;
+}
+.acq-kpi-card>small{
+  display:inline-block;
+  margin-left:8px;
+  font-size:12px;
+  font-style:normal;
+  font-weight:800;
+}
+.acq-kpi-card>small.up{color:#3e8267}
+.acq-kpi-card>small.down{color:#b75d64}
+.acq-kpi-card>em{
+  display:block;
+  margin-top:9px;
+  font-size:12px;
+  font-style:normal;
+  color:#9aa1ac;
+}
+.acq-kpi-card.highlight{
+  border-color:#e8dba8;
+  background:#fffaf0;
+}
+.acq-kpi-card.highlight>strong{color:#69551e}
+
+.acq-funnel-panel{margin-bottom:16px}
+.acq-funnel-panel .panel-head{align-items:center}
+.acq-student-summary{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 11px;
+  border:1px solid #e7eaee;
+  border-radius:9px;
+  background:#fafbfc;
+}
+.acq-student-summary span{font-size:12px;color:#8c94a0}
+.acq-student-summary strong{font-size:13px}
+.acq-student-summary i{width:1px;height:16px;background:#dfe3e8}
+
+.acq-funnel-flow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr) 72px minmax(0,1fr) 72px minmax(0,1fr);
+  gap:8px;
+  align-items:stretch;
+  margin-top:8px;
+}
+.acq-funnel-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:104px;
+  padding:15px;
+  border:1px solid #e2e6eb;
+  border-radius:12px;
+  background:#fafbfc;
+}
+.acq-funnel-card.final{
+  border-color:#ddc877;
+  background:#fffaf0;
+}
+.acq-funnel-card .step{
+  width:34px;height:34px;flex:0 0 34px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#eef1f5;
+  color:#66707d;
+  font-size:12px;
+  font-weight:900;
+}
+.acq-funnel-card.final .step{background:#f0df9c;color:#6a571f}
+.acq-funnel-card small{display:block;font-size:13px;color:#77808c}
+.acq-funnel-card strong{display:block;margin-top:5px;font-size:21px}
+.acq-funnel-card em{display:block;margin-top:4px;font-size:11px;font-style:normal;color:#98a0ab}
+.acq-funnel-link{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.acq-funnel-link strong{font-size:15px;color:#46505d}
+.acq-funnel-link span{margin-top:3px;font-size:11px;color:#929aa5}
+.acq-funnel-link i{margin-top:7px;font-size:18px;font-style:normal;color:#b2b9c2}
+
+.acq-analysis-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(360px,.75fr);
+  gap:16px;
+  margin-bottom:16px;
+}
+.acq-analysis-grid>.panel{min-height:430px}
+.acq-legend{display:flex;gap:14px;font-size:12px;color:#77808d;font-weight:700}
+.acq-legend span::before{
+  content:"";
+  display:inline-block;
+  width:16px;height:3px;
+  margin-right:6px;
+  vertical-align:middle;
+  border-radius:999px;
+}
+.acq-legend .traffic::before{background:#596a91}
+.acq-legend .paid::before{background:#c59b45}
+.acq-trend-chart{position:relative;height:330px;padding:14px 0 36px 54px}
+.acq-y-axis{
+  position:absolute;left:0;top:15px;height:250px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  font-size:12px;color:#939ba7
+}
+.acq-chart-area{position:relative;height:250px}
+.acq-chart-area svg{position:relative;width:100%;height:250px;overflow:visible;z-index:2}
+.acq-grid-lines{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
+.acq-grid-lines i{display:block;border-top:1px solid #edf0f3}
+.acq-line{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.acq-line.traffic{stroke:#596a91}
+.acq-line.paid{stroke:#c59b45}
+.acq-points circle{fill:#fff;stroke-width:3;vector-effect:non-scaling-stroke}
+.traffic-points circle{stroke:#596a91}
+.paid-points circle{stroke:#c59b45}
+.acq-x-axis{
+  position:absolute;left:54px;right:0;bottom:2px;
+  display:flex;justify-content:space-between;
+  font-size:12px;color:#939ba7
+}
+
+.acq-channel-rank{display:flex;flex-direction:column;gap:16px;padding-top:6px}
+.acq-rank-row{padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.acq-rank-row:last-child{border-bottom:0}
+.acq-rank-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.acq-rank-head strong{font-size:14px}
+.acq-rank-head span{font-size:15px;font-weight:900;color:#3d4652}
+.acq-rank-bar{
+  height:8px;
+  margin-top:8px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#eef1f4;
+}
+.acq-rank-bar i{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:#65738f;
+}
+.acq-rank-row small{
+  display:block;
+  margin-top:6px;
+  font-size:11px;
+  color:#959da8;
+}
+
+.acq-channel-table{margin-top:0}
+.acq-table-title>div{display:flex;flex-direction:column;gap:3px}
+.acq-channel-table th,
+.acq-channel-table td{white-space:nowrap}
+.acq-channel-table th:first-child{min-width:190px}
+
+.acq-footnote{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  margin-top:14px;
+  padding:13px 15px;
+  border:1px solid #e8ebef;
+  border-radius:11px;
+  background:#fafbfc;
+}
+.acq-footnote strong{font-size:13px;white-space:nowrap}
+.acq-footnote span{font-size:13px;line-height:1.55;color:#747d89}
+
+@media (max-width:1500px){
+  .acq-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .acq-funnel-flow{overflow-x:auto;grid-template-columns:240px 72px 240px 72px 240px 72px 240px;padding-bottom:8px}
+  .acq-analysis-grid{grid-template-columns:1fr}
+}
+
+
+/* v5.65 FAQ 예상 질문·답변 전체 구성 */
+#faq .faq-kpis{margin-bottom:14px}
+.faq-guide{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:16px;padding:13px 15px;
+  border:1px solid #e7eaee;border-radius:11px;background:#fafbfc
+}
+.faq-guide strong{font-size:14px;white-space:nowrap}
+.faq-guide span{font-size:14px;line-height:1.55;color:#737c89}
+.faq-table th:nth-child(1){width:70px}
+.faq-table th:nth-child(2){width:145px}
+.faq-table th:nth-child(4){width:100px}
+.faq-table th:nth-child(5){width:120px}
+.faq-table th:nth-child(6){width:84px}
+.faq-table td:nth-child(3){min-width:620px}
+.faq-answer-preview{
+  display:block;margin-top:6px;max-width:940px;
+  color:#8b939f;font-size:13px;line-height:1.45;white-space:normal
+}
+.faq-editor-form textarea{
+  min-height:240px!important;font-size:15px;line-height:1.65
+}
+
+
+/* v5.66 대시보드 조회기간 오늘 추가 */
+.dashboard-period-segment{
+  grid-template-columns:repeat(4,auto);
+}
+
 </style>
 </head>
 <body>
@@ -5886,8 +6738,8 @@ table td,
 <div class="nav-group">OVERVIEW</div>
 <button class="nav-item active" data-page="dashboard"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 13h6V4H4z"></path><path d="M14 20h6v-9h-6z"></path><path d="M14 4h6v3h-6z"></path><path d="M4 20h6v-3H4z"></path></svg></span>대시보드</button>
 <div class="nav-group">회원 관리</div>
-<button class="nav-item" data-page="guardians"><span class="nav-icon"><svg viewbox="0 0 24 24"><circle cx="9" cy="7" r="4"></circle><path d="M3 21v-2a6 6 0 0 1 12 0v2"></path><path d="M17 11a4 4 0 0 1 4 4v6"></path></svg></span>보호자 관리</button>
-<button class="nav-item" data-page="students"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M3 6l9-4 9 4-9 4z"></path><path d="M7 8v5c0 2 2.2 3.5 5 3.5s5-1.5 5-3.5V8"></path></svg></span>학생 관리</button>
+<button class="nav-item" data-page="account-management"><span class="nav-icon"><svg viewbox="0 0 24 24"><circle cx="9" cy="7" r="4"></circle><path d="M3 21v-2a6 6 0 0 1 12 0v2"></path><path d="M17 11a4 4 0 0 1 4 4v6"></path></svg></span>계정 관리</button>
+
 <button class="nav-item" data-page="privacy-consent">
 <span class="nav-icon">
 <svg viewbox="0 0 24 24">
@@ -5899,7 +6751,7 @@ table td,
     </button>
 <div class="nav-group">구독·결제 관리</div>
 <button class="nav-item" data-page="subscriptions"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M20 7h-7V3"></path><path d="M20 7l-3-3"></path><path d="M4 17h7v4"></path><path d="M4 17l3 3"></path><path d="M6 9a7 7 0 0 1 11-4"></path><path d="M18 15a7 7 0 0 1-11 4"></path></svg></span>구독 관리</button>
-<button class="nav-item" data-page="orders"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="18" rx="2" width="16" x="4" y="3"></rect><path d="M8 7h8M8 11h8M8 15h5"></path></svg></span>결제 내역</button>
+<button class="nav-item" data-page="orders"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="18" rx="2" width="16" x="4" y="3"></rect><path d="M8 7h8M8 11h8M8 15h5"></path></svg></span>주문·결제 내역</button>
 <button class="nav-item" data-page="payment-fail"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M12 3L2.5 20h19z"></path><path d="M12 9v4M12 17h.01"></path></svg></span>결제 실패 관리</button>
 <button class="nav-item" data-page="refunds"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M9 14l-4-4 4-4"></path><path d="M5 10h8a6 6 0 1 1 0 12h-2"></path></svg></span>환불 관리</button>
 <div class="nav-group">학습 관리</div>
@@ -5912,23 +6764,26 @@ table td,
 <button class="nav-item" data-page="content-history"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l3 2"></path></svg></span>콘텐츠 변경 이력</button>
 <div class="nav-group">서비스 분석</div>
 <button class="nav-item" data-page="business-stats"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 19V11"></path><path d="M10 19V6"></path><path d="M16 19V9"></path><path d="M22 19H2"></path><path d="M4 7l5-3 5 2 6-4"></path></svg></span>매출·구독 통계</button>
-<button class="nav-item" data-page="acquisition-cohort">
+<button class="nav-item" data-page="acquisition-conversion">
 <span class="nav-icon">
 <svg viewbox="0 0 24 24">
 <path d="M4 19V5"></path>
 <path d="M4 19h16"></path>
-<path d="M7 15h2M11 12h2M15 9h2M19 6h1"></path>
-<path d="M7 15l4-3 4-3 4-3"></path>
+<path d="M7 15l4-4 3 2 5-6"></path>
+<path d="M16 7h3v3"></path>
 </svg>
-</span>유입 후 재방문 분석</button>
+</span>유입·전환 분석</button>
 <div class="nav-group">마케팅</div>
-<button class="nav-item" data-page="events"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.2 1 5.9L12 16.5 6.8 19.3l1-5.9-4.3-4.2 5.9-.9z"></path></svg></span>이벤트·프로모션</button>
+
 <button class="nav-item" data-page="notification-log"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M5 4h14v16H5z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg></span>알림 발송 이력</button>
 <div class="nav-group">고객센터</div>
 <button class="nav-item" data-page="cs"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"></path><path d="M8 9h8M8 13h5"></path></svg></span>1:1 문의</button>
-<button class="nav-item" data-page="phone-cs"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11 11 0 0 0 3.4.54 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.5 21 3 13.5 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .54 3.4 1 1 0 0 1-.24 1z"></path></svg></span>전화 문의 이력</button>
+<button class="nav-item" data-page="phone-cs"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11 11 0 0 0 3.4.54 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.5 21 3 13.5 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .54 3.4 1 1 0 0 1-.24 1z"></path></svg></span>전화 문의 이력</button><button class="nav-item" data-page="faq"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h5"></path><path d="M18 3v4M16 5h4"></path></svg></span>FAQ</button>
 <div class="nav-group">운영 관리</div>
-<button class="nav-item" data-page="terms-management"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 11h6M9 15h6"></path></svg></span>약관 관리</button><button class="nav-item" data-page="notices"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8"></path></svg></span>공지사항</button>
+<button class="nav-item" data-page="terms-management"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 11h6M9 15h6"></path></svg></span>약관 관리</button>
+<button class="nav-item" data-page="board-management"><span class="nav-icon">
+<svg viewbox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg>
+</span>게시판 관리</button>
 <button class="nav-item" data-page="resources"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h5M8 16h6"></path></svg></span>자료실</button>
 <button class="nav-item" data-page="service-popups"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 8h18"></path><path d="M7 6h.01M11 6h.01"></path></svg></span>팝업 관리</button>
 <button class="nav-item" data-page="main-banners"><span class="nav-icon"><svg viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M7 9h10"></path><path d="M7 13h6"></path><path d="M17 16l2-2-2-2"></path></svg></span>메인 배너 관리</button>
@@ -5973,6 +6828,7 @@ table td,
 <div class="dashboard-period-box">
 <div class="dashboard-period-control">
 <div aria-label="대시보드 조회 기간" class="dashboard-period-segment" role="group">
+<button data-dashboard-period="today" type="button">오늘</button>
 <button data-dashboard-period="7" type="button">최근 7일</button>
 <button class="active" data-dashboard-period="30" type="button">최근 30일</button>
 <button data-dashboard-period="90" type="button">최근 90일</button>
@@ -5989,12 +6845,12 @@ table td,
 <div class="date-popover-fields">
 <label>
 <span>시작일</span>
-<input id="dashboardStartDate" type="date" value="2026-08-13"/>
+<input id="dashboardStartDate" type="date" value="2026-08-24"/>
 </label>
 <span class="date-range-arrow">→</span>
 <label>
 <span>종료일</span>
-<input id="dashboardEndDate" type="date" value="2026-09-11"/>
+<input id="dashboardEndDate" type="date" value="2026-09-22"/>
 </label>
 </div>
 <div class="date-popover-help">선택한 기간과 바로 이전의 동일 일수 기간을 자동 비교</div>
@@ -6006,8 +6862,8 @@ table td,
 </div>
 <div class="dashboard-period-caption">
 <span>조회 기간</span>
-<strong id="dashboardPeriodLabel">2026.08.13 ~ 2026.09.11</strong>
-<span class="dashboard-compare-date" id="dashboardCompareLabel">비교 2026.07.14 ~ 2026.08.12</span>
+<strong id="dashboardPeriodLabel">2026.08.24 ~ 2026.09.22</strong>
+<span class="dashboard-compare-date" id="dashboardCompareLabel">비교 2026.07.25 ~ 2026.08.23</span>
 </div>
 </div>
 </div>
@@ -6046,7 +6902,7 @@ table td,
 <div>
 <span class="action-label">결제 실패</span>
 <strong>28건</strong>
-<small>다시 결제 2회 이상 9건</small>
+<small>오늘 발생 9건</small>
 </div>
 <span class="action-arrow">›</span>
 </button>
@@ -6287,17 +7143,116 @@ table td,
 </div>
 </div>
 </section>
-<section class="page" id="guardians">
+<section class="page" id="account-management">
 <div class="page-head">
 <div>
-<h1 class="page-title">보호자 관리</h1>
-<div class="page-desc">보호자 계정, 연결 학생, 이용권·결제 정보 및 배송지 관리</div>
-</div>
-<div class="filters">
-<button class="btn">엑셀 다운로드</button>
-<button class="btn primary" data-modal="보호자 등록">보호자 등록</button>
+<h1 class="page-title">계정 관리</h1>
+<div class="page-desc">전체 계정을 먼저 확인하고 보호자·학생 유형별로 상세 관리</div>
 </div>
 </div>
+<div class="account-management-tabs" id="accountManagementTabs">
+<button class="active" data-account-tab="all" type="button">전체</button>
+<button data-account-tab="guardian" type="button">보호자 계정</button>
+<button data-account-tab="student" type="button">학생 계정</button>
+</div>
+
+<div class="account-management-panel active" data-account-panel="all">
+<div class="account-panel-head">
+<div><strong>전체 계정</strong><span>보호자와 학생 계정을 함께 조회합니다.</span></div>
+<div class="filters"><button class="btn">엑셀 다운로드</button></div>
+</div>
+
+<div class="kpis">
+<div class="kpi"><div class="label">전체 계정</div><div class="value">32,850명</div><div class="kpi-helper">보호자 + 학생</div></div>
+<div class="kpi"><div class="label">보호자</div><div class="value">12,420명</div><div class="kpi-helper">전체 보호자 계정</div></div>
+<div class="kpi"><div class="label">학생</div><div class="value">20,430명</div><div class="kpi-helper">전체 학생 계정</div></div>
+<div class="kpi"><div class="label">정상 계정</div><div class="value">29,166명</div><div class="kpi-helper">현재 이용 가능</div></div>
+</div>
+
+<div class="table-wrap">
+<div class="table-tools">
+<div class="table-tools-left">
+<input class="table-search wide-search" placeholder="이름 / 연락처 / 보호자명 검색"/>
+<select class="filter">
+<option>전체 계정 유형</option>
+<option>보호자</option>
+<option>학생</option>
+</select>
+<select class="filter">
+<option>전체 상태</option>
+<option>정상</option>
+<option>홀딩</option>
+<option>휴면</option>
+<option>탈퇴</option>
+</select>
+</div>
+<div class="table-tools-right"><button class="btn">필터 초기화</button></div>
+</div>
+<table class="account-all-table">
+<thead>
+<tr>
+<th>계정 유형</th>
+<th>이름</th>
+<th>연락처</th>
+<th>연결 정보</th>
+<th>이용 상태</th>
+<th>최근 활동</th>
+<th>상태</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="badge blue">보호자</span></td>
+<td><strong>김민정</strong></td>
+<td>010-2345-6789</td>
+<td>학생 5명 · 이용중 4명</td>
+<td>월 3 / 연 1</td>
+<td>최근 결제 09.04</td>
+<td><span class="badge green">정상</span></td>
+<td><button class="btn detail-btn" data-name="김민정" data-type="guardian">상세</button></td>
+</tr>
+<tr>
+<td><span class="badge yellow">학생</span></td>
+<td><strong>김하늘</strong></td>
+<td>010-3456-7890</td>
+<td>보호자 김민정</td>
+<td>3급 · 2단락 8매듭</td>
+<td>오늘 08:41</td>
+<td><span class="badge green">정상</span></td>
+<td><button class="btn detail-btn" data-name="김하늘" data-type="student">상세</button></td>
+</tr>
+<tr>
+<td><span class="badge blue">보호자</span></td>
+<td><strong>박지훈</strong></td>
+<td>010-8821-1204</td>
+<td>학생 2명 · 이용중 2명</td>
+<td>연 2</td>
+<td>최근 결제 09.01</td>
+<td><span class="badge green">정상</span></td>
+<td><button class="btn detail-btn" data-name="박지훈" data-type="guardian">상세</button></td>
+</tr>
+<tr>
+<td><span class="badge yellow">학생</span></td>
+<td><strong>김별</strong></td>
+<td>010-7834-2281</td>
+<td>보호자 김민정</td>
+<td>5급 · 1단락 4매듭</td>
+<td>2026.09.02</td>
+<td><span class="badge yellow">홀딩</span></td>
+<td><button class="btn detail-btn" data-name="김별" data-type="student">상세</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="account-management-panel" data-account-panel="guardian">
+<div class="account-panel-head">
+<div><strong>보호자 계정</strong><span>보호자 계정, 연결 학생, 결제 정보 및 배송지 관리</span></div>
+<div class="filters"><button class="btn">엑셀 다운로드</button><button class="btn primary" data-modal="보호자 등록">보호자 등록</button></div>
+</div>
+
 <div class="kpis">
 <div class="kpi"><div class="label">전체 보호자</div><div class="value">12,420명</div></div>
 <div class="kpi"><div class="label">이번 달 신규</div><div class="value">324명</div></div>
@@ -6321,19 +7276,12 @@ table td,
 </tbody>
 </table>
 </div>
-</section>
-<section class="page" id="students">
-<div class="page-head">
-<div>
-<h1 class="page-title">학생 관리</h1>
-<div class="page-desc">학생 계정 정보, 학습 현황, 진도율, 회원 상태 및 학습코드 관리</div>
+</div><div class="account-management-panel" data-account-panel="student">
+<div class="account-panel-head">
+<div><strong>학생 계정</strong><span>학생 계정, 학습 현황, 진도율, 상태 및 학습코드 관리</span></div>
+<div class="filters"><button class="btn">엑셀 다운로드</button><button class="btn" data-modal="학습 진도 변경 요청">학습 진도 변경/요청</button><button class="btn primary" data-modal="학생 등록">학생 등록</button></div>
 </div>
-<div class="filters">
-<button class="btn">엑셀 다운로드</button>
-<button class="btn" data-modal="학습 진도 변경 요청">학습 진도 변경/요청</button>
-<button class="btn primary" data-modal="학생 등록">학생 등록</button>
-</div>
-</div>
+
 <div class="kpis">
 <div class="kpi"><div class="label">전체 학생</div><div class="value">20,430명</div></div>
 <div class="kpi"><div class="label">정상</div><div class="value">18,320명</div></div>
@@ -6362,7 +7310,8 @@ table td,
 </tbody>
 </table>
 </div>
-</section>
+</div></section>
+
 <section class="page" id="privacy-consent">
 <div class="page-head">
 <div>
@@ -6575,8 +7524,8 @@ table td,
 <section class="page" id="orders">
 <div class="page-head">
 <div>
-<h1 class="page-title">결제 내역</h1>
-<div class="page-desc">계정별 결제 정보, 구독권, 결제·변경 이력 및 구독 시작/종료일 조회</div>
+<h1 class="page-title">주문·결제 내역</h1>
+<div class="page-desc">주문번호 기준으로 결제 정보, 결제 대상 학생, 결제·환불 변경 이력을 조회</div>
 </div>
 <button class="btn">엑셀 다운로드</button>
 </div>
@@ -6605,35 +7554,103 @@ table td,
 </table>
 </div>
 </section>
+
 <section class="page" id="payment-fail">
-<div class="page-head"><div><h1 class="page-title">결제 실패 관리</h1><div class="page-desc">자동결제가 실패한 학생과 다시 결제 상태를 확인</div></div></div>
-<div class="note">자동결제 실패 시 최대 3회 다시 결제합니다. 3회 모두 실패하면 추가 이용 기간 없이 당일 24:00부터 해당 학생의 학습 이용이 제한됩니다.</div>
+<div class="page-head">
+  <div>
+    <h1 class="page-title">결제 실패 관리</h1>
+    <div class="page-desc">자동결제 실패 내역과 학습 제한 예정 상태를 확인</div>
+  </div>
+</div>
+
+<div class="note">
+  자동결제 실패 시 재결제를 다시 시도하지 않습니다. 추가 이용 기간 없이 당일 24:00부터 해당 학생의 학습 이용이 제한됩니다.
+</div>
 <div style="height:18px"></div>
+
 <div class="grid2" style="margin-bottom:18px">
-<div class="panel">
-<div class="panel-title">결제 실패 후 진행 순서</div>
-<div class="timeline" style="margin-top:16px">
-<div class="timeline-item"><div class="timeline-dot done">1</div><div class="timeline-content"><div class="timeline-title">1차 결제 실패</div><div class="timeline-sub">다시 결제 예정 · 보호자에게 안내</div></div></div>
-<div class="timeline-item"><div class="timeline-dot done">2</div><div class="timeline-content"><div class="timeline-title">2차 결제 실패</div><div class="timeline-sub">다시 결제 진행 · 결제수단 확인 안내</div></div></div>
-<div class="timeline-item"><div class="timeline-dot done">3</div><div class="timeline-content"><div class="timeline-title">3차 결제 실패</div><div class="timeline-sub">마지막 다시 결제</div></div></div>
-<div class="timeline-item"><div class="timeline-dot warn">!</div><div class="timeline-content"><div class="timeline-title">최종 실패</div><div class="timeline-sub">추가 이용 기간 없음 · 당일 24:00부터 학습 이용 제한</div></div></div>
+  <div class="panel">
+    <div class="panel-title">결제 실패 후 진행 순서</div>
+    <div class="timeline" style="margin-top:16px">
+      <div class="timeline-item">
+        <div class="timeline-dot done">1</div>
+        <div class="timeline-content">
+          <div class="timeline-title">결제 실패 확정</div>
+          <div class="timeline-sub">자동 재결제 없음 · 보호자에게 결제 실패 안내</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot warn">!</div>
+        <div class="timeline-content">
+          <div class="timeline-title">학습 이용 제한</div>
+          <div class="timeline-sub">추가 이용 기간 없음 · 결제 실패 당일 24:00부터 제한</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">처리 기준</div>
+    <div class="side-summary" style="margin-top:10px">
+      <div class="row"><span class="k">자동 재결제</span><strong>없음</strong></div>
+      <div class="row"><span class="k">추가 이용 기간</span><strong>없음</strong></div>
+      <div class="row"><span class="k">학습 제한</span><strong>실패 당일 24:00부터</strong></div>
+      <div class="row"><span class="k">관리자 역할</span><strong>실패 상태 확인 / 문의 대응</strong></div>
+    </div>
+  </div>
 </div>
+
+<div class="table-wrap">
+  <div class="table-tools">
+    <div class="table-tools-left">
+      <input class="table-search" placeholder="학생 / 보호자 / 주문번호 검색"/>
+      <select class="filter">
+        <option>전체 상태</option>
+        <option>제한 예정</option>
+        <option>학습 제한</option>
+      </select>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>결제 실패일시</th>
+        <th>학생</th>
+        <th>보호자</th>
+        <th>상품</th>
+        <th>금액</th>
+        <th>실패사유</th>
+        <th>학습 제한</th>
+        <th>상태</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>09.07 08:12</td>
+        <td>최서윤</td>
+        <td>최은정</td>
+        <td>월</td>
+        <td>9,900원</td>
+        <td>한도초과</td>
+        <td>09.07 24:00 예정</td>
+        <td><span class="badge yellow">제한 예정</span></td>
+        <td><button class="btn detail-btn" data-name="최서윤" data-type="paymentFail">상세</button></td>
+      </tr>
+      <tr>
+        <td>09.06 07:51</td>
+        <td>윤지호</td>
+        <td>윤지민</td>
+        <td>월</td>
+        <td>9,900원</td>
+        <td>카드만료</td>
+        <td>09.06 24:00 적용</td>
+        <td><span class="badge red">학습 제한</span></td>
+        <td><button class="btn detail-btn" data-name="윤지호" data-type="paymentFail">상세</button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-<div class="panel">
-<div class="panel-title">처리 기준</div>
-<div class="side-summary" style="margin-top:10px">
-<div class="row"><span class="k">다시 결제</span><strong>최대 3회</strong></div>
-<div class="row"><span class="k">추가 이용 기간</span><strong>없음</strong></div>
-<div class="row"><span class="k">3회 모두 실패하면</span><strong>당일 24:00부터 학습 이용 제한</strong></div>
-<div class="row"><span class="k">관리자 역할</span><strong>상태 확인 / 문의 대응</strong></div>
-</div>
-</div>
-</div>
-<div class="table-wrap"><div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="학생 / 보호자 / 주문번호 검색"/><select class="filter"><option>전체 상태</option><option>다시 결제 중</option><option>최종실패</option><option>결제 정상</option></select></div></div>
-<table><thead><tr><th>최초 실패일시</th><th>학생</th><th>보호자</th><th>상품</th><th>금액</th><th>실패사유</th><th>다시 결제</th><th>학습 제한</th><th>상태</th><th></th></tr></thead><tbody>
-<tr><td>09.07 08:12</td><td>최서윤</td><td>최은정</td><td>월</td><td>9,900원</td><td>한도초과</td><td>2 / 3회</td><td>-</td><td><span class="badge yellow">다시 결제 중</span></td><td><button class="btn detail-btn" data-name="최서윤" data-type="paymentFail">상세</button></td></tr>
-<tr><td>09.07 07:51</td><td>윤지호</td><td>윤지민</td><td>월</td><td>9,900원</td><td>카드만료</td><td>3 / 3회</td><td>09.07 24:00</td><td><span class="badge red">최종실패</span></td><td><button class="btn detail-btn" data-name="윤지호" data-type="paymentFail">상세</button></td></tr>
-</tbody></table></div>
 </section>
 <section class="page" id="refunds">
 <div class="page-head">
@@ -6865,7 +7882,7 @@ table td,
 <td><strong>김하늘</strong><span class="row-sub">김민정 보호자</span></td>
 <td><span class="learning-type-chip basic">기본 학습</span></td>
 <td>3급 · 2단락 · 8매듭</td>
-<td><strong>최초 67% → 최종 100%</strong><span class="row-sub">다시 풀기 1회</span></td>
+<td><strong>정답률 100%</strong><span class="row-sub">다시 풀기 1회</span></td>
 <td><span class="badge green">완료</span></td>
 <td><button class="btn detail-btn" data-name="김하늘" data-type="historyBasic">상세</button></td>
 </tr>
@@ -7043,7 +8060,7 @@ table td,
 <th>보호자</th>
 <th>급수/단락</th>
 <th>기본 학습</th>
-<th>처음 → 최종 정답률</th>
+<th>처음 → 정답률</th>
 <th>다시 풀기</th>
 <th>단락 평가</th>
 <th>메타인지</th>
@@ -7086,15 +8103,33 @@ table td,
 <h1 class="page-title">학습 분석</h1>
 <div class="page-desc">급수와 연령별 학습 현황, 다시 풀기, 자주 틀리는 문제를 확인</div>
 </div>
-<div class="filters">
-<select class="filter"><option>최근 30일</option><option>최근 90일</option><option>이번 학기</option></select>
-<button class="btn">기간 선택</button>
+<div class="filters learning-stat-filters">
+<select class="filter" id="learningStatUnit">
+<option value="day">일별</option>
+<option selected="" value="month">월별</option>
+<option value="quarter">분기별</option>
+<option value="year">연별</option>
+</select>
+<select class="filter" id="learningStatPeriod">
+<option>2026년 9월</option><option>2026년 8월</option><option>2026년 7월</option>
+</select>
+<select class="filter" id="learningStatCompare">
+<option value="previous">직전 기간과 비교</option>
+<option value="yearAgo">전년 동일 기간과 비교</option>
+<option value="none">비교 안 함</option>
+</select>
+<button class="btn primary" id="learningStatApply" type="button">적용</button>
 <button class="btn">엑셀 다운로드</button>
 </div>
+</div><div class="learning-stat-compare" id="learningStatCompareSummary">
+<div><span>선택 기간</span><strong id="learningStatCurrentLabel">2026년 9월</strong></div>
+<div class="compare-vs">VS</div>
+<div><span>비교 기간</span><strong id="learningStatPreviousLabel">2026년 8월</strong></div>
+<small id="learningStatCompareHint">월별 · 직전 기간 비교</small>
 </div>
 <div class="kpis">
 <div class="kpi"><div class="label">평균 매듭 완료율</div><div class="value">73.4%</div><div class="delta">▲ 2.8%</div></div>
-<div class="kpi"><div class="label">기본 학습 최초 정답률</div><div class="value">76.8%</div><div class="kpi-helper">처음 푼 결과 기준</div></div>
+<div class="kpi"><div class="label">기본 학습 정답률</div><div class="value">76.8%</div><div class="kpi-helper">처음 푼 결과 기준</div></div>
 <div class="kpi"><div class="label">다시 풀기 비율</div><div class="value">18.6%</div><div class="kpi-helper">오답 후 다시 풀기를 진행한 학습 비율</div></div>
 <div class="kpi"><div class="label">단락 평가 평균</div><div class="value">82.4점</div><div class="kpi-helper">어휘·독해 점수 합계(100점)</div></div>
 </div>
@@ -7126,11 +8161,11 @@ table td,
 <div class="panel">
 <div class="panel-head"><div><div class="panel-title">오답률 높은 콘텐츠</div><div class="panel-sub">처음 푼 결과 기준 · 확인 필요용</div></div></div>
 <table>
-<thead><tr><th>순위</th><th>콘텐츠</th><th>문제 유형</th><th>오답률</th></tr></thead>
+<thead><tr><th>순위</th><th>콘텐츠</th><th>오답률</th></tr></thead>
 <tbody>
-<tr><td>1</td><td>4급 2단락 11매듭</td><td>구성 이해</td><td><strong>42.8%</strong></td></tr>
-<tr><td>2</td><td>5급 1단락 7매듭</td><td>추론 이해</td><td><strong>39.6%</strong></td></tr>
-<tr><td>3</td><td>3급 3단락 4매듭</td><td>구성 이해</td><td><strong>36.9%</strong></td></tr>
+<tr><td>1</td><td>4급 2단락 11매듭</td><td><strong>42.8%</strong></td></tr>
+<tr><td>2</td><td>5급 1단락 7매듭</td><td><strong>39.6%</strong></td></tr>
+<tr><td>3</td><td>3급 3단락 4매듭</td><td><strong>36.9%</strong></td></tr>
 </tbody>
 </table>
 </div>
@@ -7175,22 +8210,7 @@ table td,
 <button class="btn" data-modal="일괄 게시">일괄 게시</button>
 </div>
 </div>
-<div class="content-rule-overview">
-<div class="content-rule-overview-head">
-<div>
-<strong>콘텐츠 등록 기준</strong>
-<span>급수에 따라 지문 길이와 기본 문제 수가 달라집니다.</span>
-</div>
-</div>
-<div class="content-rule-overview-grid">
-<div><b>1급</b><span>300자 · 3문제 · 3지선다</span><small>이솝 우화 / 지역설화 / 속담 / 한국 전래동화</small></div>
-<div><b>2급</b><span>400자 · 3문제 · 3지선다</span><small>이솝 우화 / 지역설화 / 속담 / 세계 전래동화</small></div>
-<div><b>3급</b><span>500자 · 4문제 · 4지선다</span><small>비문학 / 고사성어 / 한국 문화</small></div>
-<div><b>4급</b><span>600자 · 4문제 · 4지선다</span><small>비문학 / 고사성어 / 한국 문화</small></div>
-<div><b>5급</b><span>700자 · 5문제 · 5지선다</span><small>비문학 / 한국사</small></div>
-<div><b>6급</b><span>900자 · 5문제 · 5지선다</span><small>비문학 / 한국사</small></div>
-</div>
-</div><div class="table-wrap">
+<div class="table-wrap">
 <div class="table-tools">
 <div class="table-tools-left">
 <input class="table-search" placeholder="콘텐츠 제목 / 학습 위치 검색"/>
@@ -7250,7 +8270,7 @@ table td,
 <td>2급 · 2단락</td>
 <td><strong>아리랑의 시작은?</strong><span class="row-sub">메타인지 5 · 어휘 100 · 독해 문항</span></td>
 <td>09.10 15:03<span class="row-sub">박국어</span></td>
-<td><span class="badge green">게시중</span></td>
+<td><span class="content-scheduled-badge">예약 반영 · 09.25 02:00</span></td>
 <td><div class="row-actions"><button class="btn content-edit-btn" data-edit-type="assessment">수정</button><button class="btn" data-modal="단락 평가 미리보기">미리보기</button><button class="btn danger-soft" data-content-title="아리랑의 시작은?" data-modal="콘텐츠 삭제">삭제</button></div></td>
 </tr>
 </tbody>
@@ -7284,6 +8304,36 @@ table td,
 </div>
 <div class="soft-panel content-type-lock-note">콘텐츠 유형은 등록 완료 후 변경할 수 없습니다.</div>
 </div>
+
+<div class="content-release-card" data-release-scope="create">
+  <div class="content-release-head">
+    <div>
+      <strong>게시·반영 설정</strong>
+      <span>콘텐츠 등록 시 바로 반영하거나 원하는 날짜와 시간에 예약 반영할 수 있습니다.</span>
+    </div>
+    <div class="toggle-wrap">
+      <button class="toggle on" id="createPublishToggle" type="button" aria-pressed="true"></button>
+      <span class="toggle-label" id="createPublishLabel">게시</span>
+    </div>
+  </div>
+  <div class="content-release-body">
+    <div class="content-release-mode">
+      <span class="content-setting-label">반영 방식</span>
+      <div class="segmented content-apply-segment" id="createApplySegment">
+        <button class="active" data-apply-mode="immediate" type="button">즉시 반영</button>
+        <button data-apply-mode="scheduled" type="button">예약 반영</button>
+      </div>
+    </div>
+    <div class="content-schedule-fields content-release-datetime" id="createScheduleFields" hidden>
+      <label><span>반영 날짜</span><input id="createScheduleDate" type="date" value="2026-09-25"/></label>
+      <label><span>반영 시간</span><input id="createScheduleTime" type="time" value="02:00"/></label>
+    </div>
+  </div>
+  <div class="content-publish-help" id="createPublishHelp">
+    등록 완료 시 콘텐츠가 바로 반영되고 게시 상태로 노출됩니다.
+  </div>
+</div>
+
 <div class="content-editor-layout">
 <div class="content-editor-main">
 <div class="content-form-panel active" data-create-form="b">
@@ -7672,7 +8722,7 @@ table td,
 <div class="editor-side-actions">
 <button class="btn">임시저장</button>
 <button class="btn" data-modal="학생 화면 미리보기">미리보기</button>
-<button class="btn primary" data-modal="콘텐츠 등록 확인">등록</button>
+<button class="btn primary" data-modal="콘텐츠 등록 확인" id="contentCreateCompleteBtn">등록</button>
 </div>
 </div>
 </aside>
@@ -7696,6 +8746,36 @@ table td,
 <div class="danger-note content-edit-warning">
     수정한 내용과 학습 위치 변경은 변경 이력에 자동 저장됩니다.
   </div>
+
+<div class="content-release-card" data-release-scope="edit">
+  <div class="content-release-head">
+    <div>
+      <strong>게시·반영 설정</strong>
+      <span>수정한 내용을 바로 반영하거나 원하는 날짜와 시간에 예약 반영할 수 있습니다.</span>
+    </div>
+    <div class="toggle-wrap">
+      <button class="toggle on" id="editPublishToggle" type="button" aria-pressed="true"></button>
+      <span class="toggle-label" id="editPublishLabel">게시</span>
+    </div>
+  </div>
+  <div class="content-release-body">
+    <div class="content-release-mode">
+      <span class="content-setting-label">반영 방식</span>
+      <div class="segmented content-apply-segment" id="editApplySegment">
+        <button class="active" data-apply-mode="immediate" type="button">즉시 반영</button>
+        <button data-apply-mode="scheduled" type="button">예약 반영</button>
+      </div>
+    </div>
+    <div class="content-schedule-fields content-release-datetime" id="editScheduleFields" hidden>
+      <label><span>반영 날짜</span><input id="editScheduleDate" type="date" value="2026-09-25"/></label>
+      <label><span>반영 시간</span><input id="editScheduleTime" type="time" value="02:00"/></label>
+    </div>
+  </div>
+  <div class="content-publish-help" id="editPublishHelp">
+    수정 완료 시 변경 내용이 바로 반영되고 게시 상태를 유지합니다.
+  </div>
+</div>
+
 <div class="content-editor-layout">
 <div class="content-editor-main">
 <div class="content-form-panel active" data-edit-form="b">
@@ -8198,9 +9278,10 @@ table td,
 </div>
 <div class="editor-check-list">
 <div><span>버전</span><b>v1.2</b></div>
-<div><span>상태</span><b class="ok" id="editContentStatus">게시중</b></div>
+<div><span>현재 상태</span><b class="ok" id="editContentStatus">게시중</b></div>
 <div><span>최근 수정</span><b>09.11 09:42</b></div>
 </div>
+
 <div class="linked-history-box">
 <span>학습 중인 학생</span>
 <strong>1,248명</strong>
@@ -8209,7 +9290,7 @@ table td,
 <div class="editor-side-actions">
 <button class="btn" data-modal="학생 화면 미리보기">미리보기</button>
 <button class="btn" data-modal="콘텐츠 임시저장">임시저장</button>
-<button class="btn primary" data-modal="콘텐츠 수정 확인">수정 완료</button>
+<button class="btn primary" data-modal="콘텐츠 수정 확인" id="contentEditCompleteBtn">수정 완료</button>
 </div>
 </div>
 </aside>
@@ -8560,19 +9641,34 @@ table td,
 <h1 class="page-title">매출·구독 통계</h1>
 <div class="page-desc">매출과 구독 변동을 기간별로 비교하고 추이를 분석</div>
 </div>
-<div class="filters">
-<select class="filter">
-<option>이번 달</option>
-<option>최근 3개월</option>
-<option>최근 6개월</option>
-<option>최근 1년</option>
-<option>직접 설정</option>
+<div class="filters business-stat-filters">
+<select class="filter" id="businessStatUnit">
+<option value="day">일별</option>
+<option selected="" value="month">월별</option>
+<option value="quarter">분기별</option>
+<option value="year">연별</option>
 </select>
-<button class="btn">2026.09.01 ~ 2026.09.08</button>
+<select class="filter" id="businessStatPeriod">
+<option>2026년 9월</option>
+<option>2026년 8월</option>
+<option>2026년 7월</option>
+</select>
+<select class="filter" id="businessStatCompare">
+<option value="previous">직전 기간과 비교</option>
+<option value="yearAgo">전년 동일 기간과 비교</option>
+<option value="none">비교 안 함</option>
+</select>
+<button class="btn primary" id="businessStatApply" type="button">적용</button>
 <button class="btn">엑셀 다운로드</button>
 </div>
 </div>
-<div class="stats-compare-note">비교 기간은 선택한 기간과 동일한 일수의 바로 이전 기간입니다. 매출은 결제 완료 금액 기준이며, 취소·환불 금액은 별도로 집계합니다.</div>
+<div class="learning-stat-compare business-stat-compare" id="businessStatCompareSummary">
+<div><span>선택 기간</span><strong id="businessStatCurrentLabel">2026년 9월</strong></div>
+<div class="compare-vs">VS</div>
+<div><span>비교 기간</span><strong id="businessStatPreviousLabel">2026년 8월</strong></div>
+<small id="businessStatCompareHint">월별 · 직전 기간과 비교</small>
+</div>
+<div class="stats-compare-note">매출은 결제 완료 금액 기준이며, 취소·환불 금액은 별도로 집계합니다.</div>
 <div class="kpis stats-kpis">
 <div class="kpi">
 <div class="label">총 매출</div>
@@ -8599,8 +9695,8 @@ table td,
 <div class="panel stats-revenue-pro">
 <div class="panel-head stats-revenue-head">
 <div>
-<div class="panel-title">일별 매출 비교</div>
-<div class="panel-sub">선택 기간의 일별 결제 완료 금액과 비교 기간을 비교</div>
+<div class="panel-title" id="businessRevenueChartTitle">매출 추이 비교</div>
+<div class="panel-sub" id="businessRevenueChartSub">선택 기간과 비교 기간의 결제 완료 금액 추이를 비교</div>
 </div>
 </div>
 <div class="stats-revenue-summary">
@@ -8747,7 +9843,7 @@ table td,
 <div class="panel">
 <div class="panel-head">
 <div>
-<div class="panel-title">선택 기간 vs 비교 기간</div>
+<div class="panel-title" id="businessCompareTableTitle">선택 기간 vs 비교 기간</div>
 <div class="panel-sub">선택 기간과 비교 기간의 주요 변화를 확인</div>
 </div>
 </div>
@@ -8762,401 +9858,251 @@ table td,
 </table>
 </div>
 </div>
-</section><section class="page" id="acquisition-cohort">
-<div class="page-head">
-<div>
-<h1 class="page-title">유입 후 재방문 분석</h1>
-<div class="page-desc">처음 방문한 사용자가 1일·7일·30일 뒤 다시 방문했는지 인원으로 확인합니다.</div>
-</div>
-<div class="filters">
-<select class="filter">
-<option>최근 90일</option>
-<option>최근 30일</option>
-<option>최근 180일</option>
-</select>
-<select class="filter">
-<option>전체 유입 소스</option>
-<option>네이버 검색</option>
-<option>인스타 광고</option>
-<option>Organic</option>
-<option>기타</option>
-</select>
-</div>
-</div>
-<div class="cohort-guide">
-<strong>처음 방문한 날짜 기준</strong>
-<span>예: 8월 1일에 처음 유입된 1,240명 중 다음 날 594명, 7일 뒤 391명, 30일 뒤 231명이 다시 방문한 형태로 확인합니다.</span>
-</div>
-<div class="kpis cohort-kpis">
-<div class="kpi">
-<div class="label">처음 방문한 사용자</div>
-<div class="value">24,860명</div>
-<div class="kpi-helper">선택한 기간에 처음 방문</div>
-</div>
-<div class="kpi">
-<div class="label">1일 뒤 재방문</div>
-<div class="value">11,982명</div>
-<div class="kpi-helper">1일이 지난 사용자 기준</div>
-</div>
-<div class="kpi">
-<div class="label">7일 뒤 재방문</div>
-<div class="value">7,854명</div>
-<div class="kpi-helper">7일이 지난 사용자 기준</div>
-</div>
-<div class="kpi">
-<div class="label">30일 뒤 재방문</div>
-<div class="value">4,698명</div>
-<div class="kpi-helper">30일이 지난 사용자 기준</div>
-</div>
-</div>
-<div class="grid2 cohort-summary-grid">
-<div class="panel cohort-trend-panel">
-<div class="panel-head">
-<div>
-<div class="panel-title">유입 후 재방문 사용자 추이</div>
-<div class="panel-sub">일별 처음 방문한 사용자의 D1 · D7 · D30 재방문 인원</div>
-</div>
-<div class="cohort-legend">
-<span><i></i>D1</span>
-<span><i></i>D7</span>
-<span><i></i>D30</span>
-</div>
-</div>
-<div class="cohort-chart-summary">
-<div><span>D1 평균</span><strong>557명</strong><small>최근 구간 기준</small></div>
-<div><span>D7 평균</span><strong>372명</strong><small>최근 구간 기준</small></div>
-<div><span>D30 평균</span><strong>235명</strong><small>최근 구간 기준</small></div>
-</div><div class="cohort-mini-chart cohort-count-chart cohort-chart-pro">
-<div class="cohort-y-axis">
-<span>700명</span><span>525명</span><span>350명</span><span>175명</span><span>0명</span>
-</div>
-<div class="cohort-chart-stage">
-<svg aria-label="D1 D7 D30 재방문 사용자 수 추이" id="cohortTrendSvg" preserveaspectratio="none" role="img" viewbox="0 0 900 250">
-<defs>
-<lineargradient id="cohortD1Area" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#7d88ff" stop-opacity=".18"></stop>
-<stop offset="100%" stop-color="#7d88ff" stop-opacity="0"></stop>
-</lineargradient>
-<lineargradient id="cohortD7Area" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#8db8a3" stop-opacity=".12"></stop>
-<stop offset="100%" stop-color="#8db8a3" stop-opacity="0"></stop>
-</lineargradient>
-<filter height="300%" id="cohortPointShadow" width="300%" x="-100%" y="-100%">
-<fedropshadow dx="0" dy="2" flood-color="#1f2937" flood-opacity=".16" stddeviation="2"></fedropshadow>
-</filter>
-</defs>
-<g class="cohort-grid">
-<line x1="0" x2="900" y1="18" y2="18"></line>
-<line x1="0" x2="900" y1="72" y2="72"></line>
-<line x1="0" x2="900" y1="126" y2="126"></line>
-<line x1="0" x2="900" y1="180" y2="180"></line>
-<line x1="0" x2="900" y1="234" y2="234"></line>
-</g>
-<g class="cohort-vgrid">
-<line x1="0" x2="0" y1="18" y2="234"></line>
-<line x1="150" x2="150" y1="18" y2="234"></line>
-<line x1="300" x2="300" y1="18" y2="234"></line>
-<line x1="450" x2="450" y1="18" y2="234"></line>
-<line x1="600" x2="600" y1="18" y2="234"></line>
-<line x1="750" x2="750" y1="18" y2="234"></line>
-<line x1="900" x2="900" y1="18" y2="234"></line>
-</g>
-<path class="cohort-area d1-area" d="M0 72 C75 74,75 78,150 78 C225 78,225 67,300 67 C375 67,375 73,450 73 C525 73,525 64,600 64 C675 64,675 71,750 71 C825 71,825 60,900 60 L900 234 L0 234 Z"></path>
-<path class="cohort-area d7-area" d="M0 118 C75 119,75 128,150 128 C225 128,225 112,300 112 C375 112,375 121,450 121 C525 121,525 108,600 108 C675 108,675 117,750 117 C825 117,825 103,900 103 L900 234 L0 234 Z"></path>
-<path class="cohort-line d1" d="M0 72 C75 74,75 78,150 78 C225 78,225 67,300 67 C375 67,375 73,450 73 C525 73,525 64,600 64 C675 64,675 71,750 71 C825 71,825 60,900 60"></path>
-<path class="cohort-line d7" d="M0 118 C75 119,75 128,150 128 C225 128,225 112,300 112 C375 112,375 121,450 121 C525 121,525 108,600 108 C675 108,675 117,750 117 C825 117,825 103,900 103"></path>
-<path class="cohort-line d30" d="M0 164 C75 166,75 174,150 174 C225 174,225 159,300 159 C375 159,375 168,450 168 C525 168,525 154,600 154 C675 154,675 162,750 162 C825 162,825 149,900 149"></path>
-<g class="cohort-points d1-points">
-<circle cx="0" cy="72" r="5"></circle><circle cx="150" cy="78" r="5"></circle><circle cx="300" cy="67" r="5"></circle>
-<circle cx="450" cy="73" r="5"></circle><circle cx="600" cy="64" r="5"></circle><circle cx="750" cy="71" r="5"></circle><circle cx="900" cy="60" r="5"></circle>
-</g>
-<g class="cohort-points d7-points">
-<circle cx="0" cy="118" r="5"></circle><circle cx="150" cy="128" r="5"></circle><circle cx="300" cy="112" r="5"></circle>
-<circle cx="450" cy="121" r="5"></circle><circle cx="600" cy="108" r="5"></circle><circle cx="750" cy="117" r="5"></circle><circle cx="900" cy="103" r="5"></circle>
-</g>
-<g class="cohort-points d30-points">
-<circle cx="0" cy="164" r="5"></circle><circle cx="150" cy="174" r="5"></circle><circle cx="300" cy="159" r="5"></circle>
-<circle cx="450" cy="168" r="5"></circle><circle cx="600" cy="154" r="5"></circle><circle cx="750" cy="162" r="5"></circle><circle cx="900" cy="149" r="5"></circle>
-</g>
-<g class="cohort-hover-layer" id="cohortHoverLayer" visibility="hidden">
-<line id="cohortGuideLine" x1="0" x2="0" y1="18" y2="234"></line>
-<circle id="cohortHoverD1" r="7"></circle>
-<circle id="cohortHoverD7" r="7"></circle>
-<circle id="cohortHoverD30" r="7"></circle>
-</g>
-<rect class="cohort-hit-area" height="216" id="cohortTrendHit" width="900" x="0" y="18"></rect>
-</svg>
-<div class="cohort-chart-tooltip" hidden="" id="cohortChartTooltip">
-<strong id="cohortTooltipDate">9/15</strong>
-<div><span class="d1-dot"></span><em>D1</em><b id="cohortTooltipD1">0명</b></div>
-<div><span class="d7-dot"></span><em>D7</em><b id="cohortTooltipD7">0명</b></div>
-<div><span class="d30-dot"></span><em>D30</em><b id="cohortTooltipD30">0명</b></div>
-</div>
-</div>
-<div class="cohort-x-axis">
-<span>7/1</span><span>7/15</span><span>8/1</span><span>8/15</span><span>9/1</span><span>9/8</span><span>9/15</span>
-</div>
-</div>
-</div>
-<div class="panel cohort-source-panel">
-<div class="panel-head">
-<div>
-<div class="panel-title">유입 소스별 재방문 사용자</div>
-<div class="panel-sub">선택 기간 기준 · 단위: 명</div>
-</div>
-</div>
-<div class="cohort-source-list">
-<div class="cohort-source-row">
-<div><strong>네이버 검색</strong><span>신규 유입 9,840명</span></div>
-<div><span>D7</span><strong>3,184명</strong></div>
-<div><span>D30</span><strong>1,906명</strong></div>
-</div>
-<div class="cohort-source-row">
-<div><strong>인스타 광고</strong><span>신규 유입 6,920명</span></div>
-<div><span>D7</span><strong>2,066명</strong></div>
-<div><span>D30</span><strong>1,184명</strong></div>
-</div>
-<div class="cohort-source-row">
-<div><strong>Organic</strong><span>신규 유입 5,670명</span></div>
-<div><span>D7</span><strong>1,822명</strong></div>
-<div><span>D30</span><strong>1,104명</strong></div>
-</div>
-<div class="cohort-source-row">
-<div><strong>기타</strong><span>신규 유입 2,430명</span></div>
-<div><span>D7</span><strong>782명</strong></div>
-<div><span>D30</span><strong>504명</strong></div>
-</div>
-</div>
-</div>
-</div>
-<div class="table-wrap cohort-table-wrap">
-<div class="table-tools">
-<div class="table-tools-left">
-<strong>일별 유입 사용자</strong>
-<span class="panel-sub">처음 방문한 날짜 기준</span>
-</div>
-<div class="table-tools-right">
-<span class="learning-result-count">단위: 명</span>
-</div>
-</div>
-<table class="cohort-table">
-<thead>
-<tr>
-<th>최초 유입일</th>
-<th>신규 유입</th>
-<th>D1 재방문</th>
-<th>D7 재방문</th>
-<th>D30 재방문</th>
-<th>주요 유입 소스</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>09.16</strong></td>
-<td>842명</td>
-<td><span class="cohort-cell pending">집계 중</span></td>
-<td><span class="cohort-cell pending">대기</span></td>
-<td><span class="cohort-cell pending">대기</span></td>
-<td>네이버 검색</td>
-</tr>
-<tr>
-<td><strong>09.09</strong></td>
-<td>796명</td>
-<td><span class="cohort-cell high"><b>389명</b></span></td>
-<td><span class="cohort-cell mid"><b>252명</b></span></td>
-<td><span class="cohort-cell pending">대기</span></td>
-<td>인스타 광고</td>
-</tr>
-<tr>
-<td><strong>08.15</strong></td>
-<td>1,024명</td>
-<td><span class="cohort-cell high"><b>503명</b></span></td>
-<td><span class="cohort-cell mid"><b>329명</b></span></td>
-<td><span class="cohort-cell low"><b>198명</b></span></td>
-<td>네이버 검색</td>
-</tr>
-<tr>
-<td><strong>08.01</strong></td>
-<td>1,240명</td>
-<td><span class="cohort-cell high"><b>594명</b></span></td>
-<td><span class="cohort-cell mid"><b>391명</b></span></td>
-<td><span class="cohort-cell low"><b>231명</b></span></td>
-<td>Organic</td>
-</tr>
-<tr>
-<td><strong>07.15</strong></td>
-<td>918명</td>
-<td><span class="cohort-cell high"><b>447명</b></span></td>
-<td><span class="cohort-cell mid"><b>287명</b></span></td>
-<td><span class="cohort-cell low"><b>171명</b></span></td>
-<td>네이버 검색</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="cohort-period-compare">
-<div class="panel-title">기간별 유입 사용자 요약</div>
-<div class="panel-sub">하루 단위 데이터를 주간·월간으로 묶어 재방문 사용자 규모를 확인합니다.</div>
-<div class="cohort-period-cards">
-<div>
-<span>최근 7일 신규 유입</span>
-<strong>5,482명</strong>
-<small>D7 집계 가능 대상은 비교 기간 기준</small>
-</div>
-<div>
-<span>최근 30일 신규 유입</span>
-<strong>18,320명</strong>
-<small>D1 재방문 8,914명</small>
-</div>
-<div>
-<span>유입 후 30일 경과</span>
-<strong>14,860명</strong>
-<small>D30 재방문 4,698명</small>
-</div>
-</div>
-</div>
-<div class="cohort-note">
-<strong>집계 기준</strong>
-<span>1일·7일·30일 재방문은 처음 방문한 날 이후 해당 날짜에 다시 방문한 사용자 수입니다. 아직 확인할 날짜가 지나지 않은 경우 ‘대기’로 표시합니다.</span>
-</div>
-</section><section class="page" id="events">
-<div class="page-head"><div><h1 class="page-title">이벤트·프로모션</h1><div class="page-desc">달걀 기반 이벤트와 프로모션 운영</div></div><button class="btn primary" data-go="event-create">이벤트 등록</button></div>
-<div class="table-wrap"><div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="이벤트명 검색"/></div></div>
-<table><thead><tr><th>이벤트명</th><th>기간</th><th>대상</th><th>참여자</th><th>상태</th><th></th></tr></thead><tbody>
-<tr><td>가을 독서 챌린지</td><td>09.01~09.30</td><td>전체 학생</td><td>4,210명</td><td><span class="badge green">진행중</span></td><td><button class="btn detail-btn" data-name="가을 독서 챌린지" data-type="event">상세</button></td></tr>
-</tbody></table></div>
-</section><section class="page" id="event-create">
-<div class="page-head">
-<div>
-<button aria-label="뒤로가기" class="page-back-btn" data-go="events" title="뒤로가기" type="button">
-<svg aria-hidden="true" viewbox="0 0 24 24">
-<path d="M15 5l-7 7 7 7"></path>
-<path d="M8 12h11"></path>
-</svg>
-<span>뒤로</span>
-</button>
-<h1 class="page-title">이벤트 등록</h1>
-<div class="page-desc">이벤트 배너와 상세 페이지 콘텐츠를 등록·관리</div>
-</div>
-<div class="editor-top-actions">
-<button class="btn" data-go="events">목록</button>
-<button class="btn" data-modal="이벤트 임시저장">임시저장</button>
-<button class="btn" data-modal="이벤트 미리보기">미리보기</button>
-<button class="btn primary" data-modal="이벤트 등록 완료">등록</button>
-</div>
-</div>
-<div class="editor-page-shell">
-<div class="editor-main">
-<div class="editor-section">
-<div class="editor-section-title">기본 정보</div>
-<div class="editor-form">
-<label>이벤트명</label><input value="9월 학습 이벤트"/>
-<label>이벤트 기간</label>
-<div style="display:flex;align-items:center;gap:8px">
-<input type="date" value="2026-09-01"/><span>~</span><input type="date" value="2026-09-30"/>
-</div>
-<label>노출 상태</label>
-<div class="toggle-wrap"><button class="toggle on" type="button"></button><span class="toggle-label">노출</span></div>
-</div>
-</div>
-<div class="editor-section">
-<div class="editor-section-title">이벤트 배너</div>
-<div class="editor-form">
-<label>PC 배너</label><div class="upload-box">
-<div class="upload-main">
-<div class="upload-icon"><svg viewbox="0 0 24 24"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
-<div class="upload-info">
-<div class="upload-title">파일을 선택해 주세요</div>
-<div class="upload-sub">이미지 또는 문서 파일 업로드</div>
-</div>
-</div>
-<div class="upload-actions">
-<label class="upload-btn">파일 선택<input class="file-hidden" type="file"/></label>
-</div>
-</div>
-<label>모바일 배너</label><div class="upload-box">
-<div class="upload-main">
-<div class="upload-icon"><svg viewbox="0 0 24 24"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
-<div class="upload-info">
-<div class="upload-title">파일을 선택해 주세요</div>
-<div class="upload-sub">이미지 또는 문서 파일 업로드</div>
-</div>
-</div>
-<div class="upload-actions">
-<label class="upload-btn">파일 선택<input class="file-hidden" type="file"/></label>
-</div>
-</div>
-</div>
-<div class="soft-panel" style="margin-top:10px">메인 또는 이벤트 목록에 노출되는 배너 이미지 등록 · 상세 페이지 주소는 등록 완료 시 자동 생성</div>
-</div>
-<div class="editor-section">
-<div class="editor-section-title">이벤트 상세 페이지</div>
-<div class="editor-toolbar">
-<div class="editor-toolbar-group">
-<button class="editor-tool editor-tool-text" title="제목 1" type="button">H1</button>
-<button class="editor-tool editor-tool-text" title="제목 2" type="button">H2</button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="굵게" type="button">
-<svg viewbox="0 0 24 24"><path d="M7 5h6a4 4 0 0 1 0 8H7z"></path><path d="M7 13h7a4 4 0 0 1 0 8H7z"></path></svg>
-</button>
-<button class="editor-tool" title="기울임" type="button">
-<svg viewbox="0 0 24 24"><path d="M10 5h7"></path><path d="M7 19h7"></path><path d="M14 5L10 19"></path></svg>
-</button>
-<button class="editor-tool" title="밑줄" type="button">
-<svg viewbox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"></path><path d="M5 21h14"></path></svg>
-</button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="왼쪽 정렬" type="button">
-<svg viewbox="0 0 24 24"><path d="M4 6h14"></path><path d="M4 10h10"></path><path d="M4 14h14"></path><path d="M4 18h8"></path></svg>
-</button>
-<button class="editor-tool" title="가운데 정렬" type="button">
-<svg viewbox="0 0 24 24"><path d="M5 6h14"></path><path d="M7 10h10"></path><path d="M5 14h14"></path><path d="M8 18h8"></path></svg>
-</button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="글머리 기호" type="button">
-<svg viewbox="0 0 24 24"><circle cx="5" cy="7" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="5" cy="17" r="1"></circle><path d="M9 7h10"></path><path d="M9 12h10"></path><path d="M9 17h10"></path></svg>
-</button>
-<button class="editor-tool" title="번호 목록" type="button">
-<svg viewbox="0 0 24 24"><path d="M4 6h1v3"></path><path d="M4 10h2"></path><path d="M4 14h2l-2 3h2"></path><path d="M9 7h10"></path><path d="M9 12h10"></path><path d="M9 17h10"></path></svg>
-</button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="링크" type="button">
-<svg viewbox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"></path></svg>
-</button>
-<button class="editor-tool" title="이미지 삽입" type="button">
-<svg viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 20"></path></svg>
-</button>
-<button class="editor-tool" title="구분선" type="button">
-<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>
-</button>
-</div>
-</div>
-<div class="rich-editor" contenteditable="true">
-<h2 style="margin-top:0">9월 이벤트 안내</h2>
-<p>이벤트 상세 내용을 입력해 주세요.</p>
-<p>이미지, 링크, 강조 문구 등을 활용해 이벤트 페이지를 구성할 수 있습니다.</p>
-</div>
-</div>
-</div>
-<aside class="editor-side">
-<div class="panel-title">현재 설정</div>
-<div class="side-summary" style="margin-top:10px">
-<div class="row"><span class="k">이벤트 기간</span><strong>09.01 ~ 09.30</strong></div>
-<div class="row"><span class="k">노출</span><span class="badge green">노출중</span></div>
-</div>
-<div class="editor-section" style="padding-bottom:0">
-<div class="editor-section-title">배너 미리보기</div>
-<div class="preview-frame">
-<div class="thumb" style="width:100%;height:150px;background:linear-gradient(135deg,#fff1b8,#f4c95d)"></div>
-</div>
-</div>
-<button class="btn" data-modal="이벤트 미리보기" style="width:100%;margin-top:14px">상세 페이지 미리보기</button>
-</aside>
-</div>
+</section>
+
+<section class="page" id="acquisition-conversion">
+  <div class="page-head acq-page-head">
+    <div>
+      <h1 class="page-title">유입·전환 분석</h1>
+      <div class="page-desc">사용자가 어디서 유입되어 회원가입·학생 등록·결제까지 이어졌는지 확인</div>
+    </div>
+  </div>
+
+  <div class="acq-control-card">
+    <div class="acq-control-group">
+      <span class="acq-control-label">조회 기준</span>
+      <select class="filter" id="acqUnit">
+        <option value="day">일별</option>
+        <option value="month" selected>월별</option>
+        <option value="quarter">분기별</option>
+        <option value="year">연별</option>
+      </select>
+      <select class="filter" id="acqPeriod">
+        <option>2026년 9월</option>
+        <option>2026년 8월</option>
+        <option>2026년 7월</option>
+      </select>
+    </div>
+    <div class="acq-control-divider"></div>
+    <div class="acq-control-group">
+      <span class="acq-control-label">비교</span>
+      <select class="filter" id="acqCompare">
+        <option value="previous">직전 기간과 비교</option>
+        <option value="yearAgo">전년 동일 기간과 비교</option>
+        <option value="none">비교 안 함</option>
+      </select>
+      <button class="btn primary" id="acqApply" type="button">적용</button>
+    </div>
+  </div>
+
+  <div class="acq-period-summary" id="acqCompareSummary">
+    <div class="acq-period-current">
+      <span>선택 기간</span>
+      <strong id="acqCurrentLabel">2026년 9월</strong>
+    </div>
+    <span class="acq-period-vs">VS</span>
+    <div class="acq-period-compare">
+      <span>비교 기간</span>
+      <strong id="acqPreviousLabel">2026년 8월</strong>
+    </div>
+    <small id="acqCompareHint">월별 · 직전 기간과 비교</small>
+  </div>
+
+  <div class="acq-kpi-grid">
+    <div class="acq-kpi-card">
+      <span>유입 사용자</span>
+      <strong>24,860명</strong>
+      <small class="up">▲ 8.4%</small>
+      <em>서비스 첫 유입 기준</em>
+    </div>
+    <div class="acq-kpi-card">
+      <span>신규 보호자</span>
+      <strong>4,286명</strong>
+      <small class="up">▲ 5.8%</small>
+      <em>회원가입 완료 기준</em>
+    </div>
+    <div class="acq-kpi-card">
+      <span>학생 등록 보호자</span>
+      <strong>3,540명</strong>
+      <small class="up">▲ 6.2%</small>
+      <em>학생 1명 이상 등록</em>
+    </div>
+    <div class="acq-kpi-card">
+      <span>결제 완료 보호자</span>
+      <strong>2,294명</strong>
+      <small class="up">▲ 4.6%</small>
+      <em>최초 결제 완료 기준</em>
+    </div>
+    <div class="acq-kpi-card highlight">
+      <span>유입 → 결제 전환율</span>
+      <strong>9.2%</strong>
+      <small class="down">▼ 0.3%p</small>
+      <em>유입 사용자 대비 결제 보호자</em>
+    </div>
+  </div>
+
+  <div class="panel acq-funnel-panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">전환 퍼널</div>
+        <div class="panel-sub">보호자 기준으로 유입 이후 주요 전환 단계를 확인합니다.</div>
+      </div>
+      <div class="acq-student-summary">
+        <span>학생 기준 참고</span>
+        <strong>등록 학생 5,914명</strong>
+        <i></i>
+        <strong>신규 유료 학생 3,182명</strong>
+      </div>
+    </div>
+
+    <div class="acq-funnel-flow">
+      <div class="acq-funnel-card">
+        <span class="step">01</span>
+        <div><small>서비스 유입</small><strong>24,860명</strong><em>100%</em></div>
+      </div>
+      <div class="acq-funnel-link">
+        <strong>17.2%</strong>
+        <span>가입 전환</span>
+        <i>→</i>
+      </div>
+      <div class="acq-funnel-card">
+        <span class="step">02</span>
+        <div><small>보호자 회원가입</small><strong>4,286명</strong><em>유입 대비 17.2%</em></div>
+      </div>
+      <div class="acq-funnel-link">
+        <strong>82.6%</strong>
+        <span>학생 등록</span>
+        <i>→</i>
+      </div>
+      <div class="acq-funnel-card">
+        <span class="step">03</span>
+        <div><small>학생 등록 보호자</small><strong>3,540명</strong><em>가입 대비 82.6%</em></div>
+      </div>
+      <div class="acq-funnel-link">
+        <strong>64.8%</strong>
+        <span>결제 전환</span>
+        <i>→</i>
+      </div>
+      <div class="acq-funnel-card final">
+        <span class="step">04</span>
+        <div><small>결제 완료 보호자</small><strong>2,294명</strong><em>학생 등록 대비 64.8%</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acq-analysis-grid">
+    <div class="panel acq-trend-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">기간별 유입·결제 추이</div>
+          <div class="panel-sub">유입 규모와 결제 완료 흐름을 함께 확인</div>
+        </div>
+        <div class="acq-legend">
+          <span class="traffic">유입 사용자</span>
+          <span class="paid">결제 완료 보호자</span>
+        </div>
+      </div>
+      <div class="acq-trend-chart">
+        <div class="acq-y-axis"><span>1,200</span><span>900</span><span>600</span><span>300</span><span>0</span></div>
+        <div class="acq-chart-area">
+          <div class="acq-grid-lines"><i></i><i></i><i></i><i></i><i></i></div>
+          <svg viewBox="0 0 900 250" preserveAspectRatio="none" aria-label="기간별 유입 사용자 및 결제 완료 보호자 추이">
+            <polyline class="acq-line traffic" points="0,80 150,70 300,94 450,52 600,61 750,45 900,56"></polyline>
+            <polyline class="acq-line paid" points="0,196 150,190 300,202 450,176 600,182 750,166 900,172"></polyline>
+            <g class="acq-points traffic-points">
+              <circle cx="0" cy="80" r="5"></circle><circle cx="150" cy="70" r="5"></circle><circle cx="300" cy="94" r="5"></circle><circle cx="450" cy="52" r="5"></circle><circle cx="600" cy="61" r="5"></circle><circle cx="750" cy="45" r="5"></circle><circle cx="900" cy="56" r="5"></circle>
+            </g>
+            <g class="acq-points paid-points">
+              <circle cx="0" cy="196" r="5"></circle><circle cx="150" cy="190" r="5"></circle><circle cx="300" cy="202" r="5"></circle><circle cx="450" cy="176" r="5"></circle><circle cx="600" cy="182" r="5"></circle><circle cx="750" cy="166" r="5"></circle><circle cx="900" cy="172" r="5"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="acq-x-axis"><span>9/1</span><span>9/5</span><span>9/10</span><span>9/15</span><span>9/20</span><span>9/25</span><span>9/30</span></div>
+      </div>
+    </div>
+
+    <div class="panel acq-channel-rank-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">채널별 결제 전환율</div>
+          <div class="panel-sub">유입 대비 결제 완료 보호자 기준</div>
+        </div>
+      </div>
+      <div class="acq-channel-rank">
+        <div class="acq-rank-row">
+          <div class="acq-rank-head"><strong>광고</strong><span>15.0%</span></div>
+          <div class="acq-rank-bar"><i style="width:100%"></i></div>
+          <small>유입 6,920명 · 결제 1,038명</small>
+        </div>
+        <div class="acq-rank-row">
+          <div class="acq-rank-head"><strong>검색</strong><span>14.1%</span></div>
+          <div class="acq-rank-bar"><i style="width:94%"></i></div>
+          <small>유입 9,840명 · 결제 1,386명</small>
+        </div>
+        <div class="acq-rank-row">
+          <div class="acq-rank-head"><strong>SNS</strong><span>10.9%</span></div>
+          <div class="acq-rank-bar"><i style="width:73%"></i></div>
+          <small>유입 3,780명 · 결제 412명</small>
+        </div>
+        <div class="acq-rank-row">
+          <div class="acq-rank-head"><strong>직접 유입</strong><span>10.4%</span></div>
+          <div class="acq-rank-bar"><i style="width:69%"></i></div>
+          <small>유입 2,430명 · 결제 252명</small>
+        </div>
+        <div class="acq-rank-row">
+          <div class="acq-rank-head"><strong>제휴·기타</strong><span>5.0%</span></div>
+          <div class="acq-rank-bar"><i style="width:33%"></i></div>
+          <small>유입 1,890명 · 결제 94명</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap acq-channel-table">
+    <div class="table-tools">
+      <div class="table-tools-left acq-table-title">
+        <div>
+          <strong>유입 채널별 상세</strong>
+          <span class="panel-sub">채널별 유입부터 결제까지 단계별 수치</span>
+        </div>
+      </div>
+      <div class="table-tools-right">
+        <select class="filter">
+          <option>전체 채널</option>
+          <option>검색</option>
+          <option>광고</option>
+          <option>SNS</option>
+          <option>직접 유입</option>
+          <option>제휴·기타</option>
+        </select>
+        <button class="btn">엑셀 다운로드</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>유입 채널</th>
+          <th>유입 사용자</th>
+          <th>신규 보호자</th>
+          <th>학생 등록 보호자</th>
+          <th>결제 완료 보호자</th>
+          <th>결제 전환율</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>검색</strong><span class="row-sub">네이버·구글 등</span></td><td>9,840명</td><td>1,782명</td><td>1,524명</td><td>1,386명</td><td><strong>14.1%</strong></td></tr>
+        <tr><td><strong>광고</strong><span class="row-sub">검색·디스플레이 광고</span></td><td>6,920명</td><td>1,280명</td><td>1,142명</td><td>1,038명</td><td><strong>15.0%</strong></td></tr>
+        <tr><td><strong>SNS</strong><span class="row-sub">인스타그램·기타 SNS</span></td><td>3,780명</td><td>668명</td><td>514명</td><td>412명</td><td><strong>10.9%</strong></td></tr>
+        <tr><td><strong>직접 유입</strong></td><td>2,430명</td><td>382명</td><td>286명</td><td>252명</td><td><strong>10.4%</strong></td></tr>
+        <tr><td><strong>제휴·기타</strong></td><td>1,890명</td><td>174명</td><td>74명</td><td>94명</td><td><strong>5.0%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="acq-footnote">
+    <strong>집계 기준</strong>
+    <span>전환 퍼널은 보호자 기준으로 계산합니다. 등록 학생·신규 유료 학생 수는 별도 참고 지표로 제공하며, 광고비·CAC·ROAS는 광고비 연동 방식 확정 후 추가합니다.</span>
+  </div>
 </section><section class="page" id="notification-log">
 <div class="page-head"><div><h1 class="page-title">알림 발송 이력</h1><div class="page-desc">알림톡·SMS·푸시 발송 성공/실패 이력 확인</div></div></div>
 <div class="grid2" style="margin-bottom:18px">
@@ -9189,6 +10135,7 @@ table td,
 <div class="table-wrap"><div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="보호자 / 제목 검색"/><select class="filter"><option>전체 상태</option><option>미처리</option><option>처리중</option><option>완료</option></select></div></div>
 <table><thead><tr><th>접수일</th><th>보호자</th><th>유형</th><th>제목</th><th>담당자</th><th>상태</th><th></th></tr></thead><tbody>
 <tr><td>09.07 09:12</td><td>김민정</td><td>결제</td><td>연 이용권 환불 문의</td><td>이지은</td><td><span class="badge blue">처리중</span></td><td><button class="btn detail-btn" data-name="연 이용권 환불 문의" data-type="cs">상세</button></td></tr>
+<tr><td>09.22 09:18</td><td>박지훈</td><td>계정</td><td>학습 코드 재발급 문의</td><td>-</td><td><span class="badge red">미처리</span></td><td><button class="btn detail-btn" data-name="학습 코드 재발급 문의" data-type="cs">상세</button></td></tr>
 </tbody></table></div>
 </section><section class="page" id="phone-cs">
 <div class="page-head">
@@ -9207,6 +10154,324 @@ table td,
 <tr><td>09.07 14:20</td><td>김민정</td><td>김하늘</td><td>010-2345-6789</td><td>결제</td><td class="call-summary">정기결제 카드 변경 방법 문의 및 다음 결제일 안내</td><td>이지은</td><td><span class="badge green">완료</span></td><td><button class="btn detail-btn" data-name="김민정 전화문의" data-type="phoneCs">상세</button></td></tr>
 <tr><td>09.07 13:02</td><td>박지훈</td><td>박도윤</td><td>010-8821-1204</td><td>학습</td><td class="call-summary">학습코드 재발급 및 앱 로그인 문의</td><td>최민서</td><td><span class="badge blue">처리중</span></td><td><button class="btn detail-btn" data-name="박지훈 전화문의" data-type="phoneCs">상세</button></td></tr>
 </tbody></table>
+</div>
+</section>
+<section class="page" id="faq">
+<div class="page-head">
+  <div>
+    <h1 class="page-title">FAQ</h1>
+    <div class="page-desc">서비스 이용 중 자주 발생할 수 있는 질문과 답변을 카테고리별로 관리</div>
+  </div>
+  <button class="btn primary" data-modal="FAQ 등록">FAQ 등록</button>
+</div>
+<div class="kpis faq-kpis">
+  <div class="kpi"><div class="label">전체 FAQ</div><div class="value">39개</div></div>
+  <div class="kpi"><div class="label">노출중</div><div class="value">39개</div></div>
+  <div class="kpi"><div class="label">비노출</div><div class="value">0개</div></div>
+  <div class="kpi"><div class="label">카테고리</div><div class="value">6개</div></div>
+</div>
+<div class="faq-guide">
+  <strong>예상 FAQ 구성</strong>
+  <span>현재 확정된 회원·결제·학습·환불·서비스 정책을 기준으로 초기 FAQ를 구성했습니다. 정책이 확정되지 않은 항목은 임의로 답변하지 않았습니다.</span>
+</div>
+<div class="table-wrap">
+  <div class="table-tools">
+    <div class="table-tools-left">
+      <input class="table-search wide-search" id="faqSearch" placeholder="질문 / 답변 검색"/>
+      <select class="filter" id="faqCategoryFilter">
+        <option value="all">전체 카테고리</option>
+        <option value="회원/계정">회원/계정</option>
+        <option value="결제/구독">결제/구독</option>
+        <option value="학습">학습</option>
+        <option value="환불">환불</option>
+        <option value="서비스 이용">서비스 이용</option>
+        <option value="기타">기타</option>
+      </select>
+      <select class="filter" id="faqStatusFilter">
+        <option value="all">전체 상태</option>
+        <option value="visible">노출중</option>
+        <option value="hidden">비노출</option>
+      </select>
+    </div>
+    <div class="table-tools-right"><span class="learning-result-count" id="faqResultCount">총 39개</span></div>
+  </div>
+  <table class="faq-table">
+    <thead><tr><th>순서</th><th>카테고리</th><th>질문 / 답변 요약</th><th>상태</th><th>수정일</th><th></th></tr></thead>
+    <tbody id="faqTableBody"><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>1</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학생 학습코드를 잊어버렸어요.</strong><span class="faq-answer-preview">보호자 화면에서 해당 학생의 학습코드를 다시 확인하거나 재발송할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-01" data-faq-title="학생 학습코드를 잊어버렸어요." data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>2</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학습코드를 받지 못했어요.</strong><span class="faq-answer-preview">결제 완료 후 학생 휴대폰 번호로 학습코드를 발송합니다. 알림톡 발송에 실패하면 SMS로 자동 전환되며, 두 채널 모두 실패해도 학습코드는 정상 생성되어 있...</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-02" data-faq-title="학습코드를 받지 못했어요." data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>3</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학생은 여러 명 등록할 수 있나요?</strong><span class="faq-answer-preview">네. 한 보호자 계정에 여러 명의 학생을 등록할 수 있습니다. 등록한 학생 중 결제가 필요한 학생을 선택해 이용권을 결제할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-03" data-faq-title="학생은 여러 명 등록할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>4</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학생만 등록하면 바로 학습할 수 있나요?</strong><span class="faq-answer-preview">아니요. 학생 등록과 이용권 결제는 별도입니다. 학생을 등록한 뒤 해당 학생의 이용권 결제가 완료되어야 학습이 활성화되고 학습코드가 생성됩니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-04" data-faq-title="학생만 등록하면 바로 학습할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>5</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학생 정보를 삭제하고 싶어요.</strong><span class="faq-answer-preview">해당 학생에게 사용 가능한 이용권이 남아 있는 경우 학생 삭제가 제한됩니다. 이용권 상태를 먼저 확인해 주세요.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-05" data-faq-title="학생 정보를 삭제하고 싶어요." data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>6</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>학생을 다른 보호자 계정으로 옮길 수 있나요?</strong><span class="faq-answer-preview">현재 보호자 계정 간 학생 이전 기능은 지원하지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-06" data-faq-title="학생을 다른 보호자 계정으로 옮길 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>7</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>보호자 계정을 다른 사람에게 이전할 수 있나요?</strong><span class="faq-answer-preview">현재 보호자 계정 또는 학생 계정의 소유자 이전 기능은 지원하지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-07" data-faq-title="보호자 계정을 다른 사람에게 이전할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
+<td>8</td>
+<td><span class="scope-badge">회원/계정</span></td>
+<td><strong>만 14세 미만 학생도 등록할 수 있나요?</strong><span class="faq-answer-preview">등록할 수 있습니다. 만 14세 미만 학생 등록 시 법정대리인 확인과 학생 개인정보 수집·이용 동의 절차가 필요합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-08" data-faq-title="만 14세 미만 학생도 등록할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>9</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>월 이용권과 연 이용권의 가격은 얼마인가요?</strong><span class="faq-answer-preview">월 이용권은 학생 1명당 월 9,900원, 연 이용권은 학생 1명당 연 109,000원입니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-09" data-faq-title="월 이용권과 연 이용권의 가격은 얼마인가요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>10</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>여러 학생의 이용권을 한 번에 결제할 수 있나요?</strong><span class="faq-answer-preview">네. 등록된 학생 목록에서 결제할 학생을 여러 명 선택한 뒤 이용권을 선택해 한 번에 결제할 수 있습니다. 이용권은 결제 후 학생별로 각각 활성화됩니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-10" data-faq-title="여러 학생의 이용권을 한 번에 결제할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>11</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>형제자매의 결제일이 모두 같아지나요?</strong><span class="faq-answer-preview">아니요. 각 학생의 이용권 시작일과 다음 결제일은 학생별로 독립적으로 관리됩니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-11" data-faq-title="형제자매의 결제일이 모두 같아지나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>12</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>한 학생의 구독을 중단하면 다른 학생에게도 영향이 있나요?</strong><span class="faq-answer-preview">아니요. 구독과 이용권은 학생별로 관리되므로 한 학생의 해지·환불은 다른 학생의 이용권에 영향을 주지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-12" data-faq-title="한 학생의 구독을 중단하면 다른 학생에게도 영향이 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>13</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>자동결제에 실패하면 다시 결제를 시도하나요?</strong><span class="faq-answer-preview">아니요. 자동결제 실패 후 추가 재결제는 진행하지 않습니다. 추가 이용 기간도 제공되지 않으며, 결제 실패 당일 24:00부터 해당 학생의 학습 이용이 제한...</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-13" data-faq-title="자동결제에 실패하면 다시 결제를 시도하나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>14</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>결제 실패 후 학습할 수 있는 유예기간이 있나요?</strong><span class="faq-answer-preview">없습니다. 결제 실패 당일 24:00부터 해당 학생의 학습 이용이 제한됩니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-14" data-faq-title="결제 실패 후 학습할 수 있는 유예기간이 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>15</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>연 이용권을 잠시 멈출 수 있나요?</strong><span class="faq-answer-preview">연 이용권에 한해 홀딩을 사용할 수 있습니다. 홀딩 가능 기간은 최대 14일이며, 필요에 따라 나누어 사용할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-15" data-faq-title="연 이용권을 잠시 멈출 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>16</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>월 이용권도 홀딩할 수 있나요?</strong><span class="faq-answer-preview">아니요. 홀딩은 연 이용권에서만 사용할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-16" data-faq-title="월 이용권도 홀딩할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>17</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>홀딩을 신청하면 바로 적용되나요?</strong><span class="faq-answer-preview">당일 즉시 시작할 수는 없습니다. 홀딩은 신청 다음 날 00:00부터 시작할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-17" data-faq-title="홀딩을 신청하면 바로 적용되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="결제/구독" data-faq-status="visible">
+<td>18</td>
+<td><span class="scope-badge">결제/구독</span></td>
+<td><strong>홀딩 중에도 학습하거나 달걀을 받을 수 있나요?</strong><span class="faq-answer-preview">아니요. 홀딩 기간에는 학습을 진행할 수 없으며 달걀도 적립되지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-18" data-faq-title="홀딩 중에도 학습하거나 달걀을 받을 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>19</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>처음 학습을 시작하면 무엇부터 하나요?</strong><span class="faq-answer-preview">처음에는 문해력 진단을 진행합니다. 진단 결과에 따라 학습 급수가 배정되며, 배정된 급수의 1단락부터 학습을 시작합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-19" data-faq-title="처음 학습을 시작하면 무엇부터 하나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>20</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>급수는 학교 학년과 같은 개념인가요?</strong><span class="faq-answer-preview">아니요. 급수는 노른자국어에서 사용하는 학습 수준입니다. 학교 학년과 별도로 학생의 학습 수준과 진도를 관리합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-20" data-faq-title="급수는 학교 학년과 같은 개념인가요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>21</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>다음 매듭은 언제 열리나요?</strong><span class="faq-answer-preview">현재 매듭의 기본 학습을 완료하면 다음 매듭의 기본 학습이 열립니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-21" data-faq-title="다음 매듭은 언제 열리나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>22</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>어휘 특강은 꼭 완료해야 하나요?</strong><span class="faq-answer-preview">아니요. 어휘 특강은 선택 학습입니다. 어휘 특강을 완료하지 않아도 기본 학습을 완료했다면 다음 매듭으로 진행할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-22" data-faq-title="어휘 특강은 꼭 완료해야 하나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>23</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>단락 평가는 언제 열리나요?</strong><span class="faq-answer-preview">해당 단락의 기본 학습 20매듭을 모두 완료하면 단락 평가가 열립니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-23" data-faq-title="단락 평가는 언제 열리나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>24</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>단락 분석지는 언제 만들어지나요?</strong><span class="faq-answer-preview">해당 단락의 기본 학습 20매듭과 단락 평가를 완료하면 단락 분석지 결과를 확인할 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-24" data-faq-title="단락 분석지는 언제 만들어지나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>25</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>달걀은 어떻게 받을 수 있나요?</strong><span class="faq-answer-preview">하루에 처음 완료한 기본 학습 또는 단락 평가를 기준으로 달걀을 받을 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-25" data-faq-title="달걀은 어떻게 받을 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>26</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>하루에 달걀을 여러 개 받을 수 있나요?</strong><span class="faq-answer-preview">아니요. 달걀은 학생 1명당 하루 최대 1개까지 받을 수 있습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-26" data-faq-title="하루에 달걀을 여러 개 받을 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="학습" data-faq-status="visible">
+<td>27</td>
+<td><span class="scope-badge">학습</span></td>
+<td><strong>어휘 특강을 완료해도 달걀을 받을 수 있나요?</strong><span class="faq-answer-preview">아니요. 어휘 특강과 복습 학습은 달걀 적립 대상에 포함되지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-27" data-faq-title="어휘 특강을 완료해도 달걀을 받을 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>28</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>이용권 환불은 어떻게 신청하나요?</strong><span class="faq-answer-preview">보호자가 직접 환불을 신청하거나 고객센터를 통해 환불 접수를 요청할 수 있습니다. 접수 후 환불 가능 여부와 환불금액을 확인해 처리합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-28" data-faq-title="이용권 환불은 어떻게 신청하나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>29</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>환불을 신청하면 바로 학습이 중단되나요?</strong><span class="faq-answer-preview">네. 환불 요청이 접수되면 해당 학생의 학습 이용은 즉시 제한됩니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-29" data-faq-title="환불을 신청하면 바로 학습이 중단되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>30</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>한 학생만 환불하면 다른 학생도 이용이 중단되나요?</strong><span class="faq-answer-preview">아니요. 환불은 학생별로 처리되며 다른 학생의 이용권과 학습에는 영향을 주지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-30" data-faq-title="한 학생만 환불하면 다른 학생도 이용이 중단되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>31</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>월 이용권은 어떤 기준으로 환불되나요?</strong><span class="faq-answer-preview">결제 후 7일 이내인지, 학습 이용 여부가 있는지에 따라 환불 가능 여부와 금액이 달라집니다. 미사용 상태에서 결제 후 7일 이내라면 전액 환불이 가능하며,...</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-31" data-faq-title="월 이용권은 어떤 기준으로 환불되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>32</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>연 이용권은 어떤 기준으로 환불되나요?</strong><span class="faq-answer-preview">연 이용권은 결제 후 경과 기간과 학습 이용 여부를 기준으로 환불 가능 여부와 금액을 계산합니다. 미사용 상태의 초기 환불과 장기 경과 또는 이용 이력이 있...</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-32" data-faq-title="연 이용권은 어떤 기준으로 환불되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="환불" data-faq-status="visible">
+<td>33</td>
+<td><span class="scope-badge">환불</span></td>
+<td><strong>환불금액은 관리자가 임의로 정할 수 있나요?</strong><span class="faq-answer-preview">아니요. 환불금액은 정해진 환불 기준에 따라 계산하며, 관리자가 임의의 금액으로 변경해 처리하지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-33" data-faq-title="환불금액은 관리자가 임의로 정할 수 있나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="서비스 이용" data-faq-status="visible">
+<td>34</td>
+<td><span class="scope-badge">서비스 이용</span></td>
+<td><strong>학습코드는 어떤 방식으로 발송되나요?</strong><span class="faq-answer-preview">결제 완료 후 학생 휴대폰 번호로 알림톡을 먼저 발송하고, 알림톡 발송에 실패하면 SMS로 자동 전환합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-34" data-faq-title="학습코드는 어떤 방식으로 발송되나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="서비스 이용" data-faq-status="visible">
+<td>35</td>
+<td><span class="scope-badge">서비스 이용</span></td>
+<td><strong>알림톡과 SMS가 모두 오지 않았어요.</strong><span class="faq-answer-preview">메시지 발송에 실패해도 생성된 학습코드는 그대로 유효합니다. 보호자 화면에서 학습코드를 확인하거나 다시 발송해 주세요.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-35" data-faq-title="알림톡과 SMS가 모두 오지 않았어요." data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="서비스 이용" data-faq-status="visible">
+<td>36</td>
+<td><span class="scope-badge">서비스 이용</span></td>
+<td><strong>마케팅 정보 수신 동의는 필수인가요?</strong><span class="faq-answer-preview">아니요. 마케팅 정보 수신 동의는 선택 항목이며, 동의하지 않아도 기본 서비스 이용에는 영향을 주지 않습니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-36" data-faq-title="마케팅 정보 수신 동의는 필수인가요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="서비스 이용" data-faq-status="visible">
+<td>37</td>
+<td><span class="scope-badge">서비스 이용</span></td>
+<td><strong>서비스 이용 중 문의가 있으면 어떻게 하나요?</strong><span class="faq-answer-preview">1:1 문의를 통해 내용을 접수할 수 있습니다. 결제·환불·학습·계정 등 문의 내용을 남기면 확인 후 답변을 안내합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-37" data-faq-title="서비스 이용 중 문의가 있으면 어떻게 하나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="기타" data-faq-status="visible">
+<td>38</td>
+<td><span class="scope-badge">기타</span></td>
+<td><strong>결제나 학습 상태를 확인할 때 어떤 학생을 기준으로 보나요?</strong><span class="faq-answer-preview">노른자국어의 이용권과 학습 상태는 학생별로 관리됩니다. 여러 학생을 등록한 경우 확인이 필요한 학생을 선택해 해당 학생의 이용권·학습 상태를 확인해 주세요.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-38" data-faq-title="결제나 학습 상태를 확인할 때 어떤 학생을 기준으로 보나요?" data-modal="FAQ 수정">수정</button></td>
+</tr><tr data-faq-row data-faq-category="기타" data-faq-status="visible">
+<td>39</td>
+<td><span class="scope-badge">기타</span></td>
+<td><strong>여러 학생을 등록한 경우 학습코드는 각각 다른가요?</strong><span class="faq-answer-preview">네. 학습코드는 학생별로 생성되며 각 학생은 자신의 학습코드로 학습에 접속합니다.</span></td>
+<td><span class="badge green">노출중</span></td>
+<td>2026.09.22</td>
+<td><button class="btn" data-faq-id="faq-39" data-faq-title="여러 학생을 등록한 경우 학습코드는 각각 다른가요?" data-modal="FAQ 수정">수정</button></td>
+</tr></tbody>
+  </table>
 </div>
 </section><section class="page" id="terms-management">
 <div class="page-head">
@@ -9250,116 +10515,237 @@ table td,
 </tbody>
 </table>
 </div>
-</section><section class="page" id="notices">
+</section>
+<section class="page" id="board-management">
 <div class="page-head">
-<div><h1 class="page-title">공지사항</h1><div class="page-desc">서비스 공지 등록·수정·노출기간·상단 고정 관리</div></div>
-<button class="btn primary" data-go="notice-create">공지사항 등록</button>
+  <div>
+    <h1 class="page-title">게시판 관리</h1>
+    <div class="page-desc">공지사항과 이벤트·프로모션을 하나의 게시판에서 카테고리로 구분해 관리</div>
+  </div>
+  <button class="btn primary" data-go="board-create" type="button">게시글 등록</button>
 </div>
+
+<div class="kpis board-kpis">
+  <div class="kpi"><div class="label">전체 게시글</div><div class="value">146건</div></div>
+  <div class="kpi"><div class="label">공지사항</div><div class="value">128건</div></div>
+  <div class="kpi"><div class="label">이벤트·프로모션</div><div class="value">18건</div></div>
+  <div class="kpi"><div class="label">예약 게시</div><div class="value">3건</div></div>
+</div>
+
 <div class="table-wrap">
-<div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="제목 검색"/><select class="filter"><option>전체 상태</option><option>게시중</option><option>예약</option><option>비게시</option></select></div></div>
-<table><thead><tr><th>번호</th><th>제목</th><th>노출기간</th><th>상단고정</th><th>등록자</th><th>상태</th><th>게시 방식</th><th>수정일</th><th></th></tr></thead><tbody>
-<tr><td>128</td><td>9월 서비스 업데이트 안내</td><td>09.07~09.30</td><td>고정</td><td>김운영</td><td><span class="badge green">게시중</span></td><td>09.07</td><td><button class="btn" data-go="notice-create">수정</button> <button class="btn danger-soft" data-modal="공지사항 삭제">삭제</button></td></tr>
-<tr><td>127</td><td>추석 연휴 고객센터 운영 안내</td><td>09.20~10.05</td><td>-</td><td>이지은</td><td><span class="badge blue">예약</span></td><td>09.06</td><td><button class="btn" data-go="notice-create">수정</button> <button class="btn danger-soft" data-modal="공지사항 삭제">삭제</button></td></tr>
-</tbody></table>
+  <div class="table-tools">
+    <div class="table-tools-left">
+      <input class="table-search wide-search" id="boardSearch" placeholder="제목 검색"/>
+      <select class="filter" id="boardCategoryFilter">
+        <option value="all">전체 카테고리</option>
+        <option value="notice">공지사항</option>
+        <option value="event">이벤트·프로모션</option>
+      </select>
+      <select class="filter" id="boardStatusFilter">
+        <option value="all">전체 상태</option>
+        <option value="published">게시중</option>
+        <option value="scheduled">예약</option>
+        <option value="hidden">비게시</option>
+      </select>
+    </div>
+    <div class="table-tools-right"><span class="learning-result-count" id="boardResultCount">총 4건</span></div>
+  </div>
+
+  <table class="board-table">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>카테고리</th>
+        <th>제목</th>
+        <th>게시 기간</th>
+        <th>노출 대상</th>
+        <th>상단 고정</th>
+        <th>등록자</th>
+        <th>상태</th>
+        <th>수정일</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="boardTableBody">
+      <tr data-board-category="notice" data-board-status="published">
+        <td>146</td>
+        <td><span class="board-category-badge notice">공지사항</span></td>
+        <td><strong>9월 서비스 업데이트 안내</strong></td>
+        <td>09.07 ~ 09.30</td>
+        <td>전체</td>
+        <td>고정</td>
+        <td>김운영</td>
+        <td><span class="badge green">게시중</span></td>
+        <td>09.07</td>
+        <td><div class="row-actions"><button class="btn" data-go="board-create">수정</button><button class="btn danger-soft" data-modal="게시글 삭제">삭제</button></div></td>
+      </tr>
+      <tr data-board-category="event" data-board-status="published">
+        <td>145</td>
+        <td><span class="board-category-badge event">이벤트·프로모션</span></td>
+        <td><strong>가을 독서 챌린지</strong></td>
+        <td>09.01 ~ 09.30</td>
+        <td>전체 학생</td>
+        <td>-</td>
+        <td>이마케팅</td>
+        <td><span class="badge green">게시중</span></td>
+        <td>09.05</td>
+        <td><div class="row-actions"><button class="btn" data-go="board-create">수정</button><button class="btn danger-soft" data-modal="게시글 삭제">삭제</button></div></td>
+      </tr>
+      <tr data-board-category="notice" data-board-status="scheduled">
+        <td>144</td>
+        <td><span class="board-category-badge notice">공지사항</span></td>
+        <td><strong>추석 연휴 고객센터 운영 안내</strong></td>
+        <td>09.20 ~ 10.05</td>
+        <td>전체</td>
+        <td>-</td>
+        <td>이지은</td>
+        <td><span class="badge blue">예약</span></td>
+        <td>09.06</td>
+        <td><div class="row-actions"><button class="btn" data-go="board-create">수정</button><button class="btn danger-soft" data-modal="게시글 삭제">삭제</button></div></td>
+      </tr>
+      <tr data-board-category="event" data-board-status="hidden">
+        <td>143</td>
+        <td><span class="board-category-badge event">이벤트·프로모션</span></td>
+        <td><strong>친구 추천 프로모션</strong></td>
+        <td>10.01 ~ 10.31</td>
+        <td>보호자</td>
+        <td>-</td>
+        <td>박마케팅</td>
+        <td><span class="badge gray">비게시</span></td>
+        <td>09.04</td>
+        <td><div class="row-actions"><button class="btn" data-go="board-create">수정</button><button class="btn danger-soft" data-modal="게시글 삭제">삭제</button></div></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-</section><section class="page" id="notice-create">
+</section>
+
+<section class="page" id="board-create">
 <div class="page-head">
-<div>
-<button aria-label="뒤로가기" class="page-back-btn" data-go="notices" title="뒤로가기" type="button">
-<svg aria-hidden="true" viewbox="0 0 24 24">
-<path d="M15 5l-7 7 7 7"></path>
-<path d="M8 12h11"></path>
-</svg>
-<span>뒤로</span>
-</button>
-<h1 class="page-title">공지사항 등록</h1>
-<div class="page-desc">공지 기본정보와 게시 설정, 상세 내용을 작성</div>
+  <div>
+    <button aria-label="뒤로가기" class="page-back-btn" data-go="board-management" title="뒤로가기" type="button">
+      <svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path><path d="M8 12h11"></path></svg>
+      <span>뒤로</span>
+    </button>
+    <h1 class="page-title">게시글 등록</h1>
+    <div class="page-desc">카테고리를 선택해 공지사항 또는 이벤트·프로모션 게시글을 등록</div>
+  </div>
+  <div class="editor-top-actions">
+    <button class="btn" data-go="board-management">목록</button>
+    <button class="btn" data-modal="게시글 임시저장">임시저장</button>
+    <button class="btn" data-modal="게시글 미리보기">미리보기</button>
+    <button class="btn primary" data-modal="게시글 등록 완료">등록</button>
+  </div>
 </div>
-<div class="editor-top-actions">
-<button class="btn" data-go="notices">목록</button>
-<button class="btn" data-modal="공지사항 임시저장">임시저장</button>
-<button class="btn" data-modal="공지사항 미리보기">미리보기</button>
-<button class="btn primary" data-modal="공지사항 등록 완료">등록</button>
-</div>
-</div>
+
 <div class="editor-page-shell">
-<div class="editor-main">
-<div class="editor-section">
-<div class="editor-section-title">기본 정보</div>
-<div class="editor-form">
-<label>제목</label><input value="9월 서비스 업데이트 안내"/>
-<label>노출 대상</label>
-<div class="segmented"><button class="active" type="button">전체</button><button type="button">학생</button><button type="button">보호자</button></div>
-<label>게시 상태</label>
-<div class="toggle-wrap"><button class="toggle on" type="button"></button><span class="toggle-label">게시</span></div>
-<label>상단 고정</label>
-<div class="toggle-wrap"><button class="toggle" type="button"></button><span class="toggle-label">고정 해제</span></div>
-<label>게시 기간</label>
-<div style="display:flex;align-items:center;gap:8px">
-<input type="date" value="2026-09-08"/><span>~</span><input type="date" value="2026-09-30"/>
+  <div class="editor-main">
+    <div class="editor-section">
+      <div class="editor-section-title">기본 정보</div>
+      <div class="editor-form">
+        <label>카테고리</label>
+        <select id="boardEditorCategory">
+          <option value="notice" selected>공지사항</option>
+          <option value="event">이벤트·프로모션</option>
+        </select>
+
+        <label>제목</label>
+        <input value="9월 서비스 업데이트 안내"/>
+
+        <label>노출 대상</label>
+        <div class="segmented">
+          <button class="active" type="button">전체</button>
+          <button type="button">학생</button>
+          <button type="button">보호자</button>
+        </div>
+
+        <label>게시 상태</label>
+        <div class="toggle-wrap"><button class="toggle on" type="button"></button><span class="toggle-label">게시</span></div>
+
+        <label>상단 고정</label>
+        <div class="toggle-wrap"><button class="toggle" type="button"></button><span class="toggle-label">고정 해제</span></div>
+
+        <label>게시 기간</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="date" value="2026-09-08"/><span>~</span><input type="date" value="2026-09-30"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-section-title">대표 이미지 <span class="board-optional-label">선택</span></div>
+      <div class="upload-box">
+        <div class="upload-main">
+          <div class="upload-icon"><svg viewbox="0 0 24 24"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
+          <div class="upload-info">
+            <div class="upload-title">대표 이미지를 선택해 주세요</div>
+            <div class="upload-sub">이벤트·프로모션 또는 강조가 필요한 게시글에 사용할 수 있습니다.</div>
+          </div>
+        </div>
+        <div class="upload-actions">
+          <label class="upload-btn">파일 선택<input class="file-hidden" type="file" accept="image/*"/></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-section-title">상세 내용</div>
+      <div class="editor-toolbar">
+        <div class="editor-toolbar-group">
+          <button class="editor-tool editor-tool-text" title="제목 1" type="button">H1</button>
+          <button class="editor-tool editor-tool-text" title="제목 2" type="button">H2</button>
+        </div>
+        <div class="editor-toolbar-group">
+          <button class="editor-tool" title="굵게" type="button"><svg viewbox="0 0 24 24"><path d="M7 5h6a4 4 0 0 1 0 8H7z"></path><path d="M7 13h7a4 4 0 0 1 0 8H7z"></path></svg></button>
+          <button class="editor-tool" title="기울임" type="button"><svg viewbox="0 0 24 24"><path d="M10 5h7"></path><path d="M7 19h7"></path><path d="M14 5L10 19"></path></svg></button>
+          <button class="editor-tool" title="밑줄" type="button"><svg viewbox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"></path><path d="M5 21h14"></path></svg></button>
+        </div>
+        <div class="editor-toolbar-group">
+          <button class="editor-tool" title="왼쪽 정렬" type="button"><svg viewbox="0 0 24 24"><path d="M4 6h14"></path><path d="M4 10h10"></path><path d="M4 14h14"></path><path d="M4 18h8"></path></svg></button>
+          <button class="editor-tool" title="가운데 정렬" type="button"><svg viewbox="0 0 24 24"><path d="M5 6h14"></path><path d="M7 10h10"></path><path d="M5 14h14"></path><path d="M8 18h8"></path></svg></button>
+        </div>
+        <div class="editor-toolbar-group">
+          <button class="editor-tool" title="링크" type="button"><svg viewbox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"></path></svg></button>
+          <button class="editor-tool" title="이미지 삽입" type="button"><svg viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 20"></path></svg></button>
+        </div>
+      </div>
+      <div class="rich-editor" contenteditable="true">
+        <h2 style="margin-top:0">게시글 제목</h2>
+        <p>게시글 상세 내용을 입력해 주세요.</p>
+        <p>카테고리에 따라 공지사항 또는 이벤트·프로모션으로 노출됩니다.</p>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-section-title">첨부파일</div>
+      <div class="upload-box">
+        <div class="upload-main">
+          <div class="upload-icon"><svg viewbox="0 0 24 24"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
+          <div class="upload-info">
+            <div class="upload-title">파일을 선택해 주세요</div>
+            <div class="upload-sub">게시글에 함께 제공할 문서 또는 이미지 파일</div>
+          </div>
+        </div>
+        <div class="upload-actions"><label class="upload-btn">파일 선택<input class="file-hidden" type="file"/></label></div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="editor-side">
+    <div class="panel-title">현재 설정</div>
+    <div class="side-summary" style="margin-top:10px">
+      <div class="row"><span class="k">카테고리</span><strong id="boardEditorCategorySummary">공지사항</strong></div>
+      <div class="row"><span class="k">노출 대상</span><strong>전체</strong></div>
+      <div class="row"><span class="k">게시</span><span class="badge green">게시중</span></div>
+      <div class="row"><span class="k">상단 고정</span><strong>미사용</strong></div>
+      <div class="row"><span class="k">기간</span><strong>09.08 ~ 09.30</strong></div>
+    </div>
+    <div class="soft-panel board-category-guide" id="boardCategoryGuide">일반 서비스 안내, 업데이트, 운영 공지를 등록합니다.</div>
+    <button class="btn" data-modal="게시글 미리보기" style="width:100%;margin-top:14px">게시글 미리보기</button>
+  </aside>
 </div>
-</div>
-</div>
-<div class="editor-section">
-<div class="editor-section-title">공지 상세 내용</div>
-<div class="editor-toolbar">
-<div class="editor-toolbar-group">
-<button class="editor-tool editor-tool-text" title="제목 1" type="button">H1</button>
-<button class="editor-tool editor-tool-text" title="제목 2" type="button">H2</button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="굵게" type="button"><svg viewbox="0 0 24 24"><path d="M7 5h6a4 4 0 0 1 0 8H7z"></path><path d="M7 13h7a4 4 0 0 1 0 8H7z"></path></svg></button>
-<button class="editor-tool" title="기울임" type="button"><svg viewbox="0 0 24 24"><path d="M10 5h7"></path><path d="M7 19h7"></path><path d="M14 5L10 19"></path></svg></button>
-<button class="editor-tool" title="밑줄" type="button"><svg viewbox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"></path><path d="M5 21h14"></path></svg></button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="왼쪽 정렬" type="button"><svg viewbox="0 0 24 24"><path d="M4 6h14"></path><path d="M4 10h10"></path><path d="M4 14h14"></path><path d="M4 18h8"></path></svg></button>
-<button class="editor-tool" title="가운데 정렬" type="button"><svg viewbox="0 0 24 24"><path d="M5 6h14"></path><path d="M7 10h10"></path><path d="M5 14h14"></path><path d="M8 18h8"></path></svg></button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="글머리 기호" type="button"><svg viewbox="0 0 24 24"><circle cx="5" cy="7" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="5" cy="17" r="1"></circle><path d="M9 7h10"></path><path d="M9 12h10"></path><path d="M9 17h10"></path></svg></button>
-<button class="editor-tool" title="번호 목록" type="button"><svg viewbox="0 0 24 24"><path d="M4 6h1v3"></path><path d="M4 10h2"></path><path d="M4 14h2l-2 3h2"></path><path d="M9 7h10"></path><path d="M9 12h10"></path><path d="M9 17h10"></path></svg></button>
-</div>
-<div class="editor-toolbar-group">
-<button class="editor-tool" title="링크" type="button"><svg viewbox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"></path></svg></button>
-<button class="editor-tool" title="이미지 삽입" type="button"><svg viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 20"></path></svg></button>
-<button class="editor-tool" title="구분선" type="button"><svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg></button>
-</div>
-</div>
-<div class="rich-editor" contenteditable="true">
-<h2 style="margin-top:0">9월 서비스 업데이트 안내</h2>
-<p>서비스 업데이트 내용을 입력해 주세요.</p>
-<p>이미지, 링크, 강조 문구 등을 활용해 공지사항을 작성할 수 있습니다.</p>
-</div>
-</div>
-<div class="editor-section">
-<div class="editor-section-title">첨부파일</div>
-<div class="upload-box">
-<div class="upload-main">
-<div class="upload-icon"><svg viewbox="0 0 24 24"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
-<div class="upload-info">
-<div class="upload-title">파일을 선택해 주세요</div>
-<div class="upload-sub">공지에 함께 제공할 문서 또는 이미지 파일</div>
-</div>
-</div>
-<div class="upload-actions">
-<label class="upload-btn">파일 선택<input class="file-hidden" type="file"/></label>
-</div>
-</div>
-</div>
-</div>
-<aside class="editor-side">
-<div class="panel-title">현재 설정</div>
-<div class="side-summary" style="margin-top:10px">
-<div class="row"><span class="k">노출 대상</span><strong>전체</strong></div>
-<div class="row"><span class="k">게시</span><span class="badge green">게시중</span></div>
-<div class="row"><span class="k">상단 고정</span><strong>미사용</strong></div>
-<div class="row"><span class="k">기간</span><strong>09.08 ~ 09.30</strong></div>
-</div>
-<button class="btn" data-modal="공지사항 미리보기" style="width:100%;margin-top:14px">공지사항 미리보기</button>
-</aside>
-</div>
-</section><section class="page" id="resources">
+</section>
+<section class="page" id="resources">
 <div class="page-head">
 <div>
 <h1 class="page-title">자료실</h1>
@@ -9499,16 +10885,17 @@ table td,
 </div>
 </section><section class="page" id="service-popups">
 <div class="page-head">
-<div><h1 class="page-title">팝업 관리</h1><div class="page-desc">로그인 후 메인 화면에 노출되는 서비스 팝업 이미지·기간·대상 관리</div></div>
+<div><h1 class="page-title">팝업 관리</h1><div class="page-desc">비로그인·보호자·학생 영역에 노출되는 서비스 팝업 이미지·기간·대상 관리</div></div>
 <button class="btn primary" data-modal="팝업 등록">팝업 등록</button>
 </div>
-<div class="note">팝업 노출 위치는 로그인 후 메인 화면 · 노출 대상은 학생 / 보호자 / 전체 중 선택</div>
+<div class="note">노출 대상은 비로그인 / 보호자 / 학생을 복수 선택할 수 있으며, 시작·종료 날짜와 시간까지 지정할 수 있습니다. 3개 대상을 모두 선택하면 목록에서는 ‘전체’로 표시합니다.</div>
 <div style="height:18px"></div>
 <div class="table-wrap">
-<div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="팝업명 검색"/><select class="filter"><option>전체 대상</option><option>학생</option><option>보호자</option><option>전체</option></select><select class="filter"><option>전체 상태</option><option>노출중</option><option>예약</option><option>비노출</option></select></div></div>
+<div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="팝업명 검색"/><select class="filter"><option>전체 대상</option><option>비로그인 포함</option><option>보호자 포함</option><option>학생 포함</option><option>전체 대상 선택</option></select><select class="filter"><option>전체 상태</option><option>노출중</option><option>예약</option><option>비노출</option></select></div></div>
 <table><thead><tr><th>미리보기</th><th>팝업명</th><th>노출기간</th><th>노출대상</th><th>위치</th><th>상태</th><th></th></tr></thead><tbody>
-<tr><td><div class="thumb"></div></td><td>9월 학습 챌린지</td><td>09.01~09.30</td><td><span class="scope-badge">학생</span></td><td>로그인 메인</td><td><span class="badge green">노출중</span></td><td><button class="btn detail-btn" data-name="9월 학습 챌린지" data-type="servicePopup">상세</button></td></tr>
-<tr><td><div class="thumb" style="background:linear-gradient(135deg,#e6ecff,#8897ff)"></div></td><td>보호자 리포트 안내</td><td>09.15~10.15</td><td><span class="scope-badge">보호자</span></td><td>로그인 메인</td><td><span class="badge blue">예약</span></td><td><button class="btn detail-btn" data-name="보호자 리포트 안내" data-type="servicePopup">상세</button></td></tr>
+<tr><td><div class="thumb"></div></td><td>9월 학습 챌린지</td><td><strong>09.01 09:00</strong><span class="row-sub">~ 09.30 23:59</span></td><td><span class="scope-badge">학생</span></td><td>학생 메인</td><td><span class="badge green">노출중</span></td><td><button class="btn detail-btn" data-name="9월 학습 챌린지" data-type="servicePopup">상세</button></td></tr>
+<tr><td><div class="thumb" style="background:linear-gradient(135deg,#e6ecff,#8897ff)"></div></td><td>보호자 리포트 안내</td><td><strong>09.15 10:00</strong><span class="row-sub">~ 10.15 18:00</span></td><td><span class="scope-badge">보호자</span></td><td>보호자 메인</td><td><span class="badge blue">예약</span></td><td><button class="btn detail-btn" data-name="보호자 리포트 안내" data-type="servicePopup">상세</button></td></tr>
+<tr><td><div class="thumb" style="background:linear-gradient(135deg,#eef7ff,#6fa8dc)"></div></td><td>신규 회원 혜택 안내</td><td><strong>09.22 09:00</strong><span class="row-sub">~ 10.31 23:59</span></td><td><div class="scope-chip-wrap"><span class="scope-badge guest">비로그인</span><span class="scope-badge">보호자</span></div></td><td>비로그인 메인 · 보호자 메인</td><td><span class="badge green">노출중</span></td><td><button class="btn detail-btn" data-name="신규 회원 혜택 안내" data-type="servicePopup">상세</button></td></tr>
 </tbody></table>
 </div>
 </section><section class="page" id="main-banners">
@@ -9519,7 +10906,7 @@ table td,
 </div>
 <button class="btn primary" data-modal="메인 배너 등록">메인 배너 등록</button>
 </div>
-<div class="note">여러 배너 운영 시 노출 순서에 따라 슬라이드되며, PC/모바일 이미지는 각각 등록 가능</div>
+<div class="note">여러 배너 운영 시 노출 순서에 따라 슬라이드되며, 모바일 이미지만 등록합니다.</div>
 <div style="height:18px"></div>
 <div class="kpis">
 <div class="kpi"><div class="label">전체 배너</div><div class="value">8개</div></div>
@@ -9793,11 +11180,11 @@ table td,
 <tr><td><strong>개인정보·동의 관리</strong><span>동의 현황 및 이력 조회</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
 <tr class="permission-group-row"><td colspan="5">구독·결제 관리</td></tr>
 <tr><td><strong>구독 관리</strong><span>구독 상태·다음 결제일</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
-<tr><td><strong>결제 내역</strong><span>결제·변경 이력 조회</span></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
+<tr><td><strong>주문·결제 내역</strong><span>주문·결제·변경 이력 조회</span></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
 <tr><td><strong>환불 관리</strong><span>환불 접수·최종 처리</span></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
 <tr class="permission-group-row"><td colspan="5">콘텐츠·운영</td></tr>
 <tr><td><strong>학습 콘텐츠</strong><span>콘텐츠 등록·수정·삭제</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
-<tr><td><strong>공지·자료·팝업</strong><span>운영 콘텐츠 관리</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
+<tr><td><strong>게시판·자료·팝업</strong><span>공지·이벤트·프로모션 및 운영 콘텐츠 관리</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
 <tr class="permission-group-row"><td colspan="5">고객센터·설정</td></tr>
 <tr><td><strong>1:1 문의 / 전화 문의</strong><span>답변·상담 기록</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
 <tr><td><strong>관리자·권한 설정</strong><span>관리자 계정 및 권한 그룹</span></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td><td><input checked="" type="checkbox"/></td></tr>
@@ -9842,8 +11229,6 @@ table td,
 const pages = [...document.querySelectorAll('.page')];
 const navItems = [...document.querySelectorAll('.nav-item[data-page]')];
 const parentNavMap = {
-  'event-create':'events',
-  'notice-create':'notices',
   'resource-create':'resources',
   'grade-create':'curriculum',
   'section-create':'curriculum',
@@ -9851,7 +11236,8 @@ const parentNavMap = {
   'curriculum-edit':'curriculum',
   'content-create':'contents',
   'content-edit':'contents',
-  'content-bulk-upload':'contents'
+  'content-bulk-upload':'contents',
+  'board-create':'board-management'
 };
 
 function goPage(id){
@@ -9919,8 +11305,7 @@ function detailTemplate(type,name){
         <div><span>학습 완료</span><strong>2026.09.11 10:42</strong></div>
         <div><span>소요시간</span><strong>24분</strong></div>
         <div><span>학습 상태</span><strong>완료</strong></div>
-        <div><span>처음 정답률</span><strong>67%</strong></div>
-        <div><span>최종 정답률</span><strong>100%</strong></div>
+        <div><span>정답률</span><strong>100%</strong></div>
         <div><span>다시 풀기</span><strong>1회</strong></div>
         <div><span>학습 중 종료</span><strong>없음</strong></div>
       </div>
@@ -10073,7 +11458,7 @@ function detailTemplate(type,name){
     </div>
     <div class="operation-card"><h4>학습 이력</h4>
       <div class="history-list"><div class="history-row"><div class="history-time">오늘 08:41</div><div>3급 2단락 8매듭 완료</div><span class="badge green">완료</span></div><div class="history-row"><div class="history-time">어제 18:20</div><div>어휘특강 완료</div><span class="badge green">완료</span></div></div>
-      <div class="operation-actions"><button class="btn" data-modal="비밀번호 재설정" data-account-type="학생" data-account-name="${name}">비밀번호 재설정</button><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button><button class="btn" data-modal="알림톡 재발송">알림톡 재발송</button></div>
+      <div class="operation-actions"><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button><button class="btn" data-modal="알림톡 재발송">알림톡 재발송</button></div>
     </div>
     <div class="danger-note">유효 이용권 보유 중에는 학생 삭제 불가</div>
   
@@ -10183,55 +11568,29 @@ function detailTemplate(type,name){
         </table>
       </div>`,
     learning: `
-      <div class="learning-hero">
+      <div class="learning-hero simple-learning-hero">
         <div class="learning-hero-left">
-          <div class="score-ring" style="background:conic-gradient(var(--blue) 0 40%,#eceef2 40%)"><strong>40%</strong></div>
           <div>
-            <div class="learning-hero-title">${name} · 통합 학습 현황</div>
+            <div class="learning-hero-title">${name} · 학습 현황</div>
             <div class="learning-meta"><span>3급</span><span>2단락 8매듭</span><span>최근 학습 오늘 10:42</span></div>
           </div>
         </div>
         <span class="badge blue">학습중</span>
       </div>
 
-      <div class="metric-grid">
-        <div class="metric-card"><div class="metric-label">현재 단락</div><div class="metric-value">8 / 20매듭</div></div>
-        <div class="metric-card"><div class="metric-label">최근 기본 학습</div><div class="metric-value">완료</div></div>
-        <div class="metric-card"><div class="metric-label">최근 어휘 특강</div><div class="metric-value">완료</div></div>
-        <div class="metric-card"><div class="metric-label">단락평가</div><div class="metric-value">진입 전</div></div>
+      <div class="history-detail-grid learning-overview-simple-grid">
+        <div><span>현재 급수</span><strong>3급</strong></div>
+        <div><span>현재 위치</span><strong>2단락 8매듭</strong></div>
+        <div><span>오늘 학습</span><strong>기본 학습 완료</strong></div>
+        <div><span>최근 학습</span><strong>오늘 10:42</strong></div>
+        <div><span>최근 정답률</span><strong>100%</strong></div>
+        <div><span>다시 풀기</span><strong>1회</strong></div>
+        <div><span>단락 평가</span><strong>진입 전</strong></div>
+        <div><span>확인 필요</span><strong>없음</strong></div>
       </div>
 
-      <div class="result-card">
-        <h4>학생 학습 타임라인</h4>
-        <table class="result-table learning-timeline-table">
-          <thead><tr><th>일시</th><th>학습 유형</th><th>위치</th><th>결과</th><th>상태</th></tr></thead>
-          <tbody>
-            <tr><td>09.11 10:42</td><td>기본 학습</td><td>3급 2단락 8매듭</td><td>최초 67% → 최종 100%</td><td><span class="result-status good">완료</span></td></tr>
-            <tr><td>09.11 10:18</td><td>어휘 특강</td><td>3급 2단락 8매듭</td><td>5/5 완료</td><td><span class="result-status good">완료</span></td></tr>
-            <tr><td>09.10 19:04</td><td>기본 학습</td><td>3급 2단락 7매듭</td><td>최초 100%</td><td><span class="result-status good">완료</span></td></tr>
-            <tr><td>08.28 17:21</td><td>문해력 진단</td><td>진단 테스트</td><td>82점 · 추천 3급</td><td><span class="result-status good">완료</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="result-grid">
-        <div class="result-card">
-          <h4>최근 기본 학습 정보</h4>
-          <div class="score-detail-list">
-            <div><span>최초 정답률</span><strong>67%</strong></div>
-            <div><span>다시 풀기</span><strong>1회</strong></div>
-            <div><span>최종 정답률</span><strong>100%</strong></div>
-            <div><span>콘텐츠</span><strong>B_3_2_8 · v1.2</strong></div>
-          </div>
-        </div>
-        <div class="result-card">
-          <h4>확인 필요</h4>
-          <div class="admin-learning-checks">
-            <div><span>학습 중 종료</span><strong>최근 30일 1회</strong></div>
-            <div><span>제한시간 초과</span><strong>없음</strong></div>
-            <div><span>3일 이상 미학습</span><strong>해당 없음</strong></div>
-          </div>
-        </div>
+      <div class="history-detail-note">
+        상세한 학습 회차는 <strong>학습 이력</strong>, 진단·단락 분석 결과는 <strong>학습 결과</strong>에서 확인합니다.
       </div>`,
     basic: `
       <div class="learning-hero">
@@ -10246,9 +11605,9 @@ function detailTemplate(type,name){
       </div>
 
       <div class="metric-grid">
-        <div class="metric-card"><div class="metric-label">최초 정답률</div><div class="metric-value">67%</div></div>
+        <div class="metric-card"><div class="metric-label">정답률</div><div class="metric-value">100%</div></div>
         <div class="metric-card"><div class="metric-label">다시 풀기</div><div class="metric-value">1회</div></div>
-        <div class="metric-card"><div class="metric-label">최종 정답률</div><div class="metric-value">100%</div></div>
+        <div class="metric-card"><div class="metric-label">소요시간</div><div class="metric-value">24분</div></div>
         <div class="metric-card"><div class="metric-label">학습 중 종료</div><div class="metric-value">없음</div></div>
       </div>
 
@@ -10268,11 +11627,11 @@ function detailTemplate(type,name){
         <div class="result-card">
           <h4>문항 결과</h4>
           <table class="result-table">
-            <thead><tr><th>문항</th><th>유형</th><th>최초</th><th>다시 풀기</th><th>최종</th></tr></thead>
+            <thead><tr><th>문항</th><th>유형</th><th>결과</th><th>다시 풀기</th></tr></thead>
             <tbody>
-              <tr><td>1</td><td>구성 이해</td><td><span class="result-status good">정답</span></td><td>-</td><td>정답</td></tr>
-              <tr><td>2</td><td>구성 이해</td><td><span class="result-status bad">오답</span></td><td>1회</td><td>정답</td></tr>
-              <tr><td>3</td><td>추론 이해</td><td><span class="result-status good">정답</span></td><td>-</td><td>정답</td></tr>
+              <tr><td>1</td><td>구성 이해</td><td><span class="result-status good">정답</span></td><td>-</td></tr>
+              <tr><td>2</td><td>구성 이해</td><td><span class="result-status good">정답</span></td><td>1회</td></tr>
+              <tr><td>3</td><td>추론 이해</td><td><span class="result-status good">정답</span></td><td>-</td></tr>
             </tbody>
           </table>
         </div>
@@ -10393,7 +11752,7 @@ function detailTemplate(type,name){
 
       <div class="metric-grid">
         <div class="metric-card"><div class="metric-label">기본 학습</div><div class="metric-value">20 / 20</div></div>
-        <div class="metric-card"><div class="metric-label">최초 → 최종</div><div class="metric-value">78% → 92%</div></div>
+        <div class="metric-card"><div class="metric-label">정답률</div><div class="metric-value">92%</div></div>
         <div class="metric-card"><div class="metric-label">다시 풀기</div><div class="metric-value">6회</div></div>
         <div class="metric-card"><div class="metric-label">단락 평가</div><div class="metric-value">86 / 100</div></div>
       </div>
@@ -10418,12 +11777,12 @@ function detailTemplate(type,name){
       <div class="result-card">
         <h4>매듭별 결과</h4>
         <table class="result-table">
-          <thead><tr><th>구간</th><th>완료</th><th>최초 평균</th><th>최종 평균</th><th>다시 풀기</th></tr></thead>
+          <thead><tr><th>구간</th><th>완료</th><th>정답률</th><th>다시 풀기</th></tr></thead>
           <tbody>
-            <tr><td>1~5매듭</td><td>5/5</td><td>80%</td><td>93%</td><td>2회</td></tr>
-            <tr><td>6~10매듭</td><td>5/5</td><td>76%</td><td>90%</td><td>2회</td></tr>
-            <tr><td>11~15매듭</td><td>5/5</td><td>79%</td><td>92%</td><td>1회</td></tr>
-            <tr><td>16~20매듭</td><td>5/5</td><td>77%</td><td>93%</td><td>1회</td></tr>
+            <tr><td>1~5매듭</td><td>5/5</td><td>93%</td><td>2회</td></tr>
+            <tr><td>6~10매듭</td><td>5/5</td><td>90%</td><td>2회</td></tr>
+            <tr><td>11~15매듭</td><td>5/5</td><td>92%</td><td>1회</td></tr>
+            <tr><td>16~20매듭</td><td>5/5</td><td>93%</td><td>1회</td></tr>
           </tbody>
         </table>
       </div>`,
@@ -10503,7 +11862,17 @@ function detailTemplate(type,name){
   </div>
 </div>
 `,
-    paymentFail: common + `<div class="detail-section"><h4>자동결제 실패</h4><div class="detail-grid"><div class="k">최초 실패일</div><div>2026.09.07</div><div class="k">다시 결제</div><div>3 / 3회</div><div class="k">추가 이용 기간</div><div>없음</div><div class="k">최종 상태</div><div><span class="badge red">최종실패</span></div><div class="k">학습 제한</div><div>최종 실패일 24:00 기준</div></div></div><div class="note">다시 결제는 시스템에서 최대 3회 자동 처리하며 관리자가 수동으로 다시 결제하지 않음</div>`,
+    paymentFail: common + `<div class="detail-section">
+  <h4>자동결제 실패</h4>
+  <div class="detail-grid">
+    <div class="k">결제 실패일</div><div>2026.09.07</div>
+    <div class="k">자동 재결제</div><div>없음</div>
+    <div class="k">추가 이용 기간</div><div>없음</div>
+    <div class="k">상태</div><div><span class="badge yellow">제한 예정</span></div>
+    <div class="k">학습 제한</div><div>결제 실패일 24:00부터</div>
+  </div>
+</div>
+<div class="note">결제 실패 후 자동 재결제를 다시 시도하지 않으며, 당일 24:00부터 해당 학생의 학습 이용을 제한합니다.</div>`,
 
     contentHistory: common + `<div class="detail-section"><h4>변경 상세</h4><div class="detail-grid"><div class="k">변경유형</div><div>급수 이동</div><div class="k">변경 전</div><div>3급 4단락</div><div class="k">변경 후</div><div>4급 2단락</div><div class="k">처리자</div><div>이기획</div><div class="k">사유</div><div>국어팀 난이도 재검토</div></div></div>`,
     phoneCs: common + `<div class="detail-section"><h4>전화 상담 내역</h4><div class="detail-grid"><div class="k">보호자</div><div>김민정</div><div class="k">학생</div><div>김하늘</div><div class="k">문의유형</div><div>결제</div><div class="k">담당자</div><div>이지은</div></div></div><div class="detail-section"><h4>상담 내용</h4><div class="note">정기결제 카드 변경 방법 문의. 보호자 화면에서 결제수단 변경 후 다음 결제일부터 적용되는 경로 안내.</div></div><div class="detail-section"><h4>처리 메모</h4><textarea class="form-area">안내 완료. 추가 문의 시 결제 실패 이력 확인 필요.</textarea></div><div class="detail-section"><button class="btn primary" data-modal="환불 대신 접수">환불 대신 접수</button></div>`,
@@ -10579,11 +11948,41 @@ function detailTemplate(type,name){
     <h4>${name}</h4>
     <div class="form-grid">
       <div class="form-label">노출 상태</div><div class="toggle-wrap"><button class="toggle on"></button><span class="toggle-label">노출</span></div>
-      <div class="form-label">노출 대상</div><div class="segmented"><button class="active">학생</button><button>보호자</button><button>전체</button></div>
-      <div class="form-label">노출 시작</div><input class="form-control" value="2026-09-01">
-      <div class="form-label">노출 종료</div><input class="form-control" value="2026-09-30">
-      <div class="form-label">노출 위치</div><span>로그인 후 메인</span>
+
+      <div class="form-label">노출 대상</div>
+      <div class="popup-audience-block" data-popup-audience>
+        <div class="popup-audience-picker" role="group" aria-label="팝업 노출 대상">
+          <button class="popup-audience-option active" type="button" data-popup-target="guest" aria-pressed="true">
+            <strong>비로그인</strong><small>로그인 전 메인</small>
+          </button>
+          <button class="popup-audience-option active" type="button" data-popup-target="guardian" aria-pressed="true">
+            <strong>보호자</strong><small>보호자 메인</small>
+          </button>
+          <button class="popup-audience-option" type="button" data-popup-target="student" aria-pressed="false">
+            <strong>학생</strong><small>학생 메인</small>
+          </button>
+        </div>
+        <div class="popup-audience-footer">
+          <span>버튼을 눌러 여러 대상을 선택할 수 있습니다.</span>
+          <span>현재 선택: <strong data-popup-audience-summary>비로그인, 보호자</strong></span>
+        </div>
+      </div>
+
+      <div class="form-label">이동 링크</div><input class="form-control" value="/event/fall-reading">
+      <div class="form-label">노출 시작</div>
+      <div class="popup-datetime-row">
+        <input class="form-control" type="date" value="2026-09-01" data-popup-start-date>
+        <input class="form-control" type="time" value="09:00" data-popup-start-time>
+      </div>
+      <div class="form-label">노출 종료</div>
+      <div class="popup-datetime-row">
+        <input class="form-control" type="date" value="2026-09-30" data-popup-end-date>
+        <input class="form-control" type="time" value="23:59" data-popup-end-time>
+      </div>
+      <div class="form-label">노출 위치</div><div class="popup-location-summary" data-popup-location-summary>비로그인 메인 · 보호자 메인</div>
+      <div></div><div class="popup-datetime-help" data-popup-datetime-help>2026.09.01 09:00 ~ 2026.09.30 23:59 노출</div>
     </div>
+    <div class="soft-panel popup-flex-note">비로그인·보호자·학생 버튼을 각각 눌러 노출 대상을 선택합니다. 여러 대상을 동시에 선택할 수 있으며, 3개 모두 선택하면 ‘전체’로 표시됩니다.</div>
     <div class="operation-actions"><button class="btn primary" data-modal="팝업 수정 저장">저장</button></div>
   </div>
   <div class="ops-preview"><h4>미리보기</h4><div class="preview-frame"><div class="thumb" style="width:240px;height:145px"></div></div></div>
@@ -10596,19 +11995,7 @@ function detailTemplate(type,name){
     <div class="form-grid">
       <div class="form-label">노출 상태</div><div class="toggle-wrap"><button class="toggle on"></button><span class="toggle-label">노출</span></div>
       <div class="form-label">노출 대상</div><div class="segmented"><button class="active">학생</button><button>보호자</button><button>전체</button></div>
-      <div class="form-label">PC 이미지</div><div class="upload-box has-file compact">
-          <div class="upload-main">
-            <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg></div>
-            <div class="upload-info">
-              <div class="upload-title">banner_pc_01.png</div>
-              <div class="upload-sub">PC 배너 · PNG</div>
-            </div>
-          </div>
-          <div class="upload-actions">
-            <button class="upload-btn" type="button" data-modal="파일 교체">교체</button>
-            <button class="upload-remove" type="button" title="삭제"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M8 11v6M12 11v6M16 11v6"/><path d="M6 7l1 13h10l1-13"/></svg></button>
-          </div>
-        </div>
+
       <div class="form-label">모바일 이미지</div><div class="upload-box has-file compact">
           <div class="upload-main">
             <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg></div>
@@ -10633,7 +12020,7 @@ function detailTemplate(type,name){
     <h4>미리보기</h4>
     <div class="preview-frame"><div class="thumb" style="width:100%;height:170px;background:linear-gradient(135deg,#fff1b8,#f4c95d)"></div></div>
     <h4 style="margin-top:14px">최근 변경</h4>
-    <div class="history-list"><div class="history-row"><div class="history-time">09.07</div><div>노출 순서 2 → 1</div><span class="badge blue">순서</span></div><div class="history-row"><div class="history-time">09.06</div><div>PC 이미지 교체</div><span class="badge green">이미지</span></div></div>
+    <div class="history-list"><div class="history-row"><div class="history-time">09.07</div><div>노출 순서 2 → 1</div><span class="badge blue">순서</span></div><div class="history-row"><div class="history-time">09.06</div><div>모바일 이미지 교체</div><span class="badge green">이미지</span></div></div>
   </div>
 </div>
 `,
@@ -10692,105 +12079,252 @@ function detailTemplate(type,name){
   </div>
 </div>
 `,
-    cs: `
-<div class="cs-shell cs-shell-upgraded">
-  <div class="cs-thread">
-    <div class="cs-thread-head">
-      <div>
-        <h4>${name}</h4>
-        <div class="cs-thread-sub">보호자와 주고받은 문의·답변 이력</div>
-      </div>
-      <span class="badge blue">처리중</span>
-    </div>
-
-    <div class="cs-message-list">
-      <div class="message user">
-        <div class="message-role">보호자 문의</div>
-        연 이용권 5명 중 1명만 중도 취소하고 싶습니다. 환불 금액과 처리 방법을 확인해주세요.
-        <div class="message-meta">김민정 · 2026.09.07 09:12</div>
-      </div>
-      <div class="message admin">
-        <div class="message-role">관리자 답변</div>
-        문의하신 내용 확인 중입니다. 해당 학생의 결제 및 학습 이력을 확인한 뒤 환불 가능 여부와 예상 금액을 안내드리겠습니다.
-        <div class="message-meta">이지은 · 2026.09.07 09:22</div>
-      </div>
-    </div>
-
-    <div class="cs-reply-composer">
-      <div class="cs-reply-head">
+    cs: name === '학습 코드 재발급 문의' ? `
+<div class="cs-case-layout" data-cs-case-mode="create">
+  <div class="cs-case-main">
+    <section class="cs-case-card">
+      <div class="cs-case-card-head">
         <div>
-          <strong>답변 작성</strong>
-          <span>보호자에게 발송되는 답변</span>
+          <span class="cs-section-kicker">문의 내용</span>
+          <h4>${name}</h4>
         </div>
-        <div class="cs-template-chips">
-          <button type="button" class="cs-template-btn" data-cs-template="refund">환불 안내</button>
-          <button type="button" class="cs-template-btn" data-cs-template="payment">결제 안내</button>
-          <button type="button" class="cs-template-btn" data-cs-template="learning">학습 안내</button>
-        </div>
+        <span class="badge red" id="csCaseStatusBadge">미처리</span>
       </div>
 
-      <textarea class="cs-reply-textarea" id="csReplyTextarea" maxlength="2000" placeholder="답변 내용을 입력해 주세요.">안녕하세요, 김민정 보호자님.
+      <div class="cs-inquiry-meta">
+        <div><span>작성자</span><strong>박지훈 보호자</strong></div>
+        <div><span>접수일시</span><strong>2026.09.22 09:18</strong></div>
+        <div><span>문의 유형</span><strong>계정</strong></div>
+        <div><span>관련 학생</span><strong>박도윤</strong></div>
+      </div>
 
-문의하신 김별 학생의 연 이용권 환불 관련 내용을 확인했습니다.
+      <div class="cs-inquiry-content">
+        아이가 학습 코드를 잊어버려서 로그인을 못하고 있습니다.<br>
+        기존 코드를 다시 확인하거나 새 코드로 받을 수 있을까요?
+      </div>
 
-환불 가능 여부와 환불금액은 최종 결제일 및 결제 이후 학습 이용 여부를 기준으로 산정됩니다. 관리자에서 환불 접수 후 기준에 따라 예상 환불금액을 확인한 뒤 최종 처리할 수 있습니다.
+      <div class="cs-file-row">
+        <span>첨부파일</span>
+        <strong>첨부파일 없음</strong>
+      </div>
+    </section>
 
-환불 접수가 진행되면 해당 학생의 학습 이용은 즉시 제한되며, 다른 학생의 이용권에는 영향을 주지 않습니다.
+    <section class="cs-case-card cs-answer-card" id="csAnswerCard">
+      <div class="cs-case-card-head">
+        <div>
+          <span class="cs-section-kicker" id="csAnswerKicker">답변 등록</span>
+          <h4>보호자에게 전달할 답변</h4>
+        </div>
+        <button class="btn" id="csAnswerEditBtn" type="button" hidden>답변 수정</button>
+      </div>
 
-환불 접수를 원하시면 답변 부탁드립니다. 확인 후 처리 도와드리겠습니다.
+      <div class="cs-answer-empty-guide" id="csAnswerEmptyGuide">
+        아직 등록된 답변이 없습니다. 문의 내용을 확인한 뒤 답변을 작성해 주세요.
+      </div>
 
-감사합니다.</textarea>
+      <div class="cs-answer-meta" id="csAnswerMeta" hidden>
+        <span>작성자 <strong>김관리자</strong></span>
+        <span>등록 <strong>방금</strong></span>
+        <span id="csAnswerEditedMeta">마지막 수정 방금</span>
+      </div>
 
-      <div class="cs-reply-tools">
-        <div class="cs-reply-left-tools">
+      <div class="cs-template-chips cs-edit-only">
+        <button type="button" class="cs-template-btn" data-cs-template="refund">환불 안내</button>
+        <button type="button" class="cs-template-btn" data-cs-template="payment">결제 안내</button>
+        <button type="button" class="cs-template-btn" data-cs-template="learning">학습 안내</button>
+      </div>
+
+      <textarea class="cs-reply-textarea cs-answer-textarea is-editing" id="csReplyTextarea" maxlength="2000" data-cs-answer-mode="create" placeholder="답변 내용을 입력해 주세요."></textarea>
+
+      <div class="cs-answer-tools">
+        <div class="cs-edit-only">
           <label class="cs-attach-btn">
             <svg viewBox="0 0 24 24"><path d="M8 12.5l6.5-6.5a4 4 0 1 1 5.5 5.8l-8.2 8.2a6 6 0 0 1-8.5-8.5L12 2.8"/></svg>
             파일 첨부
             <input type="file" hidden>
           </label>
-          <button type="button" class="cs-clear-btn" id="csReplyClear">내용 지우기</button>
         </div>
         <div class="cs-reply-count"><span id="csReplyCount">0</span> / 2,000자</div>
       </div>
 
-      <div class="cs-internal-note">
-        <label>내부 메모 <span>보호자에게 노출되지 않음</span></label>
-        <textarea placeholder="CS 처리에 필요한 내부 메모를 입력해 주세요.">환불 의사 재확인 후 관리자 대행 접수 예정</textarea>
+      <div class="cs-create-answer-actions" id="csCreateAnswerActions">
+        <button class="btn" id="csAnswerClearBtn" type="button">내용 지우기</button>
+        <button class="btn primary" id="csAnswerCreateSave" type="button">답변 등록</button>
       </div>
 
-      <div class="cs-reply-bottom">
-        <button class="btn" data-modal="답변 임시저장">임시저장</button>
-        <div class="cs-reply-bottom-right">
-          <button class="btn" data-modal="환불 대신 접수">환불 대신 접수</button>
-          <button class="btn primary" data-modal="답변 등록">답변 등록</button>
-        </div>
+      <div class="cs-answer-edit-actions cs-edit-only" id="csAnswerEditActions" hidden>
+        <button class="btn" id="csAnswerEditCancel" type="button">수정 취소</button>
+        <button class="btn primary" id="csAnswerEditSave" type="button">수정 저장</button>
       </div>
-    </div>
+    </section>
+
+    <section class="cs-case-card">
+      <div class="cs-case-card-head">
+        <div>
+          <span class="cs-section-kicker">내부 메모</span>
+          <h4>CS 처리 메모</h4>
+        </div>
+        <span class="cs-private-label">보호자에게 노출되지 않음</span>
+      </div>
+      <textarea class="cs-internal-note-textarea" placeholder="CS 처리에 필요한 내부 메모를 입력해 주세요."></textarea>
+      <div class="cs-note-actions">
+        <button class="btn" type="button" id="csNoteSave">메모 저장</button>
+      </div>
+    </section>
   </div>
 
-  <aside class="cs-info">
-    <h4>문의 정보</h4>
-    <div class="inline-field"><span class="label">문의번호</span><span class="value">INQ-260907-014</span></div>
-    <div class="inline-field"><span class="label">유형</span><span class="value">결제·환불</span></div>
-    <div class="inline-field"><span class="label">보호자</span><span class="value">김민정</span></div>
-    <div class="inline-field"><span class="label">학생</span><span class="value">김별</span></div>
-    <div class="inline-field"><span class="label">담당자</span><span class="value">이지은</span></div>
-    <div class="inline-field"><span class="label">접수일시</span><span class="value">2026.09.07 09:12</span></div>
-    <div class="inline-field"><span class="label">처리 상태</span><div class="segmented"><button class="active">처리중</button><button>완료</button></div></div>
-
-    <h4 style="margin-top:18px">관련 정보</h4>
-    <div class="cs-related-card">
-      <span>연 이용권</span>
-      <strong>김별 · 109,000원</strong>
-      <small>최근 결제 2026.03.12</small>
-      <button type="button" class="btn" data-go="subscriptions">구독 정보 보기</button>
+  <aside class="cs-case-side">
+    <div class="cs-info cs-case-info">
+      <h4>문의 정보</h4>
+      <div class="inline-field"><span class="label">문의번호</span><span class="value">INQ-260922-031</span></div>
+      <div class="inline-field"><span class="label">유형</span><span class="value">계정</span></div>
+      <div class="inline-field"><span class="label">보호자</span><span class="value">박지훈</span></div>
+      <div class="inline-field"><span class="label">학생</span><span class="value">박도윤</span></div>
+      <div class="inline-field"><span class="label">담당자</span><span class="value">미배정</span></div>
+      <div class="inline-field"><span class="label">접수일시</span><span class="value">2026.09.22 09:18</span></div>
+      <div class="inline-field"><span class="label">처리 상태</span><div class="segmented"><button class="active">미처리</button><button>처리중</button><button>완료</button></div></div>
     </div>
 
-    <h4 style="margin-top:18px">처리 이력</h4>
-    <div class="history-list">
-      <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:12</div><div>문의 접수</div></div>
-      <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:20</div><div>이지은 담당자 배정</div></div>
-      <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:22</div><div>1차 답변 등록</div></div>
+    <div class="cs-info cs-case-info">
+      <h4>관련 정보</h4>
+      <div class="cs-related-card">
+        <span>학생 계정</span>
+        <strong>박도윤 · 5급</strong>
+        <small>학습코드 B5N4T8</small>
+        <button type="button" class="btn" data-go="account-management">계정 정보 보기</button>
+      </div>
+    </div>
+
+    <div class="cs-info cs-case-info">
+      <h4>처리 이력</h4>
+      <div class="history-list" id="csCaseHistory">
+        <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:18</div><div>문의 접수</div></div>
+      </div>
+    </div>
+  </aside>
+</div>
+` : `
+<div class="cs-case-layout">
+  <div class="cs-case-main">
+    <section class="cs-case-card">
+      <div class="cs-case-card-head">
+        <div>
+          <span class="cs-section-kicker">문의 내용</span>
+          <h4>${name}</h4>
+        </div>
+        <span class="badge blue">처리중</span>
+      </div>
+
+      <div class="cs-inquiry-meta">
+        <div><span>작성자</span><strong>김민정 보호자</strong></div>
+        <div><span>접수일시</span><strong>2026.09.07 09:12</strong></div>
+        <div><span>문의 유형</span><strong>결제·환불</strong></div>
+        <div><span>관련 학생</span><strong>김별</strong></div>
+      </div>
+
+      <div class="cs-inquiry-content">
+        연 이용권 5명 중 1명만 중도 취소하고 싶습니다.<br>
+        김별 학생만 환불이 가능한지, 가능하다면 환불 금액과 처리 방법을 확인해주세요.
+      </div>
+
+      <div class="cs-file-row">
+        <span>첨부파일</span>
+        <strong>첨부파일 없음</strong>
+      </div>
+    </section>
+
+    <section class="cs-case-card cs-answer-card">
+      <div class="cs-case-card-head">
+        <div>
+          <span class="cs-section-kicker">등록된 답변</span>
+          <h4>관리자 답변</h4>
+        </div>
+        <button class="btn" id="csAnswerEditBtn" type="button">답변 수정</button>
+      </div>
+
+      <div class="cs-answer-meta">
+        <span>작성자 <strong>이지은</strong></span>
+        <span>등록 2026.09.07 09:22</span>
+        <span id="csAnswerEditedMeta">마지막 수정 2026.09.07 09:22</span>
+      </div>
+
+      <div class="cs-template-chips cs-edit-only" hidden>
+        <button type="button" class="cs-template-btn" data-cs-template="refund">환불 안내</button>
+        <button type="button" class="cs-template-btn" data-cs-template="payment">결제 안내</button>
+        <button type="button" class="cs-template-btn" data-cs-template="learning">학습 안내</button>
+      </div>
+
+      <textarea class="cs-reply-textarea cs-answer-textarea" id="csReplyTextarea" maxlength="2000" readonly>문의하신 내용 확인 중입니다.
+
+김별 학생의 결제 및 학습 이력을 확인한 뒤 환불 가능 여부와 예상 환불 금액을 안내드리겠습니다.
+
+환불 접수가 진행되는 경우 해당 학생의 학습 이용은 즉시 제한되며, 다른 학생의 이용권에는 영향을 주지 않습니다.
+
+확인 후 다시 안내드리겠습니다.
+감사합니다.</textarea>
+
+      <div class="cs-answer-tools">
+        <div class="cs-edit-only" hidden>
+          <label class="cs-attach-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 12.5l6.5-6.5a4 4 0 1 1 5.5 5.8l-8.2 8.2a6 6 0 0 1-8.5-8.5L12 2.8"/></svg>
+            파일 첨부
+            <input type="file" hidden>
+          </label>
+        </div>
+        <div class="cs-reply-count"><span id="csReplyCount">0</span> / 2,000자</div>
+      </div>
+
+      <div class="cs-answer-edit-actions cs-edit-only" hidden>
+        <button class="btn" id="csAnswerEditCancel" type="button">수정 취소</button>
+        <button class="btn primary" id="csAnswerEditSave" type="button">수정 저장</button>
+      </div>
+    </section>
+
+    <section class="cs-case-card">
+      <div class="cs-case-card-head">
+        <div>
+          <span class="cs-section-kicker">내부 메모</span>
+          <h4>CS 처리 메모</h4>
+        </div>
+        <span class="cs-private-label">보호자에게 노출되지 않음</span>
+      </div>
+      <textarea class="cs-internal-note-textarea" placeholder="CS 처리에 필요한 내부 메모를 입력해 주세요.">환불 의사 재확인 후 관리자 대행 접수 예정</textarea>
+      <div class="cs-note-actions">
+        <button class="btn" type="button" id="csNoteSave">메모 저장</button>
+        <button class="btn" data-modal="환불 대신 접수">환불 대신 접수</button>
+      </div>
+    </section>
+  </div>
+
+  <aside class="cs-case-side">
+    <div class="cs-info cs-case-info">
+      <h4>문의 정보</h4>
+      <div class="inline-field"><span class="label">문의번호</span><span class="value">INQ-260907-014</span></div>
+      <div class="inline-field"><span class="label">유형</span><span class="value">결제·환불</span></div>
+      <div class="inline-field"><span class="label">보호자</span><span class="value">김민정</span></div>
+      <div class="inline-field"><span class="label">학생</span><span class="value">김별</span></div>
+      <div class="inline-field"><span class="label">담당자</span><span class="value">이지은</span></div>
+      <div class="inline-field"><span class="label">접수일시</span><span class="value">2026.09.07 09:12</span></div>
+      <div class="inline-field"><span class="label">처리 상태</span><div class="segmented"><button class="active">처리중</button><button>완료</button></div></div>
+    </div>
+
+    <div class="cs-info cs-case-info">
+      <h4>관련 정보</h4>
+      <div class="cs-related-card">
+        <span>연 이용권</span>
+        <strong>김별 · 109,000원</strong>
+        <small>최근 결제 2026.03.12</small>
+        <button type="button" class="btn" data-go="subscriptions">구독 정보 보기</button>
+      </div>
+    </div>
+
+    <div class="cs-info cs-case-info">
+      <h4>처리 이력</h4>
+      <div class="history-list">
+        <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:12</div><div>문의 접수</div></div>
+        <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:20</div><div>이지은 담당자 배정</div></div>
+        <div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">09:22</div><div>답변 등록</div></div>
+      </div>
     </div>
   </aside>
 </div>
@@ -10844,8 +12378,25 @@ function bindCsReplyComposer(root=document){
   if(!textarea) return;
 
   const count = root.querySelector('#csReplyCount');
-  const clearBtn = root.querySelector('#csReplyClear');
+  const editBtn = root.querySelector('#csAnswerEditBtn');
+  const cancelBtn = root.querySelector('#csAnswerEditCancel');
+  const saveBtn = root.querySelector('#csAnswerEditSave');
+  const createSaveBtn = root.querySelector('#csAnswerCreateSave');
+  const clearBtn = root.querySelector('#csAnswerClearBtn');
+  const createActions = root.querySelector('#csCreateAnswerActions');
+  const editActions = root.querySelector('#csAnswerEditActions');
+  const answerKicker = root.querySelector('#csAnswerKicker');
+  const emptyGuide = root.querySelector('#csAnswerEmptyGuide');
+  const answerMeta = root.querySelector('#csAnswerMeta');
+  const caseStatusBadge = root.querySelector('#csCaseStatusBadge');
+  const caseHistory = root.querySelector('#csCaseHistory');
+  const noteSaveBtn = root.querySelector('#csNoteSave');
+  const editOnly = [...root.querySelectorAll('.cs-edit-only')];
   const templates = root.querySelectorAll('[data-cs-template]');
+  const editedMeta = root.querySelector('#csAnswerEditedMeta');
+
+  let mode = textarea.dataset.csAnswerMode === 'create' ? 'create' : 'existing';
+  let originalValue = textarea.value;
 
   const templateMap = {
     refund: `안녕하세요, 김민정 보호자님.
@@ -10857,42 +12408,130 @@ function bindCsReplyComposer(root=document){
 환불 접수를 원하시면 답변 부탁드립니다. 확인 후 처리 도와드리겠습니다.
 
 감사합니다.`,
-    payment: `안녕하세요, 김민정 보호자님.
+    payment: `안녕하세요, 보호자님.
 
 문의하신 결제 내용을 확인했습니다.
 
-학생별 이용권과 다음 결제일을 확인한 뒤 결제 상태 및 처리 방법을 안내드리겠습니다. 결제 수단이나 결제 실패와 관련된 추가 확인이 필요한 경우 별도로 안내드리겠습니다.
+학생별 이용권과 다음 결제일을 확인한 뒤 결제 상태 및 처리 방법을 안내드리겠습니다.
 
 감사합니다.`,
-    learning: `안녕하세요, 김민정 보호자님.
+    learning: `안녕하세요, 보호자님.
 
-문의하신 학습 이용 내용을 확인했습니다.
+문의하신 학습 및 계정 이용 내용을 확인했습니다.
 
-학생의 현재 급수와 학습 진도, 최근 학습 이력을 확인한 뒤 필요한 조치와 이용 방법을 안내드리겠습니다.
+학생의 현재 계정 상태와 학습 정보를 확인한 뒤 필요한 조치와 이용 방법을 안내드리겠습니다.
 
 감사합니다.`
   };
 
-  function updateCount(){
-    if(count) count.textContent = textarea.value.length.toLocaleString('ko-KR');
+  function toast(message){
+    const toastEl=document.getElementById('toast');
+    if(!toastEl) return;
+    toastEl.textContent=message;
+    toastEl.classList.add('show');
+    setTimeout(()=>toastEl.classList.remove('show'),1800);
   }
 
-  textarea.addEventListener('input', updateCount);
+  function updateCount(){
+    if(count) count.textContent=textarea.value.length.toLocaleString('ko-KR');
+  }
+
+  function setEditing(editing){
+    textarea.readOnly=!editing;
+    textarea.classList.toggle('is-editing',editing);
+    editOnly.forEach(el=>{
+      if(el===editActions) return;
+      el.hidden=!editing;
+    });
+    if(editActions) editActions.hidden=!editing;
+    if(editBtn) editBtn.hidden=editing || mode==='create';
+    if(createActions) createActions.hidden=mode!=='create';
+    if(editing && mode!=='create'){
+      originalValue=textarea.value;
+    }
+    if(editing){
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length,textarea.value.length);
+    }
+    updateCount();
+  }
+
+  textarea.addEventListener('input',updateCount);
   updateCount();
 
-  if(clearBtn){
-    clearBtn.addEventListener('click',()=>{
-      textarea.value='';
-      updateCount();
-      textarea.focus();
+  if(mode==='create'){
+    textarea.readOnly=false;
+    textarea.classList.add('is-editing');
+    editOnly.forEach(el=>{
+      if(el===editActions) return;
+      el.hidden=false;
     });
+    if(editActions) editActions.hidden=true;
+    if(editBtn) editBtn.hidden=true;
+    if(createActions) createActions.hidden=false;
+  }else{
+    setEditing(false);
   }
+
+  editBtn?.addEventListener('click',()=>setEditing(true));
+
+  cancelBtn?.addEventListener('click',()=>{
+    textarea.value=originalValue;
+    setEditing(false);
+  });
+
+  saveBtn?.addEventListener('click',()=>{
+    originalValue=textarea.value;
+    setEditing(false);
+    if(editedMeta) editedMeta.textContent='방금 수정됨';
+    toast('답변이 수정되었습니다.');
+  });
+
+  createSaveBtn?.addEventListener('click',()=>{
+    if(!textarea.value.trim()){
+      toast('답변 내용을 입력해 주세요.');
+      textarea.focus();
+      return;
+    }
+
+    mode='existing';
+    textarea.dataset.csAnswerMode='existing';
+    originalValue=textarea.value;
+    textarea.readOnly=true;
+    textarea.classList.remove('is-editing');
+
+    editOnly.forEach(el=>el.hidden=true);
+    if(createActions) createActions.hidden=true;
+    if(editActions) editActions.hidden=true;
+    if(editBtn) editBtn.hidden=false;
+    if(emptyGuide) emptyGuide.hidden=true;
+    if(answerMeta) answerMeta.hidden=false;
+    if(answerKicker) answerKicker.textContent='등록된 답변';
+
+    if(caseStatusBadge){
+      caseStatusBadge.textContent='처리중';
+      caseStatusBadge.className='badge blue';
+    }
+    if(caseHistory){
+      caseHistory.insertAdjacentHTML('beforeend',
+        '<div class="history-row" style="grid-template-columns:70px 1fr"><div class="history-time">방금</div><div>답변 등록</div></div>');
+    }
+    toast('답변이 등록되었습니다.');
+  });
+
+  clearBtn?.addEventListener('click',()=>{
+    textarea.value='';
+    updateCount();
+    textarea.focus();
+  });
+
+  noteSaveBtn?.addEventListener('click',()=>toast('내부 메모가 저장되었습니다.'));
 
   templates.forEach(btn=>{
     btn.addEventListener('click',()=>{
-      const tpl = templateMap[btn.dataset.csTemplate];
-      if(tpl){
-        textarea.value = tpl;
+      const tpl=templateMap[btn.dataset.csTemplate];
+      if(tpl && !textarea.readOnly){
+        textarea.value=tpl;
         updateCount();
         textarea.focus();
       }
@@ -10984,26 +12623,44 @@ function creationForm(title){
         <label class="upload-btn">파일 선택<input class="file-hidden" type="file"></label>
       </div>
     </div>
-        <label>노출 대상</label><div class="segmented"><button class="active" type="button">학생</button><button type="button">보호자</button><button type="button">전체</button></div>
-        <label>노출 시작일</label><input type="date">
-        <label>노출 종료일</label><input type="date">
+        <label>이동 링크</label><input placeholder="/event/... 또는 https://...">
+        <label>노출 대상</label>
+        <div class="popup-audience-block" data-popup-audience>
+          <div class="popup-audience-picker" role="group" aria-label="팝업 노출 대상">
+            <button class="popup-audience-option active" type="button" data-popup-target="guest" aria-pressed="true">
+              <strong>비로그인</strong><small>로그인 전 메인</small>
+            </button>
+            <button class="popup-audience-option active" type="button" data-popup-target="guardian" aria-pressed="true">
+              <strong>보호자</strong><small>보호자 메인</small>
+            </button>
+            <button class="popup-audience-option" type="button" data-popup-target="student" aria-pressed="false">
+              <strong>학생</strong><small>학생 메인</small>
+            </button>
+          </div>
+          <div class="popup-audience-footer">
+            <span>버튼을 눌러 여러 대상을 선택할 수 있습니다.</span>
+            <span>현재 선택: <strong data-popup-audience-summary>비로그인, 보호자</strong></span>
+          </div>
+        </div>
+        <label>노출 시작</label>
+        <div class="popup-datetime-row">
+          <input type="date" data-popup-start-date>
+          <input type="time" data-popup-start-time value="00:00">
+        </div>
+        <label>노출 종료</label>
+        <div class="popup-datetime-row">
+          <input type="date" data-popup-end-date>
+          <input type="time" data-popup-end-time value="23:59">
+        </div>
+        <label>노출 위치</label><div class="popup-location-summary" data-popup-location-summary>비로그인 메인 · 보호자 메인</div>
+        <div class="full popup-datetime-help" data-popup-datetime-help>시작일 00:00부터 종료일 23:59까지 노출됩니다.</div>
         <label>노출 상태</label><div class="toggle-wrap"><button class="toggle on" type="button"></button><span class="toggle-label">노출</span></div>
+        <div class="full form-help">대상 버튼을 복수 선택할 수 있으며, 선택한 대상에 맞춰 노출 위치가 자동 적용됩니다.</div>
       </div>`,
     '메인 배너 등록': `
       <div class="create-form">
         <label>배너명</label><input id="createName" placeholder="배너명 입력">
-        <label>PC 이미지</label><div class="upload-box">
-      <div class="upload-main">
-        <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg></div>
-        <div class="upload-info">
-          <div class="upload-title">파일을 선택해 주세요</div>
-          <div class="upload-sub">이미지 또는 문서 파일 업로드</div>
-        </div>
-      </div>
-      <div class="upload-actions">
-        <label class="upload-btn">파일 선택<input class="file-hidden" type="file"></label>
-      </div>
-    </div>
+
         <label>모바일 이미지</label><div class="upload-box">
       <div class="upload-main">
         <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg></div>
@@ -11062,6 +12719,282 @@ function creationForm(title){
   return forms[title] || '';
 }
 
+const faqData = {
+  "faq-01": {
+    "category": "회원/계정",
+    "question": "학생 학습코드를 잊어버렸어요.",
+    "answer": "보호자 화면에서 해당 학생의 학습코드를 다시 확인하거나 재발송할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.",
+    "visible": true,
+    "order": 1
+  },
+  "faq-02": {
+    "category": "회원/계정",
+    "question": "학습코드를 받지 못했어요.",
+    "answer": "결제 완료 후 학생 휴대폰 번호로 학습코드를 발송합니다. 알림톡 발송에 실패하면 SMS로 자동 전환되며, 두 채널 모두 실패해도 학습코드는 정상 생성되어 있습니다. 보호자 화면에서 다시 발송할 수 있습니다.",
+    "visible": true,
+    "order": 2
+  },
+  "faq-03": {
+    "category": "회원/계정",
+    "question": "학생은 여러 명 등록할 수 있나요?",
+    "answer": "네. 한 보호자 계정에 여러 명의 학생을 등록할 수 있습니다. 등록한 학생 중 결제가 필요한 학생을 선택해 이용권을 결제할 수 있습니다.",
+    "visible": true,
+    "order": 3
+  },
+  "faq-04": {
+    "category": "회원/계정",
+    "question": "학생만 등록하면 바로 학습할 수 있나요?",
+    "answer": "아니요. 학생 등록과 이용권 결제는 별도입니다. 학생을 등록한 뒤 해당 학생의 이용권 결제가 완료되어야 학습이 활성화되고 학습코드가 생성됩니다.",
+    "visible": true,
+    "order": 4
+  },
+  "faq-05": {
+    "category": "회원/계정",
+    "question": "학생 정보를 삭제하고 싶어요.",
+    "answer": "해당 학생에게 사용 가능한 이용권이 남아 있는 경우 학생 삭제가 제한됩니다. 이용권 상태를 먼저 확인해 주세요.",
+    "visible": true,
+    "order": 5
+  },
+  "faq-06": {
+    "category": "회원/계정",
+    "question": "학생을 다른 보호자 계정으로 옮길 수 있나요?",
+    "answer": "현재 보호자 계정 간 학생 이전 기능은 지원하지 않습니다.",
+    "visible": true,
+    "order": 6
+  },
+  "faq-07": {
+    "category": "회원/계정",
+    "question": "보호자 계정을 다른 사람에게 이전할 수 있나요?",
+    "answer": "현재 보호자 계정 또는 학생 계정의 소유자 이전 기능은 지원하지 않습니다.",
+    "visible": true,
+    "order": 7
+  },
+  "faq-08": {
+    "category": "회원/계정",
+    "question": "만 14세 미만 학생도 등록할 수 있나요?",
+    "answer": "등록할 수 있습니다. 만 14세 미만 학생 등록 시 법정대리인 확인과 학생 개인정보 수집·이용 동의 절차가 필요합니다.",
+    "visible": true,
+    "order": 8
+  },
+  "faq-09": {
+    "category": "결제/구독",
+    "question": "월 이용권과 연 이용권의 가격은 얼마인가요?",
+    "answer": "월 이용권은 학생 1명당 월 9,900원, 연 이용권은 학생 1명당 연 109,000원입니다.",
+    "visible": true,
+    "order": 9
+  },
+  "faq-10": {
+    "category": "결제/구독",
+    "question": "여러 학생의 이용권을 한 번에 결제할 수 있나요?",
+    "answer": "네. 등록된 학생 목록에서 결제할 학생을 여러 명 선택한 뒤 이용권을 선택해 한 번에 결제할 수 있습니다. 이용권은 결제 후 학생별로 각각 활성화됩니다.",
+    "visible": true,
+    "order": 10
+  },
+  "faq-11": {
+    "category": "결제/구독",
+    "question": "형제자매의 결제일이 모두 같아지나요?",
+    "answer": "아니요. 각 학생의 이용권 시작일과 다음 결제일은 학생별로 독립적으로 관리됩니다.",
+    "visible": true,
+    "order": 11
+  },
+  "faq-12": {
+    "category": "결제/구독",
+    "question": "한 학생의 구독을 중단하면 다른 학생에게도 영향이 있나요?",
+    "answer": "아니요. 구독과 이용권은 학생별로 관리되므로 한 학생의 해지·환불은 다른 학생의 이용권에 영향을 주지 않습니다.",
+    "visible": true,
+    "order": 12
+  },
+  "faq-13": {
+    "category": "결제/구독",
+    "question": "자동결제에 실패하면 다시 결제를 시도하나요?",
+    "answer": "아니요. 자동결제 실패 후 추가 재결제는 진행하지 않습니다. 추가 이용 기간도 제공되지 않으며, 결제 실패 당일 24:00부터 해당 학생의 학습 이용이 제한됩니다.",
+    "visible": true,
+    "order": 13
+  },
+  "faq-14": {
+    "category": "결제/구독",
+    "question": "결제 실패 후 학습할 수 있는 유예기간이 있나요?",
+    "answer": "없습니다. 결제 실패 당일 24:00부터 해당 학생의 학습 이용이 제한됩니다.",
+    "visible": true,
+    "order": 14
+  },
+  "faq-15": {
+    "category": "결제/구독",
+    "question": "연 이용권을 잠시 멈출 수 있나요?",
+    "answer": "연 이용권에 한해 홀딩을 사용할 수 있습니다. 홀딩 가능 기간은 최대 14일이며, 필요에 따라 나누어 사용할 수 있습니다.",
+    "visible": true,
+    "order": 15
+  },
+  "faq-16": {
+    "category": "결제/구독",
+    "question": "월 이용권도 홀딩할 수 있나요?",
+    "answer": "아니요. 홀딩은 연 이용권에서만 사용할 수 있습니다.",
+    "visible": true,
+    "order": 16
+  },
+  "faq-17": {
+    "category": "결제/구독",
+    "question": "홀딩을 신청하면 바로 적용되나요?",
+    "answer": "당일 즉시 시작할 수는 없습니다. 홀딩은 신청 다음 날 00:00부터 시작할 수 있습니다.",
+    "visible": true,
+    "order": 17
+  },
+  "faq-18": {
+    "category": "결제/구독",
+    "question": "홀딩 중에도 학습하거나 달걀을 받을 수 있나요?",
+    "answer": "아니요. 홀딩 기간에는 학습을 진행할 수 없으며 달걀도 적립되지 않습니다.",
+    "visible": true,
+    "order": 18
+  },
+  "faq-19": {
+    "category": "학습",
+    "question": "처음 학습을 시작하면 무엇부터 하나요?",
+    "answer": "처음에는 문해력 진단을 진행합니다. 진단 결과에 따라 학습 급수가 배정되며, 배정된 급수의 1단락부터 학습을 시작합니다.",
+    "visible": true,
+    "order": 19
+  },
+  "faq-20": {
+    "category": "학습",
+    "question": "급수는 학교 학년과 같은 개념인가요?",
+    "answer": "아니요. 급수는 노른자국어에서 사용하는 학습 수준입니다. 학교 학년과 별도로 학생의 학습 수준과 진도를 관리합니다.",
+    "visible": true,
+    "order": 20
+  },
+  "faq-21": {
+    "category": "학습",
+    "question": "다음 매듭은 언제 열리나요?",
+    "answer": "현재 매듭의 기본 학습을 완료하면 다음 매듭의 기본 학습이 열립니다.",
+    "visible": true,
+    "order": 21
+  },
+  "faq-22": {
+    "category": "학습",
+    "question": "어휘 특강은 꼭 완료해야 하나요?",
+    "answer": "아니요. 어휘 특강은 선택 학습입니다. 어휘 특강을 완료하지 않아도 기본 학습을 완료했다면 다음 매듭으로 진행할 수 있습니다.",
+    "visible": true,
+    "order": 22
+  },
+  "faq-23": {
+    "category": "학습",
+    "question": "단락 평가는 언제 열리나요?",
+    "answer": "해당 단락의 기본 학습 20매듭을 모두 완료하면 단락 평가가 열립니다.",
+    "visible": true,
+    "order": 23
+  },
+  "faq-24": {
+    "category": "학습",
+    "question": "단락 분석지는 언제 만들어지나요?",
+    "answer": "해당 단락의 기본 학습 20매듭과 단락 평가를 완료하면 단락 분석지 결과를 확인할 수 있습니다.",
+    "visible": true,
+    "order": 24
+  },
+  "faq-25": {
+    "category": "학습",
+    "question": "달걀은 어떻게 받을 수 있나요?",
+    "answer": "하루에 처음 완료한 기본 학습 또는 단락 평가를 기준으로 달걀을 받을 수 있습니다.",
+    "visible": true,
+    "order": 25
+  },
+  "faq-26": {
+    "category": "학습",
+    "question": "하루에 달걀을 여러 개 받을 수 있나요?",
+    "answer": "아니요. 달걀은 학생 1명당 하루 최대 1개까지 받을 수 있습니다.",
+    "visible": true,
+    "order": 26
+  },
+  "faq-27": {
+    "category": "학습",
+    "question": "어휘 특강을 완료해도 달걀을 받을 수 있나요?",
+    "answer": "아니요. 어휘 특강과 복습 학습은 달걀 적립 대상에 포함되지 않습니다.",
+    "visible": true,
+    "order": 27
+  },
+  "faq-28": {
+    "category": "환불",
+    "question": "이용권 환불은 어떻게 신청하나요?",
+    "answer": "보호자가 직접 환불을 신청하거나 고객센터를 통해 환불 접수를 요청할 수 있습니다. 접수 후 환불 가능 여부와 환불금액을 확인해 처리합니다.",
+    "visible": true,
+    "order": 28
+  },
+  "faq-29": {
+    "category": "환불",
+    "question": "환불을 신청하면 바로 학습이 중단되나요?",
+    "answer": "네. 환불 요청이 접수되면 해당 학생의 학습 이용은 즉시 제한됩니다.",
+    "visible": true,
+    "order": 29
+  },
+  "faq-30": {
+    "category": "환불",
+    "question": "한 학생만 환불하면 다른 학생도 이용이 중단되나요?",
+    "answer": "아니요. 환불은 학생별로 처리되며 다른 학생의 이용권과 학습에는 영향을 주지 않습니다.",
+    "visible": true,
+    "order": 30
+  },
+  "faq-31": {
+    "category": "환불",
+    "question": "월 이용권은 어떤 기준으로 환불되나요?",
+    "answer": "결제 후 7일 이내인지, 학습 이용 여부가 있는지에 따라 환불 가능 여부와 금액이 달라집니다. 미사용 상태에서 결제 후 7일 이내라면 전액 환불이 가능하며, 그 외에는 이용 기간 또는 이용 여부를 기준으로 환불금액이 계산됩니다.",
+    "visible": true,
+    "order": 31
+  },
+  "faq-32": {
+    "category": "환불",
+    "question": "연 이용권은 어떤 기준으로 환불되나요?",
+    "answer": "연 이용권은 결제 후 경과 기간과 학습 이용 여부를 기준으로 환불 가능 여부와 금액을 계산합니다. 미사용 상태의 초기 환불과 장기 경과 또는 이용 이력이 있는 경우의 계산 기준이 다르며, 최종 환불금액은 접수 시 자동 계산된 금액을 기준으로 안내합니다.",
+    "visible": true,
+    "order": 32
+  },
+  "faq-33": {
+    "category": "환불",
+    "question": "환불금액은 관리자가 임의로 정할 수 있나요?",
+    "answer": "아니요. 환불금액은 정해진 환불 기준에 따라 계산하며, 관리자가 임의의 금액으로 변경해 처리하지 않습니다.",
+    "visible": true,
+    "order": 33
+  },
+  "faq-34": {
+    "category": "서비스 이용",
+    "question": "학습코드는 어떤 방식으로 발송되나요?",
+    "answer": "결제 완료 후 학생 휴대폰 번호로 알림톡을 먼저 발송하고, 알림톡 발송에 실패하면 SMS로 자동 전환합니다.",
+    "visible": true,
+    "order": 34
+  },
+  "faq-35": {
+    "category": "서비스 이용",
+    "question": "알림톡과 SMS가 모두 오지 않았어요.",
+    "answer": "메시지 발송에 실패해도 생성된 학습코드는 그대로 유효합니다. 보호자 화면에서 학습코드를 확인하거나 다시 발송해 주세요.",
+    "visible": true,
+    "order": 35
+  },
+  "faq-36": {
+    "category": "서비스 이용",
+    "question": "마케팅 정보 수신 동의는 필수인가요?",
+    "answer": "아니요. 마케팅 정보 수신 동의는 선택 항목이며, 동의하지 않아도 기본 서비스 이용에는 영향을 주지 않습니다.",
+    "visible": true,
+    "order": 36
+  },
+  "faq-37": {
+    "category": "서비스 이용",
+    "question": "서비스 이용 중 문의가 있으면 어떻게 하나요?",
+    "answer": "1:1 문의를 통해 내용을 접수할 수 있습니다. 결제·환불·학습·계정 등 문의 내용을 남기면 확인 후 답변을 안내합니다.",
+    "visible": true,
+    "order": 37
+  },
+  "faq-38": {
+    "category": "기타",
+    "question": "결제나 학습 상태를 확인할 때 어떤 학생을 기준으로 보나요?",
+    "answer": "노른자국어의 이용권과 학습 상태는 학생별로 관리됩니다. 여러 학생을 등록한 경우 확인이 필요한 학생을 선택해 해당 학생의 이용권·학습 상태를 확인해 주세요.",
+    "visible": true,
+    "order": 38
+  },
+  "faq-39": {
+    "category": "기타",
+    "question": "여러 학생을 등록한 경우 학습코드는 각각 다른가요?",
+    "answer": "네. 학습코드는 학생별로 생성되며 각 학생은 자신의 학습코드로 학습에 접속합니다.",
+    "visible": true,
+    "order": 39
+  }
+};
+
 function openModal(title, trigger=null){
   currentModalAction = title;
   currentModalTrigger = trigger;
@@ -11089,6 +13022,50 @@ function openModal(title, trigger=null){
         <div class="k">계정 구분</div><div>${accountType}</div>
       </div>
       <div class="note">비밀번호를 재설정합니다. 재설정 완료 후 기존 비밀번호로는 로그인할 수 없습니다.</div>`;
+  } else if(title === '배송지 수정'){
+    modalConfirm.textContent = '저장';
+    document.querySelector('#modalBackdrop .modal').classList.add('form-modal');
+    modalBody.innerHTML = `
+      <div class="create-form">
+        <div class="form-section">배송지 정보</div>
+        <label>수령인</label><input id="createName" value="김민정" placeholder="수령인 이름">
+        <label>연락처</label><input value="010-2345-6789" placeholder="010-0000-0000">
+        <label>우편번호</label><div style="display:flex;gap:8px"><input value="08294" placeholder="우편번호"><button class="btn" type="button">주소 검색</button></div>
+        <label>기본 주소</label><input value="서울 구로구 경인로 00" placeholder="기본 주소">
+        <label>상세 주소</label><input value="101동 1001호" placeholder="상세 주소">
+        <label>배송 메모</label><input placeholder="배송 시 요청사항">
+        <div class="full form-help">저장한 배송지는 이후 교재 배송 시 기본 배송지로 사용됩니다.</div>
+      </div>`;
+  } else if(title === 'FAQ 등록' || title === 'FAQ 수정'){
+    const isEdit = title === 'FAQ 수정';
+    const faqId = trigger?.dataset?.faqId || '';
+    const faq = isEdit && faqId ? faqData[faqId] : null;
+    const faqTitle = faq?.question || trigger?.dataset?.faqTitle || '';
+    const faqAnswer = faq?.answer || '';
+    const faqCategory = faq?.category || '회원/계정';
+    const faqOrder = faq?.order || 1;
+    const faqVisible = faq?.visible !== false;
+    const esc = (value='') => String(value)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;');
+
+    modalConfirm.textContent = isEdit ? '저장' : '등록';
+    document.querySelector('#modalBackdrop .modal').classList.add('form-modal');
+    modalBody.innerHTML = `
+      <div class="create-form faq-editor-form">
+        <div class="form-section">FAQ ${isEdit ? '수정' : '등록'}</div>
+        <label>카테고리</label>
+        <select>
+          ${['회원/계정','결제/구독','학습','환불','서비스 이용','기타'].map(cat=>`<option ${cat===faqCategory?'selected':''}>${cat}</option>`).join('')}
+        </select>
+        <label>질문</label><input id="createName" value="${esc(faqTitle)}" placeholder="질문 입력">
+        <label>답변</label><textarea placeholder="답변 내용을 입력해 주세요.">${esc(faqAnswer)}</textarea>
+        <label>노출 상태</label><div class="toggle-wrap"><button class="toggle ${faqVisible?'on':''}" type="button"></button><span class="toggle-label">${faqVisible?'노출':'비노출'}</span></div>
+        <label>노출 순서</label><input type="number" min="1" value="${faqOrder}">
+        ${isEdit ? '<div class="full form-help">현재 등록된 답변이 표시됩니다. 수정 후 저장하면 해당 FAQ 답변에 반영됩니다.</div>' : ''}
+      </div>`;
   } else if(title === '학습 진도 변경 요청'){
     modalConfirm.textContent = '변경';
     document.querySelector('#modalBackdrop .modal').classList.add('form-modal');
@@ -11446,7 +13423,7 @@ if(initialPageTitle){
 }
 
 
-// v4.2 dashboard period selector + custom date picker
+// v5.66 dashboard period selector + 오늘 추가
 (function(){
   const presetButtons = document.querySelectorAll('[data-dashboard-period]');
   const periodLabel = document.getElementById('dashboardPeriodLabel');
@@ -11460,11 +13437,19 @@ if(initialPageTitle){
 
   if(!presetButtons.length || !periodLabel || !compareLabel) return;
 
-  const presetLabels = {
-    '7':['2026.09.05 ~ 2026.09.11','비교 2026.08.29 ~ 2026.09.04'],
-    '30':['2026.08.13 ~ 2026.09.11','비교 2026.07.14 ~ 2026.08.12'],
-    '90':['2026.06.14 ~ 2026.09.11','비교 2026.03.16 ~ 2026.06.13']
-  };
+  function localToday(){
+    return new Date(2026, 8, 22);
+  }
+
+  function startOfDay(date){
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  function addDays(date, days){
+    const next = new Date(date);
+    next.setDate(next.getDate() + days);
+    return next;
+  }
 
   function fmt(date){
     const y = date.getFullYear();
@@ -11473,9 +13458,34 @@ if(initialPageTitle){
     return `${y}.${m}.${d}`;
   }
 
+  function fmtInput(date){
+    const y = date.getFullYear();
+    const m = String(date.getMonth()+1).padStart(2,'0');
+    const d = String(date.getDate()).padStart(2,'0');
+    return `${y}-${m}-${d}`;
+  }
+
   function parseLocal(value){
     const [y,m,d] = value.split('-').map(Number);
     return new Date(y, m-1, d);
+  }
+
+  function getPresetRange(key){
+    const end = startOfDay(localToday());
+    const days = key === 'today' ? 1 : Number(key);
+    const start = addDays(end, -(days-1));
+    const compareEnd = addDays(start, -1);
+    const compareStart = addDays(compareEnd, -(days-1));
+    return {start,end,compareStart,compareEnd};
+  }
+
+  function applyRange(range){
+    periodLabel.textContent = range.start.getTime() === range.end.getTime()
+      ? `${fmt(range.start)} · 오늘`
+      : `${fmt(range.start)} ~ ${fmt(range.end)}`;
+    compareLabel.textContent = range.compareStart.getTime() === range.compareEnd.getTime()
+      ? `비교 ${fmt(range.compareStart)}`
+      : `비교 ${fmt(range.compareStart)} ~ ${fmt(range.compareEnd)}`;
   }
 
   function closePopover(){
@@ -11489,11 +13499,11 @@ if(initialPageTitle){
       if(customBtn) customBtn.classList.remove('active');
       closePopover();
 
-      const pair = presetLabels[btn.dataset.dashboardPeriod];
-      if(pair){
-        periodLabel.textContent = pair[0];
-        compareLabel.textContent = pair[1];
-      }
+      const range = getPresetRange(btn.dataset.dashboardPeriod);
+      applyRange(range);
+
+      if(startInput) startInput.value = fmtInput(range.start);
+      if(endInput) endInput.value = fmtInput(range.end);
     });
   });
 
@@ -11530,10 +13540,21 @@ if(initialPageTitle){
 
       presetButtons.forEach(b=>b.classList.remove('active'));
       customBtn.classList.add('active');
-      periodLabel.textContent = `${fmt(start)} ~ ${fmt(end)}`;
-      compareLabel.textContent = `비교 ${fmt(compareStart)} ~ ${fmt(compareEnd)}`;
+
+      periodLabel.textContent = start.getTime() === end.getTime()
+        ? `${fmt(start)}`
+        : `${fmt(start)} ~ ${fmt(end)}`;
+      compareLabel.textContent = compareStart.getTime() === compareEnd.getTime()
+        ? `비교 ${fmt(compareStart)}`
+        : `비교 ${fmt(compareStart)} ~ ${fmt(compareEnd)}`;
       closePopover();
     });
+  }
+
+  const active = document.querySelector('[data-dashboard-period].active');
+  if(active){
+    const range = getPresetRange(active.dataset.dashboardPeriod);
+    applyRange(range);
   }
 })();
 
@@ -12474,6 +14495,45 @@ if(initialPageTitle){
   });
 })();
 
+
+// v5.49 학습 통계 기간/비교 선택
+(function(){
+  const unit=document.getElementById('learningStatUnit');
+  const period=document.getElementById('learningStatPeriod');
+  const compare=document.getElementById('learningStatCompare');
+  const apply=document.getElementById('learningStatApply');
+  const cur=document.getElementById('learningStatCurrentLabel');
+  const prev=document.getElementById('learningStatPreviousLabel');
+  const hint=document.getElementById('learningStatCompareHint');
+  if(!unit||!period||!compare||!apply) return;
+  const options={
+    day:['2026.09.22','2026.09.21','2026.09.20'],
+    month:['2026년 9월','2026년 8월','2026년 7월'],
+    quarter:['2026년 3분기','2026년 2분기','2026년 1분기'],
+    year:['2026년','2025년','2024년']
+  };
+  const labels={day:'일별',month:'월별',quarter:'분기별',year:'연별'};
+  function resetPeriods(){
+    period.innerHTML=options[unit.value].map(v=>`<option>${v}</option>`).join('');
+  }
+  function previousLabel(){
+    if(compare.value==='none') return '비교 안 함';
+    if(compare.value==='yearAgo'){
+      const v=period.value;
+      return v.replace(/2026/g,'2025').replace(/2025/g,'2024');
+    }
+    const arr=options[unit.value];
+    const idx=Math.max(0,arr.indexOf(period.value));
+    return arr[Math.min(idx+1,arr.length-1)] || '-';
+  }
+  unit.addEventListener('change',resetPeriods);
+  apply.addEventListener('click',()=>{
+    cur.textContent=period.value;
+    prev.textContent=previousLabel();
+    hint.textContent=`${labels[unit.value]} · ${compare.options[compare.selectedIndex].text}`;
+  });
+})();
+
 // v5.44 재방문 추이 그래프 인터랙션
 (function(){
   const svg = document.getElementById('cohortTrendSvg');
@@ -12536,6 +14596,397 @@ if(initialPageTitle){
     tooltip.hidden=true;
   });
 })();
+
+// v5.49 계정 관리 탭
+(function(){
+  const tabs=document.querySelectorAll('#accountManagementTabs [data-account-tab]');
+  const panels=document.querySelectorAll('#account-management [data-account-panel]');
+  tabs.forEach(btn=>btn.addEventListener('click',()=>{
+    tabs.forEach(b=>b.classList.toggle('active',b===btn));
+    panels.forEach(p=>p.classList.toggle('active',p.dataset.accountPanel===btn.dataset.accountTab));
+  }));
+})();
+
+// v5.54 콘텐츠 등록/수정 게시·비게시 + 즉시/예약 반영
+(function(){
+  function setupRelease(scope){
+    const prefix = scope === 'create' ? 'create' : 'edit';
+    const card = document.querySelector(`.content-release-card[data-release-scope="${scope}"]`);
+    const toggle = document.getElementById(`${prefix}PublishToggle`);
+    const label = document.getElementById(`${prefix}PublishLabel`);
+    const segment = document.getElementById(`${prefix}ApplySegment`);
+    const scheduleFields = document.getElementById(`${prefix}ScheduleFields`);
+    const scheduleDate = document.getElementById(`${prefix}ScheduleDate`);
+    const scheduleTime = document.getElementById(`${prefix}ScheduleTime`);
+    const help = document.getElementById(`${prefix}PublishHelp`);
+    const actionBtn = document.getElementById(
+      scope === 'create' ? 'contentCreateCompleteBtn' : 'contentEditCompleteBtn'
+    );
+    const status = scope === 'edit' ? document.getElementById('editContentStatus') : null;
+
+    if(!card || !toggle || !segment || !scheduleFields || !help) return;
+
+    let publish = true;
+    let applyMode = 'immediate';
+
+    function update(){
+      toggle.classList.toggle('on', publish);
+      toggle.setAttribute('aria-pressed', publish ? 'true' : 'false');
+      if(label) label.textContent = publish ? '게시' : '비게시';
+
+      card.classList.toggle('is-unpublished', !publish);
+      card.classList.toggle('is-scheduled', applyMode === 'scheduled');
+
+      segment.querySelectorAll('[data-apply-mode]').forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.applyMode === applyMode);
+      });
+
+      scheduleFields.hidden = applyMode !== 'scheduled';
+
+      if(status){
+        status.textContent = publish ? '게시중' : '비게시';
+        status.classList.toggle('ok', publish);
+      }
+
+      const stateText = publish ? '게시' : '비게시';
+      if(applyMode === 'scheduled'){
+        const d = scheduleDate?.value || '날짜 미선택';
+        const t = scheduleTime?.value || '시간 미선택';
+        help.textContent = `${d} ${t}에 ${scope === 'create' ? '등록한 콘텐츠' : '수정 내용'}와 ${stateText} 상태가 함께 반영됩니다.`;
+        if(actionBtn) actionBtn.textContent = scope === 'create' ? '예약 등록' : '예약 저장';
+      }else{
+        help.textContent = `${scope === 'create' ? '등록 완료' : '수정 완료'} 시 ${scope === 'create' ? '콘텐츠' : '변경 내용'}가 바로 반영되고 ${stateText} 상태로 적용됩니다.`;
+        if(actionBtn) actionBtn.textContent = scope === 'create' ? '등록' : '수정 완료';
+      }
+    }
+
+    toggle.addEventListener('click', ()=>{
+      publish = !publish;
+      update();
+    });
+
+    segment.querySelectorAll('[data-apply-mode]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        applyMode = btn.dataset.applyMode;
+        update();
+      });
+    });
+
+    [scheduleDate, scheduleTime].forEach(el=>{
+      el?.addEventListener('input', update);
+      el?.addEventListener('change', update);
+    });
+
+    update();
+  }
+
+  setupRelease('create');
+  setupRelease('edit');
+})();
+
+
+// v5.52 매출·구독 통계 기간/비교 선택
+(function(){
+  const unit=document.getElementById('businessStatUnit');
+  const period=document.getElementById('businessStatPeriod');
+  const compare=document.getElementById('businessStatCompare');
+  const apply=document.getElementById('businessStatApply');
+  const cur=document.getElementById('businessStatCurrentLabel');
+  const prev=document.getElementById('businessStatPreviousLabel');
+  const hint=document.getElementById('businessStatCompareHint');
+  const summary=document.getElementById('businessStatCompareSummary');
+  const tableTitle=document.getElementById('businessCompareTableTitle');
+  if(!unit||!period||!compare||!apply||!cur||!prev||!hint) return;
+
+  const options={
+    day:['2026.09.22','2026.09.21','2026.09.20'],
+    month:['2026년 9월','2026년 8월','2026년 7월'],
+    quarter:['2026년 3분기','2026년 2분기','2026년 1분기'],
+    year:['2026년','2025년','2024년']
+  };
+  const labels={day:'일별',month:'월별',quarter:'분기별',year:'연별'};
+
+  function resetPeriods(){
+    period.innerHTML=options[unit.value].map(v=>`<option>${v}</option>`).join('');
+  }
+
+  function getCompareLabel(){
+    if(compare.value==='none') return '비교 안 함';
+    if(compare.value==='yearAgo'){
+      const v=period.value;
+      if(unit.value==='year'){
+        const year=parseInt(v,10);
+        return Number.isFinite(year) ? `${year-1}년` : '전년';
+      }
+      return v.replace(/2026/g,'2025').replace(/2025/g,'2024');
+    }
+    const arr=options[unit.value];
+    const idx=Math.max(0,arr.indexOf(period.value));
+    return arr[Math.min(idx+1,arr.length-1)] || '-';
+  }
+
+  function applySelection(){
+    const comparison=getCompareLabel();
+    cur.textContent=period.value;
+    prev.textContent=comparison;
+    hint.textContent=`${labels[unit.value]} · ${compare.options[compare.selectedIndex].text}`;
+    summary?.classList.toggle('is-no-compare',compare.value==='none');
+    if(tableTitle){
+      tableTitle.textContent=compare.value==='none'
+        ? `${period.value} 주요 지표`
+        : '선택 기간 vs 비교 기간';
+    }
+  }
+
+  unit.addEventListener('change',()=>{
+    resetPeriods();
+    applySelection();
+  });
+  compare.addEventListener('change',applySelection);
+  apply.addEventListener('click',applySelection);
+
+  applySelection();
+})();
+
+
+// v5.55 통합 게시판
+(function(){
+  const categoryFilter=document.getElementById('boardCategoryFilter');
+  const statusFilter=document.getElementById('boardStatusFilter');
+  const search=document.getElementById('boardSearch');
+  const rows=[...document.querySelectorAll('#boardTableBody tr')];
+  const count=document.getElementById('boardResultCount');
+
+  function filterBoard(){
+    const category=categoryFilter?.value || 'all';
+    const status=statusFilter?.value || 'all';
+    const q=(search?.value || '').trim().toLowerCase();
+    let visible=0;
+    rows.forEach(row=>{
+      const title=(row.querySelector('td:nth-child(3)')?.textContent || '').toLowerCase();
+      const okCategory=category==='all' || row.dataset.boardCategory===category;
+      const okStatus=status==='all' || row.dataset.boardStatus===status;
+      const okSearch=!q || title.includes(q);
+      const show=okCategory && okStatus && okSearch;
+      row.style.display=show ? '' : 'none';
+      if(show) visible++;
+    });
+    if(count) count.textContent=`총 ${visible}건`;
+  }
+
+  categoryFilter?.addEventListener('change',filterBoard);
+  statusFilter?.addEventListener('change',filterBoard);
+  search?.addEventListener('input',filterBoard);
+
+  const editorCategory=document.getElementById('boardEditorCategory');
+  const summary=document.getElementById('boardEditorCategorySummary');
+  const guide=document.getElementById('boardCategoryGuide');
+  function updateEditorCategory(){
+    if(!editorCategory) return;
+    const eventMode=editorCategory.value==='event';
+    if(summary) summary.textContent=eventMode ? '이벤트·프로모션' : '공지사항';
+    if(guide){
+      guide.textContent=eventMode
+        ? '이벤트, 챌린지, 혜택 및 프로모션 게시글을 등록합니다.'
+        : '일반 서비스 안내, 업데이트, 운영 공지를 등록합니다.';
+    }
+  }
+  editorCategory?.addEventListener('change',updateEditorCategory);
+  updateEditorCategory();
+})();
+
+
+// v5.59 팝업 노출 대상 클릭 다중 선택
+(function(){
+  const labelMap={guest:'비로그인',guardian:'보호자',student:'학생'};
+  const locationMap={guest:'비로그인 메인',guardian:'보호자 메인',student:'학생 메인'};
+
+  function showPopupToast(message){
+    const toastEl=document.getElementById('toast');
+    if(!toastEl) return;
+    toastEl.textContent=message;
+    toastEl.classList.add('show');
+    setTimeout(()=>toastEl.classList.remove('show'),1600);
+  }
+
+  function updatePopupAudience(block){
+    if(!block) return;
+    const buttons=[...block.querySelectorAll('[data-popup-target]')];
+    const selected=buttons.filter(btn=>btn.classList.contains('active'));
+
+    buttons.forEach(btn=>{
+      btn.setAttribute('aria-pressed',btn.classList.contains('active') ? 'true' : 'false');
+    });
+
+    const summary=block.querySelector('[data-popup-audience-summary]');
+    const parent=block.closest('.create-form,.ops-form');
+    const location=parent?.querySelector('[data-popup-location-summary]');
+
+    if(summary){
+      summary.textContent=selected.length===3
+        ? '전체'
+        : selected.map(btn=>labelMap[btn.dataset.popupTarget]).join(', ');
+    }
+    if(location){
+      location.textContent=selected.length===3
+        ? '비로그인 메인 · 보호자 메인 · 학생 메인'
+        : selected.map(btn=>locationMap[btn.dataset.popupTarget]).join(' · ');
+    }
+  }
+
+  document.addEventListener('click',e=>{
+    const target=e.target.closest('[data-popup-target]');
+    if(!target) return;
+
+    const block=target.closest('[data-popup-audience]');
+    if(!block) return;
+
+    const activeButtons=[...block.querySelectorAll('[data-popup-target].active')];
+    const isActive=target.classList.contains('active');
+
+    if(isActive && activeButtons.length===1){
+      showPopupToast('노출 대상은 최소 1개 이상 선택해 주세요.');
+      return;
+    }
+
+    target.classList.toggle('active');
+    updatePopupAudience(block);
+  });
+})();
+
+
+// v5.60 팝업 노출 일시
+(function(){
+  function formatDate(date){
+    if(!date) return '';
+    return date.replaceAll('-','.');
+  }
+
+  function updatePopupDatetime(scope){
+    if(!scope) return;
+    const sd=scope.querySelector('[data-popup-start-date]');
+    const st=scope.querySelector('[data-popup-start-time]');
+    const ed=scope.querySelector('[data-popup-end-date]');
+    const et=scope.querySelector('[data-popup-end-time]');
+    const help=scope.querySelector('[data-popup-datetime-help]');
+    if(!sd||!st||!ed||!et||!help) return;
+
+    const startDate=sd.value;
+    const startTime=st.value || '00:00';
+    const endDate=ed.value;
+    const endTime=et.value || '23:59';
+
+    if(!startDate || !endDate){
+      help.classList.remove('invalid');
+      help.textContent=`시작 ${startTime} · 종료 ${endTime}까지 시간을 지정할 수 있습니다.`;
+      return;
+    }
+
+    const start=new Date(`${startDate}T${startTime}:00`);
+    const end=new Date(`${endDate}T${endTime}:00`);
+    const invalid=end <= start;
+
+    help.classList.toggle('invalid',invalid);
+    help.textContent=invalid
+      ? '종료 일시는 시작 일시보다 이후로 설정해 주세요.'
+      : `${formatDate(startDate)} ${startTime} ~ ${formatDate(endDate)} ${endTime} 노출`;
+  }
+
+  document.addEventListener('input',e=>{
+    if(!e.target.matches('[data-popup-start-date],[data-popup-start-time],[data-popup-end-date],[data-popup-end-time]')) return;
+    const scope=e.target.closest('.create-form,.ops-form');
+    updatePopupDatetime(scope);
+  });
+
+  document.addEventListener('change',e=>{
+    if(!e.target.matches('[data-popup-start-date],[data-popup-start-time],[data-popup-end-date],[data-popup-end-time]')) return;
+    const scope=e.target.closest('.create-form,.ops-form');
+    updatePopupDatetime(scope);
+  });
+})();
+
+
+// v5.62 유입·전환 분석 기간 비교
+(function(){
+  const unit=document.getElementById('acqUnit');
+  const period=document.getElementById('acqPeriod');
+  const compare=document.getElementById('acqCompare');
+  const apply=document.getElementById('acqApply');
+  const cur=document.getElementById('acqCurrentLabel');
+  const prev=document.getElementById('acqPreviousLabel');
+  const hint=document.getElementById('acqCompareHint');
+  const summary=document.getElementById('acqCompareSummary');
+  if(!unit||!period||!compare||!apply||!cur||!prev||!hint) return;
+
+  const options={
+    day:['2026.09.22','2026.09.21','2026.09.20'],
+    month:['2026년 9월','2026년 8월','2026년 7월'],
+    quarter:['2026년 3분기','2026년 2분기','2026년 1분기'],
+    year:['2026년','2025년','2024년']
+  };
+  const labels={day:'일별',month:'월별',quarter:'분기별',year:'연별'};
+
+  function resetPeriod(){
+    period.innerHTML=options[unit.value].map(v=>`<option>${v}</option>`).join('');
+  }
+
+  function compareLabel(){
+    if(compare.value==='none') return '비교 안 함';
+    const value=period.value;
+    if(compare.value==='yearAgo'){
+      if(unit.value==='year'){
+        const y=parseInt(value,10);
+        return Number.isFinite(y) ? `${y-1}년` : '전년';
+      }
+      const m=value.match(/20\d{2}/);
+      return m ? value.replace(m[0],String(Number(m[0])-1)) : '전년 동일 기간';
+    }
+    const arr=options[unit.value];
+    const idx=Math.max(0,arr.indexOf(value));
+    return arr[Math.min(idx+1,arr.length-1)] || '-';
+  }
+
+  function update(){
+    cur.textContent=period.value;
+    prev.textContent=compareLabel();
+    hint.textContent=`${labels[unit.value]} · ${compare.options[compare.selectedIndex].text}`;
+    summary?.classList.toggle('is-no-compare',compare.value==='none');
+  }
+
+  unit.addEventListener('change',()=>{resetPeriod();update();});
+  compare.addEventListener('change',update);
+  apply.addEventListener('click',update);
+  update();
+})();
+
+
+// v5.65 FAQ 검색 / 필터
+(function(){
+  const search=document.getElementById('faqSearch');
+  const category=document.getElementById('faqCategoryFilter');
+  const status=document.getElementById('faqStatusFilter');
+  const count=document.getElementById('faqResultCount');
+  const body=document.getElementById('faqTableBody');
+  if(!search||!category||!status||!count||!body) return;
+
+  function applyFaqFilter(){
+    const q=search.value.trim().toLowerCase();
+    let visible=0;
+    body.querySelectorAll('[data-faq-row]').forEach(row=>{
+      const rowText=row.textContent.toLowerCase();
+      const show=(!q||rowText.includes(q))
+        && (category.value==='all'||row.dataset.faqCategory===category.value)
+        && (status.value==='all'||row.dataset.faqStatus===status.value);
+      row.style.display=show?'':'none';
+      if(show) visible++;
+    });
+    count.textContent=`총 ${visible}개`;
+  }
+  search.addEventListener('input',applyFaqFilter);
+  category.addEventListener('change',applyFaqFilter);
+  status.addEventListener('change',applyFaqFilter);
+})();
+
 </script>
 </body>
 </html>
