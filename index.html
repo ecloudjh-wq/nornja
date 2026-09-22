@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=1920, initial-scale=1" name="viewport"/>
-<title>노른자국어 관리자센터 v5.78 - 디스크립션 의미 기반 전수 보정</title>
+<title>노른자국어 관리자센터 v5.80 - 콘텐츠 등록·수정 디스크립션 보강</title>
 <!-- 통합 최종안 v2: 국어팀 관리자 구조 + 확정 결제/학습 정책 + 전문 학습결과 모달 반영 /  결제실패 3회/유예없음/24시 학습제한, 연환불 취소일 일할, 이용권 보유 학생 삭제불가, 홀딩 익일부터 00시 적용, 환불·상태 보호자만 변경, 이관 미지원 -->
 <style>
 :root{
@@ -7290,6 +7290,93 @@ body.desc-global-mode .global-desc-drawer{
   white-space:pre-line !important;
 }
 
+
+/* v5.79 상세 팝업 디스크립션 */
+.detail-modal-head-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.detail-desc-toggle{
+  height:34px !important;
+  border-color:#e3e6eb !important;
+  background:#fff !important;
+  color:#596273 !important;
+  font-size:12px !important;
+  font-weight:800;
+}
+body.detail-spec-active.desc-global-mode .detail-desc-toggle{
+  border-color:#e5484d !important;
+  background:#e5484d !important;
+  color:#fff !important;
+}
+body.detail-spec-active .page .spec-marker-layer{
+  visibility:hidden;
+}
+body.detail-spec-active.desc-global-mode .detail-modal-backdrop.open{
+  padding-right:490px;
+  box-sizing:border-box;
+}
+.detail-spec-marker-layer{
+  position:fixed;
+  inset:0;
+  z-index:70;
+  pointer-events:none;
+}
+.detail-spec-marker-layer button{
+  position:fixed;
+  border:3px solid #fff;
+  background:#ed1c24;
+  color:#fff;
+  font-weight:900;
+  box-shadow:0 3px 10px rgba(34,42,58,.22);
+  cursor:pointer;
+  opacity:0;
+  pointer-events:none;
+}
+body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
+  opacity:1;
+  pointer-events:auto;
+}
+.detail-spec-group-marker{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  font-size:13px;
+  transform:translate(-50%,-50%);
+}
+.detail-spec-sub-marker{
+  min-width:40px;
+  height:25px;
+  padding:0 7px;
+  border-radius:999px;
+  font-size:11px;
+  transform:translate(-25%,-50%);
+}
+.detail-spec-highlight{
+  outline:2px solid #ed1c24 !important;
+  outline-offset:4px;
+  border-radius:10px;
+}
+@media (max-width:1600px){
+  body.detail-spec-active.desc-global-mode .detail-modal-backdrop.open{
+    padding-right:450px;
+  }
+}
+
+
+/* v5.80 콘텐츠 등록/수정 디스크립션 보강 */
+#content-create .spec-highlight,
+#content-edit .spec-highlight{
+  scroll-margin-top:104px;
+}
+#content-create .editor-card.spec-highlight,
+#content-edit .editor-card.spec-highlight,
+#content-create .grade-rule-card.spec-highlight,
+#content-edit .grade-rule-card.spec-highlight{
+  outline-offset:5px;
+}
+
 </style>
 </head>
 <body>
@@ -11786,7 +11873,10 @@ body.desc-global-mode .global-desc-drawer{
 </div>
 <div class="panel-sub" id="detailModalSub">운영 데이터 조회</div>
 </div>
+<div class="detail-modal-head-actions">
+<button class="btn detail-desc-toggle" id="detailDescToggle" type="button" aria-pressed="false">디스크립션</button>
 <button aria-label="닫기" class="icon-btn" id="detailModalClose">✕</button>
+</div>
 </div>
 <div class="detail-modal-body" id="detailModalBody"></div>
 <div class="detail-modal-foot">
@@ -11844,7 +11934,7 @@ document.addEventListener('click', e=>{
   const btn = e.target.closest('.history-result-go');
   if(!btn) return;
   const target = btn.dataset.resultTarget || 'diagnostic';
-  if(detailModalBackdrop) detailModalBackdrop.classList.remove('open');
+  if(detailModalBackdrop) closeDetailModal();
   goPage('reports');
   const tab = document.querySelector(`#learningResultTabs [data-result-tab="${target}"]`);
   if(tab) tab.click();
@@ -12949,6 +13039,9 @@ function openDetailModal(type,name){
   bindCsReplyComposer(detailModalBody);
   detailModalBackdrop.classList.add('open');
   bindDynamicModal();
+  if(typeof specEnterDetailModal === 'function'){
+    setTimeout(()=>specEnterDetailModal(type,name),0);
+  }
 }
 
 function bindCsReplyComposer(root=document){
@@ -13119,6 +13212,7 @@ function bindCsReplyComposer(root=document){
 
 function closeDetailModal(){
   detailModalBackdrop.classList.remove('open');
+  if(typeof specExitDetailModal === 'function') specExitDetailModal();
 }
 document.querySelectorAll('.detail-btn').forEach(b=>b.addEventListener('click',()=>openDetailModal(b.dataset.type,b.dataset.name)));
 document.getElementById('detailModalClose').onclick=closeDetailModal;
@@ -16216,7 +16310,632 @@ function specProcessBlock(groups, block, pageTitle){
   }
 }
 
+
+// v5.80 콘텐츠 등록/수정 화면 전용 디스크립션
+function specContentEditorType(page){
+  const active=page.querySelector('.content-form-panel.active');
+  return active?.dataset.createForm || active?.dataset.editForm || 'b';
+}
+
+function specContentEditorMode(page){
+  return page.id==='content-create' ? 'create' : 'edit';
+}
+
+function specContentCleanHeading(value=''){
+  return String(value)
+    .replace(/\s+/g,' ')
+    .replace(/^\d{1,2}\s*[.)-]?\s*/,'')
+    .replace(/\s+\d+\s*\/\s*\d+.*$/,'')
+    .replace(/\s+\d+개.*$/,'')
+    .trim();
+}
+
+function specContentItemTitle(el){
+  if(!el) return '항목';
+
+  if(el.matches('.content-type-card')){
+    return el.querySelector('strong')?.textContent?.trim() || '콘텐츠 유형';
+  }
+
+  if(el.matches('.grade-rule-grid > div,.content-rule-grid > div,.lt-grade-guide-grid > div')){
+    return el.querySelector('span')?.textContent?.trim() || '기준';
+  }
+
+  if(el.matches('.vocab-edit-row')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return `필수 어휘 ${n}`.trim();
+  }
+
+  if(el.matches('.sentence-edit-list > div')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return `어휘 특강 문장 ${n}`.trim();
+  }
+
+  if(el.matches('.lt-meta-list > div')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return `메타인지 문항 ${n}`.trim();
+  }
+
+  if(el.matches('.simple-question-list > div')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return `메타인지 문항 ${n}`.trim();
+  }
+
+  if(el.matches('.lt-edit-row')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return `어휘 ${n}`.trim();
+  }
+
+  if(el.matches('details')){
+    return el.querySelector('summary b')?.textContent?.trim() || '문제';
+  }
+
+  if(el.matches('.basic-content-tab,.assessment-tab,.lt-pool-tab')){
+    const raw=(el.textContent||'').replace(/\s+\d+\s*\/\s*\d+.*/,'').trim();
+    return `${raw} 탭`;
+  }
+
+  if(el.matches('.content-release-head .toggle')){
+    return '게시 상태';
+  }
+
+  if(el.matches('[data-apply-mode="immediate"]')) return '즉시 반영';
+  if(el.matches('[data-apply-mode="scheduled"]')) return '예약 반영';
+
+  if(el.matches('.simple-upload-row')){
+    return '삽화·이미지 파일';
+  }
+
+  if(el.matches('.editor-check-list > div')){
+    return el.querySelector('span')?.textContent?.trim() || '작성 상태';
+  }
+
+  if(el.matches('.selected-content-type')){
+    return '콘텐츠 유형';
+  }
+
+  if(el.matches('.editor-side-meta')){
+    return '등록 상태';
+  }
+
+  if(el.matches('.linked-history-box')){
+    return '연결 학습 이력';
+  }
+
+  if(el.matches('.content-lock-panel,.simple-edit-note')){
+    return '학습 위치 변경 기준';
+  }
+
+  if(el.matches('.grade-rule-note')){
+    return '등록 기준 안내';
+  }
+
+  if(el.matches('.content-rule-note')){
+    return '중복 등록 기준';
+  }
+
+  if(el.matches('.content-publish-help')){
+    return '반영 안내';
+  }
+
+  if(el.matches('button')){
+    return (el.textContent||'').replace(/\s+/g,' ').trim() || el.getAttribute('aria-label') || '버튼';
+  }
+
+  const label=el.closest('label');
+  const own=label?.querySelector(':scope > span');
+  if(own){
+    return own.textContent.replace(/\s+/g,' ').replace(/\s*\*$/,'').replace(/\s*선택$/,'').trim();
+  }
+
+  if(el.matches('input,textarea')){
+    return el.placeholder?.trim() || '입력';
+  }
+
+  if(el.matches('select')){
+    return el.options?.[0]?.textContent?.trim() || '선택';
+  }
+
+  const heading=
+    el.querySelector(':scope > .editor-section-head > div:first-child')?.textContent ||
+    el.querySelector(':scope > .editor-section-head')?.textContent ||
+    el.querySelector(':scope > .lt-panel-head strong')?.textContent ||
+    el.querySelector(':scope > .assessment-panel-head strong')?.textContent ||
+    el.querySelector(':scope > strong')?.textContent;
+
+  return specContentCleanHeading(heading || '') || '항목';
+}
+
+function specContentDescribe(el,context){
+  const label=specContentItemTitle(el);
+  const mode=context.mode;
+  const type=context.type;
+  const edit=mode==='edit';
+
+  const commonMap={
+    '급수':specBullets(
+      '콘텐츠를 적용할 학습 급수를 선택합니다.',
+      '급수 선택에 따라 허용 갈래, 지문 길이, 기본 문제 수와 선택지 수 기준이 함께 변경됩니다.',
+      edit ? '급수 변경 시 변경 전·후 값이 콘텐츠 변경 이력에 기록됩니다.' : ''
+    ),
+    '단락':specBullets(
+      '콘텐츠가 속할 단락을 선택합니다.',
+      type==='b'
+        ? '급수·단락·매듭 조합으로 기본 학습의 학습 위치를 결정합니다.'
+        : '급수와 단락 조합으로 단락 평가의 위치를 결정합니다.',
+      edit ? '위치 변경 시 변경 이력에 기록됩니다.' : ''
+    ),
+    '매듭':specBullets(
+      '기본 학습이 배치될 매듭을 선택합니다.',
+      '하나의 단락은 20매듭으로 구성됩니다.',
+      edit ? '매듭 변경 시 변경 이력에 기록됩니다.' : '동일한 급수·단락·매듭 조합의 콘텐츠가 이미 있으면 등록할 수 없습니다.'
+    ),
+    '갈래':specBullets(
+      '선택한 급수에서 허용되는 글의 갈래를 선택합니다.',
+      '급수별 허용 갈래 기준에 맞지 않는 값은 등록 대상에서 제외합니다.'
+    ),
+    '분야':specBullets(
+      '콘텐츠의 세부 주제 또는 분야를 입력합니다.',
+      '운영·검색 시 콘텐츠를 구분하기 위한 보조 정보로 사용합니다.'
+    ),
+    '원제':specBullets(
+      '원문 또는 출처 콘텐츠의 원제가 있는 경우 입력합니다.',
+      '원제가 없는 경우 비워둘 수 있습니다.'
+    ),
+    '제목':specBullets(
+      '관리자와 학습 화면에서 콘텐츠를 구분할 제목을 입력합니다.',
+      '필수 입력 항목이며 저장·등록 시 콘텐츠 기본 정보에 반영됩니다.'
+    ),
+    '지문':specBullets(
+      '학습에 사용할 본문 지문을 입력합니다.',
+      type==='assessment'
+        ? '단락 평가 지문은 해당 급수의 기본 학습 지문 기준보다 최대 100자까지 추가 허용합니다.'
+        : '선택한 급수의 지문 글자 수 기준을 적용합니다.'
+    ),
+    '참고':specBullets(
+      '지문 작성 또는 콘텐츠 운영에 필요한 참고 내용을 입력합니다.',
+      '선택 입력 항목으로 학습 지문과 별도로 관리합니다.'
+    ),
+    '허용 갈래':specBullets(
+      '현재 선택한 급수에서 등록 가능한 갈래를 안내합니다.'
+    ),
+    '지문 길이':specBullets(
+      '현재 선택한 급수에 적용되는 최대 지문 글자 수를 안내합니다.'
+    ),
+    '문제 수':specBullets(
+      '급수별 기본 문제 수를 안내합니다.',
+      '1~2급 3문제, 3~4급 4문제, 5~6급 5문제를 기본값으로 사용하며 필요 시 문제를 추가할 수 있습니다.'
+    ),
+    '선택지 수':specBullets(
+      '급수별 문항 선택지 수 기준을 안내합니다.',
+      '1~2급 3지선다, 3~4급 4지선다, 5~6급 5지선다 기준을 적용합니다.'
+    ),
+    '문제 구성':specBullets(
+      '선택한 급수에서 사용하는 문제 구성 기준을 안내합니다.'
+    ),
+    '생성 예정 코드':specBullets(
+      '선택한 급수·단락·매듭을 기준으로 등록될 학습 위치를 미리 확인합니다.'
+    ),
+    '동일 위치 콘텐츠':specBullets(
+      '선택한 학습 위치에 이미 등록된 콘텐츠가 있는지 확인합니다.',
+      '동일한 위치에 콘텐츠가 존재하면 신규 등록을 제한합니다.'
+    ),
+    '급수별 지문 길이':specBullets(
+      '현재 선택 급수의 지문 글자 수 제한을 다시 확인합니다.'
+    ),
+    '등록 기준 안내':specBullets(
+      '급수를 선택하면 해당 급수에 적용되는 등록 기준을 자동으로 표시합니다.'
+    ),
+    '중복 등록 기준':specBullets(
+      '기본 학습은 급수·단락·매듭 조합이 중복될 경우 신규 등록할 수 없습니다.'
+    ),
+    '삽화·이미지 파일':specBullets(
+      '학습 콘텐츠에 사용할 삽화 또는 이미지를 등록·교체합니다.',
+      '등록 후 미리보기로 이미지 적용 상태를 확인합니다.'
+    ),
+    '게시 상태':specBullets(
+      '콘텐츠를 게시 상태로 노출할지 여부를 설정합니다.',
+      '비게시 상태로 저장하면 학습 서비스에 노출하지 않습니다.'
+    ),
+    '즉시 반영':specBullets(
+      edit ? '수정 완료 시 변경 내용을 즉시 서비스에 반영합니다.' : '등록 완료 시 콘텐츠를 즉시 서비스에 반영합니다.',
+      '게시 상태 설정과 함께 최종 노출 여부를 결정합니다.'
+    ),
+    '예약 반영':specBullets(
+      edit ? '수정 내용을 지정한 날짜와 시간에 반영하도록 예약합니다.' : '신규 콘텐츠를 지정한 날짜와 시간에 반영하도록 예약합니다.',
+      '예약 반영 선택 시 반영 날짜와 시간을 필수로 입력합니다.'
+    ),
+    '반영 날짜':specBullets(
+      '예약 반영을 실행할 날짜를 선택합니다.',
+      '예약 반영을 선택한 경우에만 입력 영역이 노출됩니다.'
+    ),
+    '반영 시간':specBullets(
+      '예약 반영을 실행할 시간을 선택합니다.',
+      '선택한 날짜와 시간을 기준으로 콘텐츠 변경사항을 반영합니다.'
+    ),
+    '반영 안내':specBullets(
+      '현재 게시 상태와 반영 방식에 따라 저장 후 적용되는 결과를 안내합니다.'
+    ),
+    '기본 학습 탭':specBullets(
+      '기본 학습 본문·필수 어휘·삽화·문제 입력 영역으로 전환합니다.',
+      '기본 학습 완료는 다음 기본 학습과 같은 매듭의 어휘 특강을 여는 기준입니다.'
+    ),
+    '어휘 특강 탭':specBullets(
+      '기본 학습의 필수 어휘와 연결된 어휘 특강 문장 입력 영역으로 전환합니다.',
+      '어휘 특강은 선택 학습이며 완료 여부가 다음 매듭 오픈 조건에는 포함되지 않습니다.'
+    ),
+    '메타인지 탭':specBullets(
+      '메타인지 문항 입력 영역으로 전환합니다.',
+      '메타인지는 정답 없이 5점 척도로 응답하며 평가 총점과 별도 결과로 관리합니다.'
+    ),
+    '어휘 탭':specBullets(
+      type==='lt'
+        ? '문해력 진단의 어휘 풀 입력 영역으로 전환합니다.'
+        : '단락 평가의 어휘 문제 구성 영역으로 전환합니다.',
+      type==='lt'
+        ? '최대 50개를 등록하고 진단 시 15개를 랜덤 출제합니다.'
+        : '해당 단락 기본 학습의 필수 어휘를 기준으로 평가 어휘를 구성합니다.'
+    ),
+    '문장 이해 탭':specBullets(
+      '문장 이해 세트 입력 영역으로 전환합니다.',
+      '5세트 중 1세트를 진단 시 랜덤 출제합니다.'
+    ),
+    '문단 이해 탭':specBullets(
+      '문단 이해 세트 입력 영역으로 전환합니다.',
+      '5세트 중 2세트를 진단 시 랜덤 출제합니다.'
+    ),
+    '독해 탭':specBullets(
+      type==='lt'
+        ? '문해력 진단의 독해 지문·문항 입력 영역으로 전환합니다.'
+        : '단락 평가의 독해 지문·6문항 입력 영역으로 전환합니다.',
+      type==='lt'
+        ? '5지문 중 2지문을 랜덤 출제하며 지문별 3문항으로 구성합니다.'
+        : '단락 평가 독해는 6문항 고정으로 구성합니다.'
+    ),
+    '학습 위치 변경 기준':specBullets(
+      '급수·단락·매듭 등 학습 위치 변경 가능 여부와 기록 기준을 안내합니다.',
+      '위치를 변경한 경우 변경 전·후 값은 콘텐츠 변경 이력에 남깁니다.'
+    ),
+    '콘텐츠 유형':specBullets(
+      mode==='create'
+        ? '현재 등록 대상으로 선택한 콘텐츠 유형을 표시합니다.'
+        : '현재 수정 중인 콘텐츠 유형을 표시합니다.',
+      '콘텐츠 유형은 문해력 진단 / 기본 학습 / 단락 평가로 구분합니다.'
+    ),
+    '등록 상태':specBullets(
+      mode==='create'
+        ? '현재 콘텐츠의 신규 등록 상태를 표시합니다.'
+        : '현재 콘텐츠의 게시 상태와 최근 수정 정보를 확인합니다.'
+    ),
+    '연결 학습 이력':specBullets(
+      '현재 콘텐츠와 연결된 학습 중 학생 또는 학습 이력 현황을 확인합니다.',
+      '수정 시 운영 영향 범위를 확인하기 위한 참고 정보입니다.'
+    )
+  };
+
+  if(commonMap[label]) return commonMap[label];
+
+  if(el.matches('.content-type-card')){
+    const typeKey=el.dataset.contentType;
+    const desc={
+      lt:specBullets(
+        '문해력 진단 콘텐츠 등록 양식으로 전환합니다.',
+        '급수별 진단 콘텐츠를 구성하며 메타인지·어휘·문장 이해·문단 이해·독해 영역을 입력합니다.'
+      ),
+      b:specBullets(
+        '기본 학습 콘텐츠 등록 양식으로 전환합니다.',
+        '급수·단락·매듭 위치에 지문, 필수 어휘, 문제와 선택형 어휘 특강을 함께 구성합니다.'
+      ),
+      assessment:specBullets(
+        '단락 평가 콘텐츠 등록 양식으로 전환합니다.',
+        '단락 단위로 메타인지·어휘·독해 평가를 구성합니다.'
+      )
+    };
+    return desc[typeKey] || specBullets('등록할 콘텐츠 유형을 선택합니다.');
+  }
+
+  if(el.matches('.vocab-edit-row')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return specBullets(
+      `${n}번째 필수 어휘와 뜻을 입력합니다.`,
+      '기본 학습 1매듭당 필수 어휘 5개를 구성합니다.'
+    );
+  }
+
+  if(el.matches('.sentence-edit-list > div')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return specBullets(
+      `${n}번째 필수 어휘와 연결되는 어휘 특강 문장을 입력합니다.`,
+      '문장 안 정답 어휘는 [어휘] 형식으로 표시합니다.'
+    );
+  }
+
+  if(el.matches('.lt-meta-list > div,.simple-question-list > div')){
+    const n=el.querySelector('b')?.textContent?.trim() || '';
+    return specBullets(
+      `${n}번째 메타인지 질문을 입력합니다.`,
+      '정답 없이 5점 척도로 응답하는 자기평가 문항입니다.'
+    );
+  }
+
+  if(el.matches('.lt-edit-row')){
+    return specBullets(
+      '진단용 어휘와 정답 뜻·오답 뜻을 입력합니다.',
+      '등록된 어휘 풀에서 진단 문항을 랜덤 출제합니다.'
+    );
+  }
+
+  if(el.matches('details')){
+    const n=el.querySelector('summary b')?.textContent?.trim() || '문제';
+    return specBullets(
+      `${n}의 유형·세부유형·발문·보기·선택지·정답·해설을 입력하거나 수정합니다.`,
+      type==='assessment'
+        ? '단락 평가 독해는 총 6문항으로 고정합니다.'
+        : '기본 문제 수를 기준으로 시작하며 필요한 경우 문항을 추가할 수 있습니다.'
+    );
+  }
+
+  if(el.matches('.simple-upload-row')){
+    return commonMap['삽화·이미지 파일'];
+  }
+
+  if(el.matches('.editor-check-list > div')){
+    const t=el.querySelector('span')?.textContent?.trim() || '작성 상태';
+    return specBullets(
+      `${t} 입력 완료 여부를 확인합니다.`,
+      '필수 항목 작성 여부를 기준으로 등록 준비 상태를 확인합니다.'
+    );
+  }
+
+  if(el.matches('.editor-side-actions button')){
+    const txt=(el.textContent||'').trim();
+    if(txt==='임시저장') return specBullets('작성 중인 콘텐츠를 게시하지 않고 임시 상태로 저장합니다.');
+    if(txt==='미리보기') return specBullets('현재 입력한 콘텐츠가 학생 화면에서 어떻게 보이는지 미리 확인합니다.');
+    if(txt==='등록') return specBullets('필수 입력값을 검증한 후 신규 콘텐츠를 등록합니다.');
+    if(txt==='수정 완료') return specBullets('수정 내용을 검증한 후 선택한 반영 방식에 따라 저장·반영합니다.');
+  }
+
+  if(el.matches('button')){
+    const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+    if(txt.includes('문제 추가')) return specBullets('기본 문제 수 외에 추가 문항을 생성합니다.');
+    if(txt.includes('어휘 추가')) return specBullets('어휘 입력 행을 추가합니다.');
+    if(txt.includes('파일 선택') || txt.includes('교체')) return specBullets('삽화·이미지 파일을 선택해 등록하거나 기존 파일을 교체합니다.');
+    return specDescribe(el,context.pageTitle,context.groupTitle || '콘텐츠 설정');
+  }
+
+  if(el.matches('input,select,textarea')){
+    return commonMap[label] || specDescribe(el,context.pageTitle,context.groupTitle || '콘텐츠 설정');
+  }
+
+  return specBullets(`${label}의 입력·설정 기준을 확인합니다.`);
+}
+
+function specContentAddGroup(groups,target,title,items,context){
+  if(!target || !specIsVisible(target)) return;
+  items=specDedup((items||[]).filter(specIsVisible));
+  if(!items.length) items=[target];
+
+  groups.push({
+    target,
+    title,
+    items:items.map(el=>({
+      target:el,
+      title:specContentItemTitle(el),
+      body:specContentDescribe(el,{...context,groupTitle:title})
+    }))
+  });
+}
+
+function specContentEditorCardTitle(card){
+  const head=card.querySelector(':scope > .editor-section-head');
+  if(head){
+    const first=head.querySelector(':scope > div:first-child');
+    const raw=first?.textContent || head.textContent || '';
+    return specContentCleanHeading(raw);
+  }
+  return specContentCleanHeading(card.querySelector(':scope > h4')?.textContent || '') || '콘텐츠 입력';
+}
+
+function specContentEditorCardItems(card,context){
+  const title=specContentEditorCardTitle(card);
+
+  if(title.includes('기본 정보') || title.includes('진단 기본 정보') || title.includes('평가 기본 정보')){
+    return [...card.querySelectorAll('.content-form-grid label > input, .content-form-grid label > select, .content-form-grid label > textarea')]
+      .filter(specIsVisible);
+  }
+
+  if(title==='지문'){
+    return [...card.querySelectorAll('label > textarea, label > input')].filter(specIsVisible);
+  }
+
+  if(title.includes('필수 어휘')){
+    return [...card.querySelectorAll('.vocab-edit-row')].filter(specIsVisible);
+  }
+
+  if(title.includes('어휘 특강')){
+    const rows=[...card.querySelectorAll('.sentence-edit-list > div')].filter(specIsVisible);
+    return rows.length ? rows : [card];
+  }
+
+  if(title.includes('삽화') || title.includes('이미지')){
+    const upload=card.querySelector('.simple-upload-row');
+    return upload ? [upload] : [card];
+  }
+
+  if(title==='문제' || title.includes('독해 문제')){
+    const add=card.querySelector('.basic-question-add,.assessment-question-add');
+    const questions=[...card.querySelectorAll('.question-accordion > details,.compact-question-list > details')].filter(specIsVisible);
+    return [add,...questions].filter(Boolean).filter(specIsVisible);
+  }
+
+  if(card.classList.contains('lt-pool-card')){
+    const tabs=[...card.querySelectorAll('.lt-pool-tabs .lt-pool-tab')].filter(specIsVisible);
+    const active=card.querySelector('.lt-pool-panel.active');
+    const activeItems=[];
+
+    if(active){
+      if(active.matches('[data-lt-panel-content="meta"]')){
+        activeItems.push(...active.querySelectorAll('.lt-meta-list > div'));
+      }else if(active.matches('[data-lt-panel-content="vocab"]')){
+        const add=active.querySelector('.lt-add-row');
+        if(add) activeItems.push(add);
+        activeItems.push(...active.querySelectorAll('.lt-edit-row'));
+      }else{
+        activeItems.push(...active.querySelectorAll(':scope > .lt-set-card, :scope > .reading-passage-card, :scope > .lt-reading-card'));
+        if(!activeItems.length){
+          activeItems.push(...active.querySelectorAll(':scope > div').filter?.(()=>true) || []);
+        }
+      }
+    }
+    return [...tabs,...activeItems].filter(specIsVisible);
+  }
+
+  if(title.includes('단락 평가 구성')){
+    const tabs=[...card.querySelectorAll('.assessment-tabs .assessment-tab')].filter(specIsVisible);
+    const active=card.querySelector('.assessment-panel.active');
+    const activeItems=[];
+    if(active){
+      if(active.matches('[data-assessment-panel="meta"]')){
+        activeItems.push(...active.querySelectorAll('.simple-question-list > div'));
+      }else if(active.matches('[data-assessment-panel="vocab"]')){
+        const add=active.querySelector('.assessment-vocab-add');
+        if(add) activeItems.push(add);
+        activeItems.push(...active.querySelectorAll('.assessment-vocab-row'));
+      }else if(active.matches('[data-assessment-panel="reading"]')){
+        const passageInputs=[...active.querySelectorAll('label > input,label > textarea')].filter(specIsVisible);
+        activeItems.push(...passageInputs);
+        activeItems.push(...active.querySelectorAll('.assessment-reading-questions > details'));
+      }
+    }
+    return [...tabs,...activeItems].filter(specIsVisible);
+  }
+
+  const controls=[...card.querySelectorAll('label > input,label > select,label > textarea,button,details')].filter(specIsVisible);
+  return controls.length ? controls : [card];
+}
+
+function specBuildContentEditorPage(page){
+  const groups=[];
+  const pageTitle=specPageTitle(page);
+  const mode=specContentEditorMode(page);
+  const type=specContentEditorType(page);
+  const context={pageTitle,mode,type};
+
+  const head=page.querySelector(':scope > .page-head');
+  if(head){
+    const headItems=[...head.querySelectorAll('button')].filter(specIsVisible);
+    if(headItems.length) specContentAddGroup(groups,head,'상단',headItems,context);
+  }
+
+  const createStep=page.querySelector(':scope > .content-create-step');
+  if(createStep && specIsVisible(createStep)){
+    const typeCards=[...createStep.querySelectorAll('.content-type-card')].filter(specIsVisible);
+    specContentAddGroup(groups,createStep,'콘텐츠 유형 선택',typeCards,context);
+  }
+
+  const warning=page.querySelector(':scope > .content-edit-warning');
+  if(warning && specIsVisible(warning)){
+    groups.push({
+      target:warning,
+      title:'수정 이력 안내',
+      items:[{
+        target:warning,
+        title:'변경 이력 기록',
+        body:specBullets(
+          '콘텐츠 내용 또는 학습 위치를 수정하면 변경 전·후 정보가 콘텐츠 변경 이력에 기록됩니다.'
+        )
+      }]
+    });
+  }
+
+  const release=page.querySelector(':scope > .content-release-card');
+  if(release && specIsVisible(release)){
+    const items=[
+      release.querySelector('.content-release-head .toggle'),
+      ...release.querySelectorAll('.content-apply-segment button'),
+      ...release.querySelectorAll('.content-release-datetime input'),
+      release.querySelector('.content-publish-help')
+    ].filter(Boolean).filter(specIsVisible);
+    specContentAddGroup(groups,release,'게시·반영 설정',items,context);
+  }
+
+  const layout=page.querySelector(':scope > .content-editor-layout');
+  const activeForm=layout?.querySelector('.content-form-panel.active');
+
+  if(activeForm && specIsVisible(activeForm)){
+    [...activeForm.children].forEach(block=>{
+      if(!specIsVisible(block)) return;
+
+      if(block.matches('.editor-card')){
+        const title=specContentEditorCardTitle(block);
+        const items=specContentEditorCardItems(block,context);
+        specContentAddGroup(groups,block,title,items,context);
+        return;
+      }
+
+      if(block.matches('.grade-rule-card')){
+        const items=[...block.querySelectorAll('.grade-rule-grid > div')];
+        const note=block.querySelector('.grade-rule-note');
+        if(note) items.push(note);
+        specContentAddGroup(groups,block,'급수별 등록 기준',items,context);
+        return;
+      }
+
+      if(block.matches('.basic-content-tabs')){
+        const items=[...block.querySelectorAll('.basic-content-tab')].filter(specIsVisible);
+        specContentAddGroup(groups,block,'학습 영역 전환',items,context);
+        return;
+      }
+
+      if(block.matches('.content-rule-panel')){
+        const items=[...block.querySelectorAll('.content-rule-grid > div')];
+        const note=block.querySelector('.content-rule-note');
+        if(note) items.push(note);
+        specContentAddGroup(groups,block,'학습 위치 확인',items,context);
+        return;
+      }
+
+      if(block.matches('.content-lock-panel,.simple-edit-note')){
+        specContentAddGroup(groups,block,'학습 위치 변경 기준',[block],context);
+        return;
+      }
+
+      if(block.matches('.lt-grade-guide')){
+        const items=[...block.querySelectorAll('.lt-grade-guide-grid > div')].filter(specIsVisible);
+        specContentAddGroup(groups,block,'급수별 진단 콘텐츠 가이드',items,context);
+        return;
+      }
+    });
+  }
+
+  const side=layout?.querySelector(':scope > .content-editor-side');
+  if(side && specIsVisible(side)){
+    const card=side.querySelector('.editor-side-card') || side;
+    const items=[
+      card.querySelector('.selected-content-type'),
+      ...card.querySelectorAll('.editor-check-list > div'),
+      card.querySelector('.editor-side-meta'),
+      card.querySelector('.linked-history-box'),
+      ...card.querySelectorAll('.editor-side-actions button')
+    ].filter(Boolean).filter(specIsVisible);
+
+    specContentAddGroup(
+      groups,
+      side,
+      mode==='create' ? '등록 상태·작업' : '콘텐츠 정보·작업',
+      items,
+      context
+    );
+  }
+
+  return groups;
+}
+
 function specBuildPage(page){
+  if(page?.id==='content-create' || page?.id==='content-edit'){
+    return specBuildContentEditorPage(page);
+  }
+
   const groups=[];
   const pageTitle=specPageTitle(page);
   const head=page.querySelector(':scope > .page-head');
@@ -16422,6 +17141,19 @@ function setGlobalDescriptionOpen(open){
     specSchedulePosition();
     setTimeout(specSchedulePosition,220);
   }
+
+  if(typeof detailSpecState !== 'undefined' && detailSpecState.active){
+    const detailToggle=document.getElementById('detailDescToggle');
+    if(detailToggle){
+      detailToggle.setAttribute('aria-pressed',String(open));
+      detailToggle.textContent=open ? '디스크립션 닫기' : '디스크립션';
+    }
+    if(open){
+      setTimeout(()=>specRenderDetailModal(detailSpecState.type,detailSpecState.name),0);
+    }else{
+      detailSpecClear();
+    }
+  }
 }
 
 function syncGlobalDescriptionPage(pageId){
@@ -16443,8 +17175,8 @@ function syncGlobalDescriptionPage(pageId){
 
     const isTab =
       clickTarget.matches(
-        '[data-account-tab],[data-result-tab],[data-basic-tab],[data-assessment-tab],'+
-        '.account-management-tabs button,.learning-result-tabs button,.basic-content-tabs button,.assessment-tabs button'
+        '[data-account-tab],[data-result-tab],[data-basic-tab],[data-assessment-tab],[data-content-type],[data-lt-panel],'+
+        '.account-management-tabs button,.learning-result-tabs button,.basic-content-tabs button,.assessment-tabs button,.lt-pool-tabs button'
       );
 
     if(isTab){
@@ -16459,6 +17191,624 @@ function syncGlobalDescriptionPage(pageId){
 
   const initial=document.querySelector('.page.active');
   if(initial) specRenderPage(initial.id);
+})();
+
+
+// v5.79 상세 팝업 화면설계서형 디스크립션
+const detailSpecState = {
+  active:false,
+  type:'',
+  name:'',
+  targets:new Map(),
+  layer:null,
+  resizeObserver:null
+};
+
+const detailTypeLabels = {
+  historyBasic:'기본 학습 이력 상세',
+  historyVocab:'어휘 특강 이력 상세',
+  historyDiagnostic:'문해력 진단 이력 상세',
+  historyParagraph:'단락 평가 이력 상세',
+  guardian:'보호자 상세',
+  student:'학생 상세',
+  subscription:'구독 상세',
+  order:'주문·결제 상세',
+  refund:'환불 상세',
+  diagnostic:'문해력 진단 결과 상세',
+  learning:'학습 현황 상세',
+  basic:'기본 학습 결과 상세',
+  vocab:'어휘 특강 결과 상세',
+  paragraph:'단락 평가 결과 상세',
+  report:'단락 분석지 상세',
+  content:'콘텐츠 상세',
+  paymentFail:'결제 실패 상세',
+  contentHistory:'콘텐츠 변경 이력 상세',
+  phoneCs:'전화 문의 상세',
+  event:'이벤트 상세',
+  notice:'공지사항 상세',
+  resource:'자료실 상세',
+  servicePopup:'팝업 상세',
+  mainBanner:'메인 배너 상세',
+  admin:'관리자 상세',
+  cs:'1:1 문의 상세'
+};
+
+const detailTypePolicy = {
+  guardian: specBullets(
+    '보호자 계정의 기본 정보와 연결 학생, 이용권·결제, 배송지, 개인정보 동의 정보를 확인합니다.',
+    '보호자와 학생 간 계정 이전 기능은 지원하지 않습니다.'
+  ),
+  student: specBullets(
+    '학생별 기본 정보, 이용권, 현재 학습 위치, 학습 이력과 학습코드를 확인합니다.',
+    '유효한 이용권을 보유한 학생은 삭제할 수 없습니다.'
+  ),
+  subscription: specBullets(
+    '학생별 이용권 상태와 시작일, 다음 결제일, 자동갱신 상태를 확인합니다.',
+    '구독 시작일과 다음 결제일은 학생별로 독립 관리합니다.'
+  ),
+  order: specBullets(
+    '주문번호 기준으로 결제 정보와 결제 대상 학생, 환불·변경 이력을 확인합니다.',
+    '여러 학생을 한 번에 결제한 경우 하나의 주문에 여러 학생이 포함될 수 있습니다.'
+  ),
+  refund: specBullets(
+    '환불 가능 여부와 정책에 따라 산정된 환불금액, 접수·처리 상태를 확인합니다.',
+    '환불 접수 시 해당 학생의 학습 이용은 즉시 제한됩니다.'
+  ),
+  paymentFail: specBullets(
+    '결제 실패 사유와 학습 제한 적용 시점을 확인합니다.',
+    '자동 재결제와 추가 이용 기간은 제공하지 않으며 실패 당일 24:00부터 학습을 제한합니다.'
+  ),
+  diagnostic: specBullets(
+    '문해력 진단의 총점, 영역별 결과, 메타인지와 배정 급수를 확인합니다.',
+    '메타인지 결과는 25점 기준으로 평가점수와 별도 표시합니다.'
+  ),
+  paragraph: specBullets(
+    '단락 평가의 어휘·독해 점수와 메타인지 결과를 확인합니다.',
+    '평가점수는 어휘 40점 + 독해 60점의 100점 기준이며 메타인지는 별도 표시합니다.'
+  ),
+  report: specBullets(
+    '단락 전체의 기본 학습 완료, 정답률, 다시 풀기, 단락 평가, 메타인지 결과를 종합 확인합니다.',
+    '단락 분석지는 기본 학습 20매듭과 단락 평가 완료 후 생성됩니다.'
+  ),
+  historyBasic: specBullets(
+    '기본 학습 한 회차의 시작·완료 시간, 소요시간, 정답률과 다시 풀기 등 실행 이력을 확인합니다.'
+  ),
+  historyVocab: specBullets(
+    '어휘 특강 한 회차의 진행 시간과 대상·완료 어휘 결과를 확인합니다.',
+    '어휘 특강은 선택 학습이며 다음 매듭 오픈 조건에는 포함되지 않습니다.'
+  ),
+  historyDiagnostic: specBullets(
+    '문해력 진단 한 회차의 응시 시간과 완료 상태를 확인합니다.',
+    '영역별 상세 점수는 학습 결과 화면에서 확인합니다.'
+  ),
+  historyParagraph: specBullets(
+    '단락 평가 한 회차의 응시 시간과 완료·제한시간 초과 여부를 확인합니다.',
+    '단락별 성취 분석은 학습 결과 화면에서 확인합니다.'
+  ),
+  learning: specBullets(
+    '학생의 현재 급수·진도와 최근 학습 상태를 요약 확인합니다.',
+    '상세 회차는 학습 이력, 진단·단락 결과는 학습 결과에서 확인합니다.'
+  ),
+  basic: specBullets(
+    '기본 학습 회차의 정답률, 다시 풀기, 소요시간, 문항별 결과와 진행 상태를 확인합니다.'
+  ),
+  vocab: specBullets(
+    '어휘 특강 회차의 대상 어휘와 최종 결과, 재선택 정보를 확인합니다.'
+  ),
+  content: specBullets(
+    '콘텐츠의 학습 위치, 게시 상태, 버전과 연결 학습 이력을 확인합니다.',
+    '게시중 콘텐츠 수정 시 변경 내용은 변경 이력으로 기록합니다.'
+  ),
+  contentHistory: specBullets(
+    '콘텐츠의 변경 유형과 변경 전·후 값, 처리자, 변경 사유를 확인합니다.'
+  ),
+  phoneCs: specBullets(
+    '전화 상담 대상, 문의 유형, 상담 내용, 처리 메모와 필요한 후속 처리를 확인합니다.'
+  ),
+  cs: specBullets(
+    '1:1 문의 내용과 답변, 내부 메모, 문의 정보와 처리 이력을 한 화면에서 관리합니다.',
+    '답변은 등록 후 수정할 수 있으며 내부 메모는 사용자에게 노출되지 않습니다.'
+  ),
+  notice: specBullets(
+    '공지사항의 게시 상태, 고정 여부, 게시 기간과 본문을 확인·수정합니다.'
+  ),
+  resource: specBullets(
+    '자료의 노출 대상, 게시 상태, 첨부파일과 등록 정보를 확인·수정합니다.'
+  ),
+  servicePopup: specBullets(
+    '팝업의 노출 대상, 노출 위치, 시작·종료 일시, 이미지와 링크를 확인·수정합니다.',
+    '비로그인·보호자·학생 대상을 복수 선택할 수 있습니다.'
+  ),
+  mainBanner: specBullets(
+    '메인 배너의 노출 대상, 이미지, 이동 링크, 노출 기간과 순서를 확인·수정합니다.'
+  ),
+  admin: specBullets(
+    '관리자 계정의 기본 정보, 권한 그룹, 최근 로그인과 보안 상태를 확인합니다.'
+  ),
+  event: specBullets(
+    '이벤트의 노출 기간, 배너와 상세 페이지 정보를 확인합니다.'
+  )
+};
+
+function detailSpecLabel(el){
+  if(!el) return '항목';
+
+  if(el.matches('button')){
+    return (el.textContent || '').replace(/\s+/g,' ').trim() || el.getAttribute('aria-label') || '버튼';
+  }
+  if(el.matches('th')){
+    return (el.textContent || '').replace(/\s+/g,' ').trim() || '관리';
+  }
+  if(el.matches('.metric-card')){
+    return el.querySelector('.metric-label')?.textContent?.trim() || '결과 지표';
+  }
+  if(el.matches('.account-stat')){
+    return el.querySelector('.t')?.textContent?.trim() || '계정 요약';
+  }
+  if(el.matches('.inline-field')){
+    return el.querySelector('.label')?.textContent?.trim() || '정보';
+  }
+  if(el.matches('.history-detail-grid > div')){
+    return el.querySelector('span')?.textContent?.trim() || '학습 이력';
+  }
+  if(el.matches('.detail-grid .k')){
+    return el.textContent?.trim() || '상세 정보';
+  }
+  if(el.matches('.bar-row')){
+    return el.firstElementChild?.textContent?.trim() || '영역별 결과';
+  }
+  if(el.matches('.tab-chip')){
+    return `${el.textContent.trim()} 탭`;
+  }
+  if(el.matches('textarea')){
+    return el.getAttribute('placeholder') || '내용 입력';
+  }
+
+  const heading =
+    el.querySelector(':scope > h4')?.textContent?.trim() ||
+    el.querySelector(':scope > .panel-title')?.textContent?.trim() ||
+    el.querySelector(':scope > .insight-title')?.textContent?.trim() ||
+    el.querySelector(':scope > strong')?.textContent?.trim();
+
+  if(heading && heading.length < 50 && !/[₩원%]|\d{2,}/.test(heading)) return heading;
+  return '상세 정보';
+}
+
+function detailFieldDescription(label,type){
+  const map = {
+    '회원 상태':specBullets('현재 계정의 이용 가능 상태를 표시합니다.','상태 변경 기능이 제공되는 경우 운영 정책에 따라 변경합니다.'),
+    '이용 상태':specBullets('해당 학생 이용권의 현재 활성 상태를 표시합니다.'),
+    '학습코드':specBullets('학생이 학습 서비스에 접속할 때 사용하는 6자리 영문·숫자 코드를 표시합니다.','필요 시 코드 변경 또는 재발송 기능을 이용합니다.'),
+    '다음 결제':specBullets('해당 학생 이용권의 다음 자동결제 예정일을 표시합니다.'),
+    '다음 결제일':specBullets('해당 학생 이용권의 다음 자동결제 예정일을 표시합니다.'),
+    '자동갱신':specBullets('해당 이용권의 자동갱신 사용 여부를 표시합니다.'),
+    '결제수단':specBullets('현재 주문 또는 구독에 사용된 결제수단 정보를 표시합니다.'),
+    '결제 실패일':specBullets('자동결제가 실패한 일시를 표시합니다.'),
+    '자동 재결제':specBullets('결제 실패 이후 자동 재결제 여부를 표시합니다.','현재 정책상 자동 재결제는 진행하지 않습니다.'),
+    '추가 이용 기간':specBullets('결제 실패 후 추가 이용 가능 기간 제공 여부를 표시합니다.','현재 정책상 별도 유예기간을 제공하지 않습니다.'),
+    '학습 제한':specBullets('결제 실패에 따른 학습 제한 적용 시점을 표시합니다.','실패 당일 24:00부터 해당 학생의 학습 이용을 제한합니다.'),
+    '환불 가능 여부':specBullets('환불 정책 기준으로 현재 요청의 환불 가능 여부를 표시합니다.'),
+    '최종 환불금액':specBullets('환불 정책에 따라 계산된 최종 환불 예정 금액을 표시합니다.','관리자가 임의 금액으로 변경하지 않습니다.'),
+    '보호자 동의':specBullets('만 14세 미만 학생 등록 시 법정대리인 동의 상태를 표시합니다.'),
+    '동의 이력':specBullets('개인정보·약관 동의의 일시와 당시 문서 버전 이력을 확인합니다.'),
+    '정답률':specBullets('해당 학습 회차에서 산출된 정답률을 표시합니다.'),
+    '다시 풀기':specBullets('오답 또는 재시도로 다시 풀이한 횟수를 표시합니다.'),
+    '메타인지':specBullets('학생의 자기평가 응답 결과를 25점 기준으로 표시합니다.','평가 총점과는 별도 지표입니다.'),
+    '배정 급수':specBullets('문해력 진단 결과에 따라 학생에게 배정된 학습 급수를 표시합니다.'),
+    '처리 상태':specBullets('문의 또는 운영 요청의 현재 처리 단계를 표시하고 변경합니다.'),
+    '내부 메모':specBullets('운영자 간 공유할 내부 처리 메모를 작성합니다.','사용자에게는 노출되지 않습니다.')
+  };
+  return map[label] || specBullets(`${label} 정보를 확인합니다.`);
+}
+
+function detailSpecGroupTitle(el){
+  if(!el) return '상세 정보';
+  if(el.matches('.account-side')) return '계정 요약';
+  if(el.matches('.tab-row')) return '상세 탭';
+  if(el.matches('.metric-grid')) return '핵심 결과';
+  if(el.matches('.history-detail-hero,.learning-hero')) return '결과 요약';
+  if(el.matches('.history-detail-grid')) return '학습 이력';
+  if(el.matches('.history-detail-note,.note,.danger-note,.soft-panel')) return '운영 기준';
+  if(el.matches('.history-result-link')) return '연결 화면';
+  if(el.matches('.tx-receipt')) return '결제 요약';
+  if(el.matches('.cs-case-main')) return '문의·답변';
+  if(el.matches('.cs-case-side')) return '문의 정보';
+  return el.querySelector(':scope > h4')?.textContent?.trim() ||
+         el.querySelector('.panel-title')?.textContent?.trim() ||
+         '상세 정보';
+}
+
+function detailSpecItemsForGroup(group){
+  if(!group) return [];
+
+  if(group.matches('.account-side')){
+    return [...group.querySelectorAll('.account-stat')].filter(specIsVisible);
+  }
+  if(group.matches('.tab-row')){
+    return [...group.querySelectorAll('.tab-chip')].filter(specIsVisible);
+  }
+  if(group.matches('.operation-card,.detail-section,.cs-case-card,.cs-case-info,.result-card')){
+    const fields=[...group.querySelectorAll(':scope > .inline-field, :scope > .detail-grid > .k, :scope > .operation-actions > button, :scope > button')].filter(specIsVisible);
+    if(fields.length) return fields;
+    const th=[...group.querySelectorAll('thead th')].filter(specIsVisible);
+    if(th.length) return th;
+    return [group];
+  }
+  if(group.matches('.metric-grid')){
+    return [...group.querySelectorAll(':scope > .metric-card')].filter(specIsVisible);
+  }
+  if(group.matches('.history-detail-grid')){
+    return [...group.querySelectorAll(':scope > div')].filter(specIsVisible);
+  }
+  if(group.matches('.result-grid')){
+    return [...group.querySelectorAll(':scope > .result-card')].filter(specIsVisible);
+  }
+  if(group.matches('.learning-hero,.history-detail-hero,.history-detail-note,.history-result-link,.note,.danger-note,.soft-panel,.tx-receipt')){
+    const buttons=[...group.querySelectorAll('button')].filter(specIsVisible);
+    return buttons.length ? [group,...buttons] : [group];
+  }
+
+  const controls=[...group.querySelectorAll('button,textarea,input,select')].filter(specIsVisible);
+  if(controls.length) return controls;
+  const cards=[...group.querySelectorAll(':scope > .metric-card,:scope > .inline-field,:scope > .detail-section')].filter(specIsVisible);
+  return cards.length ? cards : [group];
+}
+
+function detailSpecDescribe(el,type,groupTitle){
+  const label=detailSpecLabel(el);
+
+  if(el.matches('button')){
+    const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+    if(el.dataset.modal) return specBullets(`${txt} 팝업을 열어 관련 정보를 확인·입력·처리합니다.`);
+    if(el.dataset.go) return specBullets(`${txt} 관련 관리 화면으로 이동합니다.`);
+    if(el.classList.contains('history-result-go')) return specBullets('현재 이력과 연결된 학습 결과 화면으로 이동합니다.');
+    if(txt.includes('저장')) return specBullets('현재 입력하거나 변경한 내용을 저장합니다.');
+    if(txt.includes('수정')) return specBullets('선택한 정보를 수정할 수 있는 상태로 전환합니다.');
+    if(txt.includes('재발송')) return specBullets('대상 학생에게 학습코드 안내 메시지를 다시 발송합니다.');
+    return specBullets(`${txt} 기능을 실행합니다.`);
+  }
+
+  if(el.matches('th')) return specBullets(`목록에서 ${label} 정보를 표시합니다.`);
+
+  if(el.matches('.metric-card')) return detailFieldDescription(label,type);
+  if(el.matches('.inline-field')) return detailFieldDescription(label,type);
+  if(el.matches('.history-detail-grid > div')) return detailFieldDescription(label,type);
+  if(el.matches('.detail-grid .k')) return detailFieldDescription(label,type);
+  if(el.matches('.tab-chip')) return specBullets(`${el.textContent.trim()} 정보를 확인하기 위한 상세 탭입니다.`);
+  if(el.matches('textarea')) return specBullets('답변 또는 메모 내용을 입력합니다.','저장 후 해당 문의 처리 정보에 반영됩니다.');
+
+  if(el.matches('.history-detail-note,.note,.danger-note,.soft-panel')){
+    return detailTypePolicy[type] || specBullets('해당 상세 화면의 운영 기준과 주의사항을 안내합니다.');
+  }
+
+  if(el.matches('.learning-hero,.history-detail-hero')){
+    return detailTypePolicy[type] || specBullets('선택한 대상의 상세 결과와 현재 상태를 요약합니다.');
+  }
+
+  if(el.matches('.history-result-link')){
+    return specBullets('현재 이력과 연결된 성취 결과를 별도 학습 결과 화면에서 확인할 수 있도록 안내합니다.');
+  }
+
+  if(el.matches('.tx-receipt')){
+    return detailTypePolicy[type] || specBullets('선택한 거래 또는 구독의 핵심 상태를 요약합니다.');
+  }
+
+  if(el.matches('.result-card')){
+    const title=el.querySelector('h4')?.textContent?.trim() || groupTitle;
+    return specBullets(`${title}의 세부 결과와 처리 기준을 확인합니다.`);
+  }
+
+  return detailTypePolicy[type] || specBullets(`${groupTitle} 정보를 확인합니다.`);
+}
+
+function detailSpecBuildGroups(type){
+  const root=detailModalBody;
+  const groups=[];
+
+  function add(target,title,items){
+    if(!target || !specIsVisible(target)) return;
+    items=(items || []).filter(specIsVisible);
+    if(!items.length) items=[target];
+    groups.push({
+      target,
+      title,
+      items:items.map(item=>({
+        target:item,
+        title:detailSpecLabel(item),
+        body:detailSpecDescribe(item,type,title)
+      }))
+    });
+  }
+
+  const top=[...root.children].filter(specIsVisible);
+
+  // 계정 상세
+  const accountShell=root.querySelector('.account-shell');
+  if(accountShell){
+    const side=accountShell.querySelector('.account-side');
+    add(side,'계정 요약',detailSpecItemsForGroup(side));
+    const tabs=accountShell.querySelector('.tab-row');
+    add(tabs,'상세 탭',detailSpecItemsForGroup(tabs));
+    [...accountShell.querySelectorAll('.account-main > .operation-card, .account-main > .operation-grid > .operation-card, .account-main > .detail-section, .account-main > .danger-note, .account-main > .soft-panel')]
+      .filter(specIsVisible)
+      .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+    return groups;
+  }
+
+  // 문의 상세
+  const csLayout=root.querySelector('.cs-case-layout');
+  if(csLayout){
+    [...csLayout.querySelectorAll('.cs-case-main > .cs-case-card, .cs-case-side > .cs-case-info')]
+      .filter(specIsVisible)
+      .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+    return groups;
+  }
+
+  // 운영 상세/콘텐츠 상세/관리자 상세: 카드 단위
+  const shell=root.querySelector('.ops-layout,.editor-shell,.admin-detail-shell,.transaction-modal');
+  if(shell && !root.querySelector('.learning-hero')){
+    const candidates=[...shell.querySelectorAll(':scope > .tx-receipt, :scope > .detail-section, :scope > .operation-card, :scope > .result-card, :scope > .panel, :scope > .ops-main > *, :scope > .ops-side > *, :scope > .admin-detail-main > *, :scope > .admin-detail-side > *')]
+      .filter(specIsVisible);
+    if(candidates.length){
+      candidates.forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+      return groups;
+    }
+  }
+
+  // 학습 결과 / 학습 이력
+  top.forEach(block=>{
+    if(block.matches('.learning-hero,.history-detail-hero,.metric-grid,.history-detail-grid,.history-detail-note,.history-result-link,.result-card,.detail-section,.note')){
+      add(block,detailSpecGroupTitle(block),detailSpecItemsForGroup(block));
+      return;
+    }
+    if(block.matches('.result-grid')){
+      [...block.querySelectorAll(':scope > .result-card')].filter(specIsVisible)
+        .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+      return;
+    }
+    // empty decorative blocks are ignored
+    if((block.textContent||'').trim() || block.querySelector('button,input,textarea,select')){
+      add(block,detailSpecGroupTitle(block),detailSpecItemsForGroup(block));
+    }
+  });
+
+  return groups;
+}
+
+function detailSpecClear(){
+  document.querySelectorAll('.detail-spec-marker-layer').forEach(el=>el.remove());
+  detailModal?.querySelectorAll('.detail-spec-highlight').forEach(el=>el.classList.remove('detail-spec-highlight'));
+  detailSpecState.targets.clear();
+  detailSpecState.layer=null;
+  if(detailSpecState.resizeObserver){
+    detailSpecState.resizeObserver.disconnect();
+    detailSpecState.resizeObserver=null;
+  }
+}
+
+function detailSpecPositionMarkers(){
+  const layer=detailSpecState.layer;
+  if(!layer || !detailSpecState.active) return;
+
+  layer.querySelectorAll('[data-detail-spec-key]').forEach(marker=>{
+    const target=detailSpecState.targets.get(marker.dataset.detailSpecKey);
+    if(!target || !specIsVisible(target)) return;
+    const rect=target.getBoundingClientRect();
+    marker.style.left=`${Math.max(2,rect.left)}px`;
+    marker.style.top=`${Math.max(2,rect.top)}px`;
+  });
+}
+
+function detailSpecSchedule(){
+  requestAnimationFrame(()=>{
+    detailSpecPositionMarkers();
+    requestAnimationFrame(detailSpecPositionMarkers);
+  });
+}
+
+function detailSpecFocus(key){
+  const target=detailSpecState.targets.get(key);
+  const list=document.getElementById('globalDescList');
+  const row=list?.querySelector(`[data-detail-spec-row="${CSS.escape(key)}"]`);
+  if(!target) return;
+
+  detailModal.querySelectorAll('.detail-spec-highlight').forEach(el=>el.classList.remove('detail-spec-highlight'));
+  list?.querySelectorAll('.spec-desc-row,.spec-group-head').forEach(el=>el.classList.remove('active'));
+  target.classList.add('detail-spec-highlight');
+  row?.classList.add('active');
+
+  const bodyRect=detailModalBody.getBoundingClientRect();
+  const targetRect=target.getBoundingClientRect();
+  const desired=detailModalBody.scrollTop + (targetRect.top-bodyRect.top) - 18;
+  detailModalBody.scrollTo({top:Math.max(0,desired),behavior:'smooth'});
+
+  if(row && list){
+    const lr=list.getBoundingClientRect();
+    const rr=row.getBoundingClientRect();
+    list.scrollTo({top:Math.max(0,list.scrollTop+(rr.top-lr.top)-12),behavior:'smooth'});
+  }
+
+  setTimeout(detailSpecSchedule,350);
+}
+
+function specRenderDetailModal(type,name){
+  const list=document.getElementById('globalDescList');
+  const title=document.getElementById('globalDescTitle');
+  if(!list || !title || !detailModalBackdrop.classList.contains('open')) return;
+
+  detailSpecClear();
+  detailSpecState.active=true;
+  detailSpecState.type=type;
+  detailSpecState.name=name;
+  document.body.classList.add('detail-spec-active');
+
+  title.textContent=`${detailTypeLabels[type] || '상세 팝업'} 디스크립션`;
+  list.innerHTML='';
+
+  const groups=detailSpecBuildGroups(type);
+  const layer=document.createElement('div');
+  layer.className='detail-spec-marker-layer';
+  detailModalBackdrop.appendChild(layer);
+  detailSpecState.layer=layer;
+
+  groups.forEach((group,gIdx)=>{
+    const gNo=gIdx+1;
+    const gKey=`dg${gNo}`;
+    detailSpecState.targets.set(gKey,group.target);
+
+    const gm=document.createElement('button');
+    gm.type='button';
+    gm.className='detail-spec-group-marker';
+    gm.dataset.detailSpecKey=gKey;
+    gm.textContent=String(gNo);
+    gm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(gKey);});
+    layer.appendChild(gm);
+
+    const gh=document.createElement('button');
+    gh.type='button';
+    gh.className='spec-group-head';
+    gh.dataset.detailSpecRow=gKey;
+    gh.innerHTML=`<b>${String(gNo).padStart(2,'0')}</b><strong>${group.title}</strong>`;
+    gh.addEventListener('click',()=>detailSpecFocus(gKey));
+    list.appendChild(gh);
+
+    group.items.forEach((item,iIdx)=>{
+      const code=`${gNo}-${iIdx+1}`;
+      const key=`di${code}`;
+      detailSpecState.targets.set(key,item.target);
+
+      const sm=document.createElement('button');
+      sm.type='button';
+      sm.className='detail-spec-sub-marker';
+      sm.dataset.detailSpecKey=key;
+      sm.textContent=code;
+      sm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(key);});
+      layer.appendChild(sm);
+
+      const row=document.createElement('button');
+      row.type='button';
+      row.className='spec-desc-row';
+      row.dataset.detailSpecRow=key;
+      row.innerHTML=`<b>${code}</b><div><strong>${item.title}</strong><span>${item.body}</span></div>`;
+      row.addEventListener('click',()=>detailSpecFocus(key));
+      list.appendChild(row);
+    });
+  });
+
+  if(detailTypePolicy[type]){
+    const policyTarget=detailModalBody.querySelector('.note,.history-detail-note,.danger-note,.soft-panel') || detailModalBody.firstElementChild;
+    if(policyTarget){
+      const gNo=groups.length+1;
+      const gKey=`dg${gNo}`;
+      detailSpecState.targets.set(gKey,policyTarget);
+
+      const gm=document.createElement('button');
+      gm.type='button';
+      gm.className='detail-spec-group-marker';
+      gm.dataset.detailSpecKey=gKey;
+      gm.textContent=String(gNo);
+      gm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(gKey);});
+      layer.appendChild(gm);
+
+      const gh=document.createElement('button');
+      gh.type='button';
+      gh.className='spec-group-head';
+      gh.dataset.detailSpecRow=gKey;
+      gh.innerHTML=`<b>${String(gNo).padStart(2,'0')}</b><strong>운영 기준</strong>`;
+      gh.addEventListener('click',()=>detailSpecFocus(gKey));
+      list.appendChild(gh);
+
+      const key=`di${gNo}-1`;
+      detailSpecState.targets.set(key,policyTarget);
+      const sm=document.createElement('button');
+      sm.type='button';
+      sm.className='detail-spec-sub-marker';
+      sm.dataset.detailSpecKey=key;
+      sm.textContent=`${gNo}-1`;
+      sm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(key);});
+      layer.appendChild(sm);
+
+      const row=document.createElement('button');
+      row.type='button';
+      row.className='spec-desc-row';
+      row.dataset.detailSpecRow=key;
+      row.innerHTML=`<b>${gNo}-1</b><div><strong>정책·처리 기준</strong><span>${detailTypePolicy[type]}</span></div>`;
+      row.addEventListener('click',()=>detailSpecFocus(key));
+      list.appendChild(row);
+    }
+  }
+
+  if(!groups.length && !detailTypePolicy[type]){
+    list.innerHTML='<div class="global-desc-empty">현재 상세 팝업에 등록된 디스크립션이 없습니다.</div>';
+  }
+
+  detailModalBody.removeEventListener('scroll',detailSpecSchedule);
+  detailModalBody.addEventListener('scroll',detailSpecSchedule,{passive:true});
+
+  if('ResizeObserver' in window){
+    detailSpecState.resizeObserver=new ResizeObserver(detailSpecSchedule);
+    detailSpecState.resizeObserver.observe(detailModal);
+    detailSpecState.resizeObserver.observe(detailModalBody);
+  }
+
+  detailSpecSchedule();
+}
+
+function specEnterDetailModal(type,name){
+  detailSpecState.active=true;
+  detailSpecState.type=type;
+  detailSpecState.name=name;
+  document.body.classList.add('detail-spec-active');
+
+  const toggle=document.getElementById('detailDescToggle');
+  if(toggle){
+    toggle.setAttribute('aria-pressed',String(specState.open));
+    toggle.textContent=specState.open ? '디스크립션 닫기' : '디스크립션';
+  }
+
+  if(specState.open) specRenderDetailModal(type,name);
+}
+
+function specExitDetailModal(){
+  detailSpecClear();
+  detailSpecState.active=false;
+  detailSpecState.type='';
+  detailSpecState.name='';
+  document.body.classList.remove('detail-spec-active');
+
+  const toggle=document.getElementById('detailDescToggle');
+  if(toggle){
+    toggle.setAttribute('aria-pressed','false');
+    toggle.textContent='디스크립션';
+  }
+
+  if(specState.open){
+    const page=document.querySelector('.page.active');
+    if(page) specRenderPage(page.id);
+  }
+}
+
+(function(){
+  const detailToggle=document.getElementById('detailDescToggle');
+  if(!detailToggle) return;
+
+  detailToggle.addEventListener('click',()=>{
+    if(!detailSpecState.active) return;
+
+    if(specState.open){
+      setGlobalDescriptionOpen(false);
+      detailSpecClear();
+      detailToggle.setAttribute('aria-pressed','false');
+      detailToggle.textContent='디스크립션';
+    }else{
+      setGlobalDescriptionOpen(true);
+      detailToggle.setAttribute('aria-pressed','true');
+      detailToggle.textContent='디스크립션 닫기';
+      specRenderDetailModal(detailSpecState.type,detailSpecState.name);
+    }
+  });
+
+  window.addEventListener('resize',detailSpecSchedule);
 })();
 
 </script>
