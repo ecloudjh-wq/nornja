@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=1920, initial-scale=1" name="viewport"/>
-<title>노른자국어 관리자센터 v5.80 - 콘텐츠 등록·수정 디스크립션 보강</title>
+<title>노른자국어 관리자센터 v5.84 - 모바일 앱 행동 분석</title>
 <!-- 통합 최종안 v2: 국어팀 관리자 구조 + 확정 결제/학습 정책 + 전문 학습결과 모달 반영 /  결제실패 3회/유예없음/24시 학습제한, 연환불 취소일 일할, 이용권 보유 학생 삭제불가, 홀딩 익일부터 00시 적용, 환불·상태 보호자만 변경, 이관 미지원 -->
 <style>
 :root{
@@ -7377,6 +7377,109 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
   outline-offset:5px;
 }
 
+
+/* v5.81 상세 팝업 디스크립션 최종 검수 */
+body.detail-spec-active.desc-global-mode .global-desc-drawer{
+  z-index:110 !important;
+}
+body.detail-spec-active.desc-global-mode .detail-modal-backdrop.open{
+  align-items:start;
+  padding-top:24px;
+  padding-bottom:24px;
+}
+body.detail-spec-active .detail-modal{
+  max-height:calc(100vh - 48px);
+}
+.detail-spec-highlight{
+  outline-offset:5px !important;
+}
+
+
+/* v5.82 1차 마케팅 분석 보강 */
+.acq-channel-toggle{
+  width:100%;display:flex;align-items:flex-start;gap:10px;border:0;background:transparent;
+  padding:0;text-align:left;cursor:pointer;color:inherit;font:inherit;
+}
+.acq-channel-toggle strong{display:block;font-size:15px}
+.acq-channel-toggle small{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.acq-channel-chevron{
+  width:22px;height:22px;border-radius:6px;background:#f4f5f7;display:grid;place-items:center;
+  font-size:19px;line-height:1;color:#697386;transition:transform .16s ease;flex:0 0 auto;
+}
+.acq-channel-parent.expanded .acq-channel-chevron{transform:rotate(90deg)}
+.acq-channel-child td{background:#fafbfc!important;color:#5d6674}
+.acq-channel-child .acq-child-label{display:block;padding-left:32px;font-weight:700;color:#697386}
+.acq-channel-child[hidden]{display:none}
+.acq-channel-rank-panel .acq-channel-rank{max-height:360px;overflow:auto;padding-right:4px}
+
+.behavior-control-card{margin-bottom:12px}
+.behavior-summary-divider{width:1px;height:34px;background:var(--line);margin:0 6px}
+.behavior-kpis{grid-template-columns:repeat(5,minmax(0,1fr))}
+.behavior-kpis .kpi .value{font-size:24px}
+.behavior-overview-grid{align-items:stretch}
+.behavior-bar-list{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.behavior-bar-row{display:grid;grid-template-columns:130px 1fr 72px;gap:12px;align-items:center;font-size:13px}
+.behavior-bar-row>strong{font-size:13px}
+.behavior-bar-row>div{height:9px;background:#eef0f3;border-radius:999px;overflow:hidden}
+.behavior-bar-row>div>i{display:block;height:100%;background:var(--yellow);border-radius:999px}
+.behavior-bar-row>span{text-align:right;color:#596273;font-weight:700}
+.behavior-guide-list{display:grid;gap:10px}
+.behavior-guide-list>div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:11px 12px;background:#fafbfc;border:1px solid var(--line);border-radius:10px}
+.behavior-guide-list strong{font-size:13px}
+.behavior-guide-list span{font-size:13px;color:var(--muted);line-height:1.5}
+.behavior-page-table td:first-child strong{display:block}
+.behavior-page-table td:first-child .row-sub{display:block;margin-top:4px}
+@media(max-width:1600px){
+  .behavior-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+
+/* v5.83 페이지 행동 분석 가독성 + 전체 페이지 목록 */
+#page-behavior-analysis .page-desc{font-size:16px;line-height:1.6}
+#page-behavior-analysis .acq-control-label{font-size:14px}
+#page-behavior-analysis .filter,
+#page-behavior-analysis .table-search,
+#page-behavior-analysis .btn{font-size:15px}
+#page-behavior-analysis .acq-period-summary span,
+#page-behavior-analysis .acq-period-summary small{font-size:13px}
+#page-behavior-analysis .acq-period-summary strong{font-size:16px}
+#page-behavior-analysis .kpi .label{font-size:14px}
+#page-behavior-analysis .kpi .value{font-size:26px}
+#page-behavior-analysis .kpi .kpi-helper{font-size:13px;line-height:1.5}
+#page-behavior-analysis .panel-title{font-size:18px}
+#page-behavior-analysis .panel-sub{font-size:14px;line-height:1.55}
+#page-behavior-analysis .behavior-bar-row{grid-template-columns:160px 1fr 86px;font-size:14px}
+#page-behavior-analysis .behavior-bar-row>strong,
+#page-behavior-analysis .behavior-bar-row>span{font-size:14px}
+#page-behavior-analysis .behavior-guide-list strong{font-size:14px}
+#page-behavior-analysis .behavior-guide-list span{font-size:14px;line-height:1.6}
+#page-behavior-analysis .behavior-page-table th{font-size:14px;padding:14px 15px}
+#page-behavior-analysis .behavior-page-table td{font-size:15px;padding:14px 15px}
+#page-behavior-analysis .behavior-page-table td:first-child strong{font-size:15px}
+#page-behavior-analysis .behavior-page-table .row-sub{font-size:13px;line-height:1.45}
+#page-behavior-analysis .behavior-footnote strong{font-size:14px}
+#page-behavior-analysis .behavior-footnote span{font-size:14px;line-height:1.65}
+.behavior-table-tools-left{
+  display:flex;align-items:center;gap:10px;min-width:0;flex:1;flex-wrap:wrap
+}
+.behavior-table-tools-left .acq-table-title{min-width:360px;margin-right:auto}
+.behavior-page-search{min-width:180px}
+.behavior-table-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 18px;border-top:1px solid var(--line);background:#fff
+}
+.behavior-pagination-info{font-size:14px;color:var(--muted)}
+.behavior-pagination{display:flex;align-items:center;gap:8px}
+.behavior-page-numbers{display:flex;align-items:center;gap:6px}
+.behavior-page-numbers button{
+  width:36px;height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;
+  font-size:14px;font-weight:700;cursor:pointer
+}
+.behavior-page-numbers button.active{
+  background:#202634;color:#fff;border-color:#202634
+}
+#page-behavior-analysis .learning-result-count{font-size:14px}
+
 </style>
 </head>
 <body>
@@ -7421,6 +7524,14 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
 <path d="M16 7h3v3"></path>
 </svg>
 </span>유입·전환 분석</button>
+<button class="nav-item" data-page="page-behavior-analysis">
+<span class="nav-icon">
+<svg viewBox="0 0 24 24">
+<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"></path>
+<circle cx="12" cy="12" r="2.5"></circle>
+<path d="M5 21h14"></path>
+</svg>
+</span>페이지 행동 분석</button>
 <div class="nav-group">마케팅</div>
 
 <button class="nav-item" data-page="notification-log"><span class="nav-icon"><svg viewbox="0 0 24 24"><path d="M5 4h14v16H5z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg></span>알림 발송 이력</button>
@@ -10513,249 +10624,650 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
 </section>
 
 <section class="page" id="acquisition-conversion">
-  <div class="page-head acq-page-head">
-    <div>
-      <h1 class="page-title">유입·전환 분석</h1>
-      <div class="page-desc">사용자가 어디서 유입되어 회원가입·학생 등록·결제까지 이어졌는지 확인</div>
-    </div>
-  </div>
+<div class="page-head acq-page-head">
+<div>
+<h1 class="page-title">유입·전환 분석</h1>
+<div class="page-desc">사용자가 어디서 유입되어 회원가입·학생 등록·결제까지 이어졌는지 확인</div>
+</div>
+</div>
+<div class="acq-control-card">
+<div class="acq-control-group">
+<span class="acq-control-label">조회 기준</span>
+<select class="filter" id="acqUnit">
+<option value="day">일별</option>
+<option selected="" value="month">월별</option>
+<option value="quarter">분기별</option>
+<option value="year">연별</option>
+</select>
+<select class="filter" id="acqPeriod">
+<option>2026년 9월</option>
+<option>2026년 8월</option>
+<option>2026년 7월</option>
+</select>
+</div>
+<div class="acq-control-divider"></div>
+<div class="acq-control-group">
+<span class="acq-control-label">비교</span>
+<select class="filter" id="acqCompare">
+<option value="previous">직전 기간과 비교</option>
+<option value="yearAgo">전년 동일 기간과 비교</option>
+<option value="none">비교 안 함</option>
+</select>
+<button class="btn primary" id="acqApply" type="button">적용</button>
+</div>
+</div>
+<div class="acq-period-summary" id="acqCompareSummary">
+<div class="acq-period-current">
+<span>선택 기간</span>
+<strong id="acqCurrentLabel">2026년 9월</strong>
+</div>
+<span class="acq-period-vs">VS</span>
+<div class="acq-period-compare">
+<span>비교 기간</span>
+<strong id="acqPreviousLabel">2026년 8월</strong>
+</div>
+<small id="acqCompareHint">월별 · 직전 기간과 비교</small>
+</div>
+<div class="acq-kpi-grid">
+<div class="acq-kpi-card">
+<span>유입 사용자</span>
+<strong>24,860명</strong>
+<small class="up">▲ 8.4%</small>
+<em>서비스 첫 유입 기준</em>
+</div>
+<div class="acq-kpi-card">
+<span>신규 보호자</span>
+<strong>4,286명</strong>
+<small class="up">▲ 5.8%</small>
+<em>회원가입 완료 기준</em>
+</div>
+<div class="acq-kpi-card">
+<span>학생 등록 보호자</span>
+<strong>3,540명</strong>
+<small class="up">▲ 6.2%</small>
+<em>학생 1명 이상 등록</em>
+</div>
+<div class="acq-kpi-card">
+<span>결제 완료 보호자</span>
+<strong>2,294명</strong>
+<small class="up">▲ 4.6%</small>
+<em>최초 결제 완료 기준</em>
+</div>
+<div class="acq-kpi-card highlight">
+<span>유입 → 결제 전환율</span>
+<strong>9.2%</strong>
+<small class="down">▼ 0.3%p</small>
+<em>유입 사용자 대비 결제 보호자</em>
+</div>
+</div>
+<div class="panel acq-funnel-panel">
+<div class="panel-head">
+<div>
+<div class="panel-title">전환 퍼널</div>
+<div class="panel-sub">보호자 기준으로 유입 이후 주요 전환 단계를 확인합니다.</div>
+</div>
+<div class="acq-student-summary">
+<span>학생 기준 참고</span>
+<strong>등록 학생 5,914명</strong>
+<i></i>
+<strong>신규 유료 학생 3,182명</strong>
+</div>
+</div>
+<div class="acq-funnel-flow">
+<div class="acq-funnel-card">
+<span class="step">01</span>
+<div><small>서비스 유입</small><strong>24,860명</strong><em>100%</em></div>
+</div>
+<div class="acq-funnel-link">
+<strong>17.2%</strong>
+<span>가입 전환</span>
+<i>→</i>
+</div>
+<div class="acq-funnel-card">
+<span class="step">02</span>
+<div><small>보호자 회원가입</small><strong>4,286명</strong><em>유입 대비 17.2%</em></div>
+</div>
+<div class="acq-funnel-link">
+<strong>82.6%</strong>
+<span>학생 등록</span>
+<i>→</i>
+</div>
+<div class="acq-funnel-card">
+<span class="step">03</span>
+<div><small>학생 등록 보호자</small><strong>3,540명</strong><em>가입 대비 82.6%</em></div>
+</div>
+<div class="acq-funnel-link">
+<strong>64.8%</strong>
+<span>결제 전환</span>
+<i>→</i>
+</div>
+<div class="acq-funnel-card final">
+<span class="step">04</span>
+<div><small>결제 완료 보호자</small><strong>2,294명</strong><em>학생 등록 대비 64.8%</em></div>
+</div>
+</div>
+</div>
+<div class="acq-analysis-grid">
+<div class="panel acq-trend-panel">
+<div class="panel-head">
+<div>
+<div class="panel-title">기간별 유입·결제 추이</div>
+<div class="panel-sub">유입 규모와 결제 완료 흐름을 함께 확인</div>
+</div>
+<div class="acq-legend">
+<span class="traffic">유입 사용자</span>
+<span class="paid">결제 완료 보호자</span>
+</div>
+</div>
+<div class="acq-trend-chart">
+<div class="acq-y-axis"><span>1,200</span><span>900</span><span>600</span><span>300</span><span>0</span></div>
+<div class="acq-chart-area">
+<div class="acq-grid-lines"><i></i><i></i><i></i><i></i><i></i></div>
+<svg aria-label="기간별 유입 사용자 및 결제 완료 보호자 추이" preserveaspectratio="none" viewbox="0 0 900 250">
+<polyline class="acq-line traffic" points="0,80 150,70 300,94 450,52 600,61 750,45 900,56"></polyline>
+<polyline class="acq-line paid" points="0,196 150,190 300,202 450,176 600,182 750,166 900,172"></polyline>
+<g class="acq-points traffic-points">
+<circle cx="0" cy="80" r="5"></circle><circle cx="150" cy="70" r="5"></circle><circle cx="300" cy="94" r="5"></circle><circle cx="450" cy="52" r="5"></circle><circle cx="600" cy="61" r="5"></circle><circle cx="750" cy="45" r="5"></circle><circle cx="900" cy="56" r="5"></circle>
+</g>
+<g class="acq-points paid-points">
+<circle cx="0" cy="196" r="5"></circle><circle cx="150" cy="190" r="5"></circle><circle cx="300" cy="202" r="5"></circle><circle cx="450" cy="176" r="5"></circle><circle cx="600" cy="182" r="5"></circle><circle cx="750" cy="166" r="5"></circle><circle cx="900" cy="172" r="5"></circle>
+</g>
+</svg>
+</div>
+<div class="acq-x-axis"><span>9/1</span><span>9/5</span><span>9/10</span><span>9/15</span><span>9/20</span><span>9/25</span><span>9/30</span></div>
+</div>
+</div>
+<div class="panel acq-channel-rank-panel">
+<div class="panel-head">
+<div>
+<div class="panel-title">채널별 결제 전환율</div>
+<div class="panel-sub">유입 대비 결제 완료 보호자 기준</div>
+</div>
+</div>
+<div class="acq-channel-rank"><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>네이버</strong><span>11.0%</span></div>
+<div class="acq-rank-bar"><i style="width:92%"></i></div>
+<small>유입 6,200명 · 결제 682명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>구글</strong><span>10.5%</span></div>
+<div class="acq-rank-bar"><i style="width:88%"></i></div>
+<small>유입 4,150명 · 결제 436명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>Meta</strong><span>9.7%</span></div>
+<div class="acq-rank-bar"><i style="width:81%"></i></div>
+<small>유입 5,100명 · 결제 495명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>카카오</strong><span>12.0%</span></div>
+<div class="acq-rank-bar"><i style="width:100%"></i></div>
+<small>유입 1,730명 · 결제 208명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>YouTube</strong><span>7.5%</span></div>
+<div class="acq-rank-bar"><i style="width:63%"></i></div>
+<small>유입 2,550명 · 결제 191명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>TikTok</strong><span>6.5%</span></div>
+<div class="acq-rank-bar"><i style="width:54%"></i></div>
+<small>유입 1,420명 · 결제 92명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>직접 유입</strong><span>6.5%</span></div>
+<div class="acq-rank-bar"><i style="width:54%"></i></div>
+<small>유입 2,430명 · 결제 158명</small>
+</div><div class="acq-rank-row">
+<div class="acq-rank-head"><strong>제휴·추천</strong><span>2.5%</span></div>
+<div class="acq-rank-bar"><i style="width:21%"></i></div>
+<small>유입 1,280명 · 결제 32명</small>
+</div></div>
+</div>
+</div>
+<div class="table-wrap acq-channel-table">
+<div class="table-tools">
+<div class="table-tools-left acq-table-title">
+<div>
+<strong>유입 채널별 상세</strong>
+<span class="panel-sub">채널별 유입부터 결제까지 단계별 수치</span>
+</div>
+</div>
+<div class="table-tools-right">
+<select class="filter" id="acqChannelFilter"><option value="all">전체 채널</option><option value="naver">네이버</option><option value="google">구글</option><option value="meta">Meta</option><option value="youtube">YouTube</option><option value="tiktok">TikTok</option><option value="kakao">카카오</option><option value="direct">직접 유입</option><option value="partner">제휴·추천</option></select>
+<button class="btn">엑셀 다운로드</button>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>유입 채널</th>
+<th>유입 사용자</th>
+<th>신규 보호자</th>
+<th>학생 등록 보호자</th>
+<th>결제 완료 보호자</th>
+<th>결제 전환율</th>
+</tr>
+</thead>
+<tbody><tr class="acq-channel-parent" data-channel="naver">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="naver" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>네이버</strong><small>검색광고 · 자연검색</small></span>
+</button>
+</td>
+<td>6,200명</td>
+<td>1,100명</td>
+<td>930명</td>
+<td>682명</td>
+<td><strong>11.0%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="naver" hidden="">
+<td><span class="acq-child-label">└ 검색광고</span></td>
+<td>3,900명</td>
+<td>720명</td>
+<td>615명</td>
+<td>460명</td>
+<td><strong>11.8%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="naver" hidden="">
+<td><span class="acq-child-label">└ 자연검색</span></td>
+<td>2,300명</td>
+<td>380명</td>
+<td>315명</td>
+<td>222명</td>
+<td><strong>9.7%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="google">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="google" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>구글</strong><small>검색광고 · 자연검색</small></span>
+</button>
+</td>
+<td>4,150명</td>
+<td>750명</td>
+<td>635명</td>
+<td>436명</td>
+<td><strong>10.5%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="google" hidden="">
+<td><span class="acq-child-label">└ 검색광고</span></td>
+<td>2,450명</td>
+<td>465명</td>
+<td>400명</td>
+<td>265명</td>
+<td><strong>10.8%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="google" hidden="">
+<td><span class="acq-child-label">└ 자연검색</span></td>
+<td>1,700명</td>
+<td>285명</td>
+<td>235명</td>
+<td>171명</td>
+<td><strong>10.1%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="meta">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="meta" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>Meta</strong><small>Instagram 광고 · Facebook 광고</small></span>
+</button>
+</td>
+<td>5,100명</td>
+<td>900명</td>
+<td>740명</td>
+<td>495명</td>
+<td><strong>9.7%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="meta" hidden="">
+<td><span class="acq-child-label">└ Instagram 광고</span></td>
+<td>3,400명</td>
+<td>600명</td>
+<td>500명</td>
+<td>335명</td>
+<td><strong>9.9%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="meta" hidden="">
+<td><span class="acq-child-label">└ Facebook 광고</span></td>
+<td>1,700명</td>
+<td>300명</td>
+<td>240명</td>
+<td>160명</td>
+<td><strong>9.4%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="youtube">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="youtube" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>YouTube</strong><small>광고 · 자연 유입</small></span>
+</button>
+</td>
+<td>2,550명</td>
+<td>420명</td>
+<td>340명</td>
+<td>191명</td>
+<td><strong>7.5%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="youtube" hidden="">
+<td><span class="acq-child-label">└ YouTube 광고</span></td>
+<td>1,150명</td>
+<td>190명</td>
+<td>150명</td>
+<td>82명</td>
+<td><strong>7.1%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="youtube" hidden="">
+<td><span class="acq-child-label">└ 자연 유입</span></td>
+<td>1,400명</td>
+<td>230명</td>
+<td>190명</td>
+<td>109명</td>
+<td><strong>7.8%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="tiktok">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="tiktok" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>TikTok</strong><small>광고 · 자연 유입</small></span>
+</button>
+</td>
+<td>1,420명</td>
+<td>245명</td>
+<td>190명</td>
+<td>92명</td>
+<td><strong>6.5%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="tiktok" hidden="">
+<td><span class="acq-child-label">└ TikTok 광고</span></td>
+<td>820명</td>
+<td>145명</td>
+<td>110명</td>
+<td>57명</td>
+<td><strong>7.0%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="tiktok" hidden="">
+<td><span class="acq-child-label">└ 자연 유입</span></td>
+<td>600명</td>
+<td>100명</td>
+<td>80명</td>
+<td>35명</td>
+<td><strong>5.8%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="kakao">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="kakao" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>카카오</strong><small>광고 · 채널 · 메시지 링크</small></span>
+</button>
+</td>
+<td>1,730명</td>
+<td>310명</td>
+<td>270명</td>
+<td>208명</td>
+<td><strong>12.0%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="kakao" hidden="">
+<td><span class="acq-child-label">└ 카카오 광고</span></td>
+<td>650명</td>
+<td>115명</td>
+<td>100명</td>
+<td>78명</td>
+<td><strong>12.0%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="kakao" hidden="">
+<td><span class="acq-child-label">└ 카카오 채널</span></td>
+<td>680명</td>
+<td>125명</td>
+<td>110명</td>
+<td>82명</td>
+<td><strong>12.1%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="kakao" hidden="">
+<td><span class="acq-child-label">└ 메시지 링크</span></td>
+<td>400명</td>
+<td>70명</td>
+<td>60명</td>
+<td>48명</td>
+<td><strong>12.0%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="direct">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="direct" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>직접 유입</strong><small>직접 입력 · 출처 확인 불가</small></span>
+</button>
+</td>
+<td>2,430명</td>
+<td>390명</td>
+<td>310명</td>
+<td>158명</td>
+<td><strong>6.5%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="direct" hidden="">
+<td><span class="acq-child-label">└ URL 직접 입력</span></td>
+<td>1,500명</td>
+<td>240명</td>
+<td>190명</td>
+<td>100명</td>
+<td><strong>6.7%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="direct" hidden="">
+<td><span class="acq-child-label">└ 출처 확인 불가</span></td>
+<td>930명</td>
+<td>150명</td>
+<td>120명</td>
+<td>58명</td>
+<td><strong>6.2%</strong></td>
+</tr><tr class="acq-channel-parent" data-channel="partner">
+<td>
+<button aria-expanded="false" class="acq-channel-toggle" data-channel-toggle="partner" type="button">
+<span class="acq-channel-chevron">›</span>
+<span><strong>제휴·추천</strong><small>제휴 링크 · 추천 링크</small></span>
+</button>
+</td>
+<td>1,280명</td>
+<td>171명</td>
+<td>125명</td>
+<td>32명</td>
+<td><strong>2.5%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="partner" hidden="">
+<td><span class="acq-child-label">└ 제휴 링크</span></td>
+<td>900명</td>
+<td>120명</td>
+<td>90명</td>
+<td>24명</td>
+<td><strong>2.7%</strong></td>
+</tr><tr class="acq-channel-child" data-channel-child="partner" hidden="">
+<td><span class="acq-child-label">└ 추천 링크</span></td>
+<td>380명</td>
+<td>51명</td>
+<td>35명</td>
+<td>8명</td>
+<td><strong>2.1%</strong></td>
+</tr></tbody>
+</table>
+</div>
+<div class="acq-footnote">
+<strong>집계 기준</strong>
+<span>전환 퍼널은 보호자 기준으로 계산합니다. 채널은 플랫폼 단위로 구분하며, 채널 행을 펼치면 광고·자연 유입 등 1차 세부 유입처를 확인할 수 있습니다. 광고비·CPA·ROAS·캠페인/소재 분석은 2차 범위로 분리합니다.</span>
+</div>
+</section>
 
-  <div class="acq-control-card">
-    <div class="acq-control-group">
-      <span class="acq-control-label">조회 기준</span>
-      <select class="filter" id="acqUnit">
-        <option value="day">일별</option>
-        <option value="month" selected>월별</option>
-        <option value="quarter">분기별</option>
-        <option value="year">연별</option>
-      </select>
-      <select class="filter" id="acqPeriod">
-        <option>2026년 9월</option>
-        <option>2026년 8월</option>
-        <option>2026년 7월</option>
-      </select>
-    </div>
-    <div class="acq-control-divider"></div>
-    <div class="acq-control-group">
-      <span class="acq-control-label">비교</span>
-      <select class="filter" id="acqCompare">
-        <option value="previous">직전 기간과 비교</option>
-        <option value="yearAgo">전년 동일 기간과 비교</option>
-        <option value="none">비교 안 함</option>
-      </select>
-      <button class="btn primary" id="acqApply" type="button">적용</button>
-    </div>
-  </div>
+<section class="page" id="page-behavior-analysis">
+<div class="page-head">
+<div>
+<h1 class="page-title">페이지 행동 분석</h1>
+<div class="page-desc">유입 이후 사용자가 어떤 페이지에 머물고 클릭·스크롤·이탈하는지 확인</div>
+</div>
+</div>
+<div class="acq-control-card behavior-control-card">
+<div class="acq-control-group">
+<span class="acq-control-label">조회 기간</span>
+<select class="filter" id="behaviorPeriod">
+<option value="2026-09">2026년 9월</option>
+<option value="2026-08">2026년 8월</option>
+<option value="2026-07">2026년 7월</option>
+</select>
+<button class="btn primary" id="behaviorApply" type="button">적용</button></div>
 
-  <div class="acq-period-summary" id="acqCompareSummary">
-    <div class="acq-period-current">
-      <span>선택 기간</span>
-      <strong id="acqCurrentLabel">2026년 9월</strong>
-    </div>
-    <span class="acq-period-vs">VS</span>
-    <div class="acq-period-compare">
-      <span>비교 기간</span>
-      <strong id="acqPreviousLabel">2026년 8월</strong>
-    </div>
-    <small id="acqCompareHint">월별 · 직전 기간과 비교</small>
-  </div>
 
-  <div class="acq-kpi-grid">
-    <div class="acq-kpi-card">
-      <span>유입 사용자</span>
-      <strong>24,860명</strong>
-      <small class="up">▲ 8.4%</small>
-      <em>서비스 첫 유입 기준</em>
-    </div>
-    <div class="acq-kpi-card">
-      <span>신규 보호자</span>
-      <strong>4,286명</strong>
-      <small class="up">▲ 5.8%</small>
-      <em>회원가입 완료 기준</em>
-    </div>
-    <div class="acq-kpi-card">
-      <span>학생 등록 보호자</span>
-      <strong>3,540명</strong>
-      <small class="up">▲ 6.2%</small>
-      <em>학생 1명 이상 등록</em>
-    </div>
-    <div class="acq-kpi-card">
-      <span>결제 완료 보호자</span>
-      <strong>2,294명</strong>
-      <small class="up">▲ 4.6%</small>
-      <em>최초 결제 완료 기준</em>
-    </div>
-    <div class="acq-kpi-card highlight">
-      <span>유입 → 결제 전환율</span>
-      <strong>9.2%</strong>
-      <small class="down">▼ 0.3%p</small>
-      <em>유입 사용자 대비 결제 보호자</em>
-    </div>
-  </div>
+</div>
+<div class="acq-period-summary behavior-summary">
+<div class="acq-period-current">
+<span>선택 기간</span>
+<strong id="behaviorPeriodLabel">2026년 9월</strong>
+</div>
 
-  <div class="panel acq-funnel-panel">
-    <div class="panel-head">
-      <div>
-        <div class="panel-title">전환 퍼널</div>
-        <div class="panel-sub">보호자 기준으로 유입 이후 주요 전환 단계를 확인합니다.</div>
-      </div>
-      <div class="acq-student-summary">
-        <span>학생 기준 참고</span>
-        <strong>등록 학생 5,914명</strong>
-        <i></i>
-        <strong>신규 유료 학생 3,182명</strong>
-      </div>
-    </div>
 
-    <div class="acq-funnel-flow">
-      <div class="acq-funnel-card">
-        <span class="step">01</span>
-        <div><small>서비스 유입</small><strong>24,860명</strong><em>100%</em></div>
-      </div>
-      <div class="acq-funnel-link">
-        <strong>17.2%</strong>
-        <span>가입 전환</span>
-        <i>→</i>
-      </div>
-      <div class="acq-funnel-card">
-        <span class="step">02</span>
-        <div><small>보호자 회원가입</small><strong>4,286명</strong><em>유입 대비 17.2%</em></div>
-      </div>
-      <div class="acq-funnel-link">
-        <strong>82.6%</strong>
-        <span>학생 등록</span>
-        <i>→</i>
-      </div>
-      <div class="acq-funnel-card">
-        <span class="step">03</span>
-        <div><small>학생 등록 보호자</small><strong>3,540명</strong><em>가입 대비 82.6%</em></div>
-      </div>
-      <div class="acq-funnel-link">
-        <strong>64.8%</strong>
-        <span>결제 전환</span>
-        <i>→</i>
-      </div>
-      <div class="acq-funnel-card final">
-        <span class="step">04</span>
-        <div><small>결제 완료 보호자</small><strong>2,294명</strong><em>학생 등록 대비 64.8%</em></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="acq-analysis-grid">
-    <div class="panel acq-trend-panel">
-      <div class="panel-head">
-        <div>
-          <div class="panel-title">기간별 유입·결제 추이</div>
-          <div class="panel-sub">유입 규모와 결제 완료 흐름을 함께 확인</div>
-        </div>
-        <div class="acq-legend">
-          <span class="traffic">유입 사용자</span>
-          <span class="paid">결제 완료 보호자</span>
-        </div>
-      </div>
-      <div class="acq-trend-chart">
-        <div class="acq-y-axis"><span>1,200</span><span>900</span><span>600</span><span>300</span><span>0</span></div>
-        <div class="acq-chart-area">
-          <div class="acq-grid-lines"><i></i><i></i><i></i><i></i><i></i></div>
-          <svg viewBox="0 0 900 250" preserveAspectRatio="none" aria-label="기간별 유입 사용자 및 결제 완료 보호자 추이">
-            <polyline class="acq-line traffic" points="0,80 150,70 300,94 450,52 600,61 750,45 900,56"></polyline>
-            <polyline class="acq-line paid" points="0,196 150,190 300,202 450,176 600,182 750,166 900,172"></polyline>
-            <g class="acq-points traffic-points">
-              <circle cx="0" cy="80" r="5"></circle><circle cx="150" cy="70" r="5"></circle><circle cx="300" cy="94" r="5"></circle><circle cx="450" cy="52" r="5"></circle><circle cx="600" cy="61" r="5"></circle><circle cx="750" cy="45" r="5"></circle><circle cx="900" cy="56" r="5"></circle>
-            </g>
-            <g class="acq-points paid-points">
-              <circle cx="0" cy="196" r="5"></circle><circle cx="150" cy="190" r="5"></circle><circle cx="300" cy="202" r="5"></circle><circle cx="450" cy="176" r="5"></circle><circle cx="600" cy="182" r="5"></circle><circle cx="750" cy="166" r="5"></circle><circle cx="900" cy="172" r="5"></circle>
-            </g>
-          </svg>
-        </div>
-        <div class="acq-x-axis"><span>9/1</span><span>9/5</span><span>9/10</span><span>9/15</span><span>9/20</span><span>9/25</span><span>9/30</span></div>
-      </div>
-    </div>
-
-    <div class="panel acq-channel-rank-panel">
-      <div class="panel-head">
-        <div>
-          <div class="panel-title">채널별 결제 전환율</div>
-          <div class="panel-sub">유입 대비 결제 완료 보호자 기준</div>
-        </div>
-      </div>
-      <div class="acq-channel-rank">
-        <div class="acq-rank-row">
-          <div class="acq-rank-head"><strong>광고</strong><span>15.0%</span></div>
-          <div class="acq-rank-bar"><i style="width:100%"></i></div>
-          <small>유입 6,920명 · 결제 1,038명</small>
-        </div>
-        <div class="acq-rank-row">
-          <div class="acq-rank-head"><strong>검색</strong><span>14.1%</span></div>
-          <div class="acq-rank-bar"><i style="width:94%"></i></div>
-          <small>유입 9,840명 · 결제 1,386명</small>
-        </div>
-        <div class="acq-rank-row">
-          <div class="acq-rank-head"><strong>SNS</strong><span>10.9%</span></div>
-          <div class="acq-rank-bar"><i style="width:73%"></i></div>
-          <small>유입 3,780명 · 결제 412명</small>
-        </div>
-        <div class="acq-rank-row">
-          <div class="acq-rank-head"><strong>직접 유입</strong><span>10.4%</span></div>
-          <div class="acq-rank-bar"><i style="width:69%"></i></div>
-          <small>유입 2,430명 · 결제 252명</small>
-        </div>
-        <div class="acq-rank-row">
-          <div class="acq-rank-head"><strong>제휴·기타</strong><span>5.0%</span></div>
-          <div class="acq-rank-bar"><i style="width:33%"></i></div>
-          <small>유입 1,890명 · 결제 94명</small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="table-wrap acq-channel-table">
-    <div class="table-tools">
-      <div class="table-tools-left acq-table-title">
-        <div>
-          <strong>유입 채널별 상세</strong>
-          <span class="panel-sub">채널별 유입부터 결제까지 단계별 수치</span>
-        </div>
-      </div>
-      <div class="table-tools-right">
-        <select class="filter">
-          <option>전체 채널</option>
-          <option>검색</option>
-          <option>광고</option>
-          <option>SNS</option>
-          <option>직접 유입</option>
-          <option>제휴·기타</option>
-        </select>
-        <button class="btn">엑셀 다운로드</button>
-      </div>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>유입 채널</th>
-          <th>유입 사용자</th>
-          <th>신규 보호자</th>
-          <th>학생 등록 보호자</th>
-          <th>결제 완료 보호자</th>
-          <th>결제 전환율</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>검색</strong><span class="row-sub">네이버·구글 등</span></td><td>9,840명</td><td>1,782명</td><td>1,524명</td><td>1,386명</td><td><strong>14.1%</strong></td></tr>
-        <tr><td><strong>광고</strong><span class="row-sub">검색·디스플레이 광고</span></td><td>6,920명</td><td>1,280명</td><td>1,142명</td><td>1,038명</td><td><strong>15.0%</strong></td></tr>
-        <tr><td><strong>SNS</strong><span class="row-sub">인스타그램·기타 SNS</span></td><td>3,780명</td><td>668명</td><td>514명</td><td>412명</td><td><strong>10.9%</strong></td></tr>
-        <tr><td><strong>직접 유입</strong></td><td>2,430명</td><td>382명</td><td>286명</td><td>252명</td><td><strong>10.4%</strong></td></tr>
-        <tr><td><strong>제휴·기타</strong></td><td>1,890명</td><td>174명</td><td>74명</td><td>94명</td><td><strong>5.0%</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="acq-footnote">
-    <strong>집계 기준</strong>
-    <span>전환 퍼널은 보호자 기준으로 계산합니다. 등록 학생·신규 유료 학생 수는 별도 참고 지표로 제공하며, 광고비·CAC·ROAS는 광고비 연동 방식 확정 후 추가합니다.</span>
-  </div>
-</section><section class="page" id="notification-log">
+<small>모바일 앱 전체 이용 기준</small>
+</div>
+<div class="kpis behavior-kpis">
+<div class="kpi">
+<div class="label">페이지 방문자</div>
+<div class="value" id="behaviorKpiVisitors">24,860명</div>
+<div class="kpi-helper">중복 제외 사용자 기준</div>
+</div>
+<div class="kpi">
+<div class="label">평균 체류시간</div>
+<div class="value" id="behaviorKpiTime">1분 54초</div>
+<div class="kpi-helper">페이지 활성 구간 기준</div>
+</div>
+<div class="kpi">
+<div class="label">75% 스크롤 도달률</div>
+<div class="value" id="behaviorKpiScroll">68.4%</div>
+<div class="kpi-helper">페이지 높이 75% 이상 도달</div>
+</div>
+<div class="kpi">
+<div class="label">주요 CTA 클릭률</div>
+<div class="value" id="behaviorKpiCta">24.8%</div>
+<div class="kpi-helper">방문자 대비 주요 CTA 클릭</div>
+</div>
+<div class="kpi">
+<div class="label">페이지 이탈률</div>
+<div class="value" id="behaviorKpiExit">32.6%</div>
+<div class="kpi-helper">해당 페이지에서 세션 종료</div>
+</div>
+</div>
+<div class="grid2 behavior-overview-grid">
+<div class="panel behavior-time-panel">
+<div class="panel-head">
+<div>
+<div class="panel-title">페이지별 평균 체류시간</div>
+<div class="panel-sub">사용자가 상대적으로 오래 머무는 페이지를 확인</div>
+</div>
+</div>
+<div class="behavior-bar-list">
+<div class="behavior-bar-row"><strong>학생 등록</strong><div><i style="width:100%"></i></div><span>2분 52초</span></div>
+<div class="behavior-bar-row"><strong>문해력 진단 소개</strong><div><i style="width:88%"></i></div><span>2분 31초</span></div>
+<div class="behavior-bar-row"><strong>이용권 안내</strong><div><i style="width:74%"></i></div><span>2분 07초</span></div>
+<div class="behavior-bar-row"><strong>메인</strong><div><i style="width:60%"></i></div><span>1분 42초</span></div>
+<div class="behavior-bar-row"><strong>결제</strong><div><i style="width:56%"></i></div><span>1분 36초</span></div>
+</div>
+</div>
+<div class="panel behavior-guide-panel">
+<div class="panel-head">
+<div>
+<div class="panel-title">행동 지표 기준</div>
+<div class="panel-sub">1차에서는 페이지 단위 행동 데이터까지만 제공합니다.</div>
+</div>
+</div>
+<div class="behavior-guide-list">
+<div><strong>체류시간</strong><span>페이지가 활성 상태인 동안 실제 머문 시간을 집계</span></div>
+<div><strong>스크롤 도달</strong><span>페이지 높이의 75% 이상 도달한 방문자 비율</span></div>
+<div><strong>CTA 클릭</strong><span>가입·학생 등록·결제 등 주요 버튼 클릭 비율</span></div>
+<div><strong>이탈률</strong><span>해당 페이지를 마지막으로 세션이 종료된 비율</span></div>
+</div>
+</div>
+</div>
+<div class="table-wrap behavior-page-table">
+<div class="table-tools"><div class="table-tools-left behavior-table-tools-left">
+<div class="acq-table-title">
+<strong>페이지별 행동 상세</strong>
+<span class="panel-sub">사용자가 접근하는 전체 서비스 페이지의 방문·체류·스크롤·CTA·이탈 지표</span>
+</div>
+<select class="filter" id="behaviorCategoryFilter">
+<option value="all">전체 구분</option>
+<option value="service">서비스·안내</option>
+<option value="account">회원·계정</option>
+<option value="payment">구독·결제</option>
+<option value="learning">학습</option>
+<option value="result">결과·리포트</option>
+</select>
+<input class="table-search behavior-page-search" id="behaviorPageSearch" placeholder="페이지명 검색"/>
+</div><div class="table-tools-right">
+<span class="learning-result-count" id="behaviorResultCount">총 23개</span>
+<button class="btn">엑셀 다운로드</button>
+</div></div>
+<table>
+<thead>
+<tr>
+<th>페이지</th>
+<th>방문자</th>
+<th>평균 체류시간</th>
+<th>75% 스크롤 도달률</th>
+<th>주요 CTA 클릭률</th>
+<th>이탈률</th>
+</tr>
+</thead>
+<tbody id="behaviorTableBody"><tr data-all="8210|1분 42초|58.0%|21.4%|34.8%" data-behavior-row="" data-category="service" data-page-name="메인">
+<td><strong>메인</strong><span class="row-sub">서비스 첫 진입</span></td>
+<td>8,210명</td><td>1분 42초</td><td>58.0%</td><td>21.4%</td><td>34.8%</td>
+</tr><tr data-all="4120|2분 31초|71.0%|34.8%|24.2%" data-behavior-row="" data-category="service" data-page-name="문해력 진단 소개">
+<td><strong>문해력 진단 소개</strong><span class="row-sub">진단 시작 CTA 포함</span></td>
+<td>4,120명</td><td>2분 31초</td><td>71.0%</td><td>34.8%</td><td>24.2%</td>
+</tr><tr data-all="2840|2분 07초|82.0%|41.3%|27.8%" data-behavior-row="" data-category="service" data-page-name="이용권 안내">
+<td><strong>이용권 안내</strong><span class="row-sub">월/연 이용권 안내</span></td>
+<td>2,840명</td><td>2분 07초</td><td>82.0%</td><td>41.3%</td><td>27.8%</td>
+</tr><tr data-all="1760|1분 26초|66.4%|-|38.5%" data-behavior-row="" data-category="service" data-page-name="공지사항">
+<td><strong>공지사항</strong><span class="row-sub">서비스 공지 조회</span></td>
+<td>1,760명</td><td>1분 26초</td><td>66.4%</td><td>-</td><td>38.5%</td>
+</tr><tr data-all="1610|2분 14초|74.2%|18.6%|29.1%" data-behavior-row="" data-category="service" data-page-name="FAQ">
+<td><strong>FAQ</strong><span class="row-sub">자주 묻는 질문</span></td>
+<td>1,610명</td><td>2분 14초</td><td>74.2%</td><td>18.6%</td><td>29.1%</td>
+</tr><tr data-all="5380|0분 54초|-|86.2%|11.6%" data-behavior-row="" data-category="account" data-page-name="로그인">
+<td><strong>로그인</strong><span class="row-sub">보호자·학생 로그인</span></td>
+<td>5,380명</td><td>0분 54초</td><td>-</td><td>86.2%</td><td>11.6%</td>
+</tr><tr data-all="1920|1분 18초|-|72.1%|18.9%" data-behavior-row="" data-category="account" data-page-name="보호자 회원가입">
+<td><strong>보호자 회원가입</strong><span class="row-sub">보호자 계정 생성</span></td>
+<td>1,920명</td><td>1분 18초</td><td>-</td><td>72.1%</td><td>18.9%</td>
+</tr><tr data-all="1384|2분 52초|-|81.4%|14.7%" data-behavior-row="" data-category="account" data-page-name="학생 등록">
+<td><strong>학생 등록</strong><span class="row-sub">학생 정보 입력</span></td>
+<td>1,384명</td><td>2분 52초</td><td>-</td><td>81.4%</td><td>14.7%</td>
+</tr><tr data-all="3560|1분 49초|69.1%|38.2%|22.6%" data-behavior-row="" data-category="account" data-page-name="보호자 홈">
+<td><strong>보호자 홈</strong><span class="row-sub">학생·이용권 요약</span></td>
+<td>3,560명</td><td>1분 49초</td><td>69.1%</td><td>38.2%</td><td>22.6%</td>
+</tr><tr data-all="2420|1분 36초|63.8%|29.5%|25.4%" data-behavior-row="" data-category="account" data-page-name="학생 정보">
+<td><strong>학생 정보</strong><span class="row-sub">학생별 정보·학습코드</span></td>
+<td>2,420명</td><td>1분 36초</td><td>63.8%</td><td>29.5%</td><td>25.4%</td>
+</tr><tr data-all="1320|1분 21초|-|84.5%|12.4%" data-behavior-row="" data-category="payment" data-page-name="결제 대상 학생 선택">
+<td><strong>결제 대상 학생 선택</strong><span class="row-sub">등록 학생 중 결제 대상 선택</span></td>
+<td>1,320명</td><td>1분 21초</td><td>-</td><td>84.5%</td><td>12.4%</td>
+</tr><tr data-all="1240|1분 48초|-|78.9%|16.8%" data-behavior-row="" data-category="payment" data-page-name="이용권 선택">
+<td><strong>이용권 선택</strong><span class="row-sub">학생별 월/연 이용권 선택</span></td>
+<td>1,240명</td><td>1분 48초</td><td>-</td><td>78.9%</td><td>16.8%</td>
+</tr><tr data-all="1126|1분 36초|-|89.8%|8.4%" data-behavior-row="" data-category="payment" data-page-name="결제">
+<td><strong>결제</strong><span class="row-sub">최종 결제 단계</span></td>
+<td>1,126명</td><td>1분 36초</td><td>-</td><td>89.8%</td><td>8.4%</td>
+</tr><tr data-all="1012|0분 46초|-|32.7%|71.5%" data-behavior-row="" data-category="payment" data-page-name="결제 완료">
+<td><strong>결제 완료</strong><span class="row-sub">결제 결과·학습 시작 안내</span></td>
+<td>1,012명</td><td>0분 46초</td><td>-</td><td>32.7%</td><td>71.5%</td>
+</tr><tr data-all="1680|1분 33초|61.4%|26.1%|28.8%" data-behavior-row="" data-category="payment" data-page-name="구독 관리">
+<td><strong>구독 관리</strong><span class="row-sub">학생별 구독 상태 확인</span></td>
+<td>1,680명</td><td>1분 33초</td><td>61.4%</td><td>26.1%</td><td>28.8%</td>
+</tr><tr data-all="320|2분 18초|-|63.4%|21.6%" data-behavior-row="" data-category="payment" data-page-name="환불 신청">
+<td><strong>환불 신청</strong><span class="row-sub">학생별 환불 요청</span></td>
+<td>320명</td><td>2분 18초</td><td>-</td><td>63.4%</td><td>21.6%</td>
+</tr><tr data-all="6840|1분 12초|54.7%|62.8%|18.1%" data-behavior-row="" data-category="learning" data-page-name="학생 홈">
+<td><strong>학생 홈</strong><span class="row-sub">학습 진입·현재 진도</span></td>
+<td>6,840명</td><td>1분 12초</td><td>54.7%</td><td>62.8%</td><td>18.1%</td>
+</tr><tr data-all="2480|18분 42초|-|88.6%|7.9%" data-behavior-row="" data-category="learning" data-page-name="문해력 진단">
+<td><strong>문해력 진단</strong><span class="row-sub">급수 배정 진단</span></td>
+<td>2,480명</td><td>18분 42초</td><td>-</td><td>88.6%</td><td>7.9%</td>
+</tr><tr data-all="6120|14분 26초|-|92.4%|5.8%" data-behavior-row="" data-category="learning" data-page-name="기본 학습">
+<td><strong>기본 학습</strong><span class="row-sub">매듭별 필수 학습</span></td>
+<td>6,120명</td><td>14분 26초</td><td>-</td><td>92.4%</td><td>5.8%</td>
+</tr><tr data-all="3380|6분 18초|-|84.1%|11.7%" data-behavior-row="" data-category="learning" data-page-name="어휘 특강">
+<td><strong>어휘 특강</strong><span class="row-sub">선택 어휘 학습</span></td>
+<td>3,380명</td><td>6분 18초</td><td>-</td><td>84.1%</td><td>11.7%</td>
+</tr><tr data-all="2140|24분 10초|-|91.7%|6.4%" data-behavior-row="" data-category="learning" data-page-name="단락 평가">
+<td><strong>단락 평가</strong><span class="row-sub">단락 완료 평가</span></td>
+<td>2,140명</td><td>24분 10초</td><td>-</td><td>91.7%</td><td>6.4%</td>
+</tr><tr data-all="2310|3분 06초|77.5%|24.2%|31.4%" data-behavior-row="" data-category="result" data-page-name="문해력 진단 결과">
+<td><strong>문해력 진단 결과</strong><span class="row-sub">영역별 진단 결과</span></td>
+<td>2,310명</td><td>3분 06초</td><td>77.5%</td><td>24.2%</td><td>31.4%</td>
+</tr><tr data-all="1880|3분 42초|81.8%|20.5%|26.7%" data-behavior-row="" data-category="result" data-page-name="단락 분석지">
+<td><strong>단락 분석지</strong><span class="row-sub">단락별 종합 학습 결과</span></td>
+<td>1,880명</td><td>3분 42초</td><td>81.8%</td><td>20.5%</td><td>26.7%</td>
+</tr></tbody>
+</table>
+<div class="behavior-table-footer">
+<div class="behavior-pagination-info" id="behaviorPaginationInfo">1-10 / 23개</div>
+<div class="behavior-pagination" id="behaviorPagination">
+<button class="btn" data-behavior-page-prev="" type="button">이전</button>
+<div class="behavior-page-numbers" id="behaviorPageNumbers"></div>
+<button class="btn" data-behavior-page-next="" type="button">다음</button>
+</div>
+</div></div>
+<div class="acq-footnote behavior-footnote">
+<strong>1차 범위</strong>
+<span>전체 사용자 페이지의 방문자·평균 체류시간·스크롤 도달률·주요 CTA 클릭률·이탈률을 제공합니다. 현재 서비스는 모바일 앱 기준으로 집계하며, 히트맵·세션 리플레이·채널별 행동 비교는 2차 범위로 분리합니다.</span>
+</div>
+</section>
+<section class="page" id="notification-log">
 <div class="page-head"><div><h1 class="page-title">알림 발송 이력</h1><div class="page-desc">알림톡·SMS·푸시 발송 성공/실패 이력 확인</div></div></div>
 <div class="grid2" style="margin-bottom:18px">
 <div class="panel">
@@ -10765,7 +11277,7 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
 <span class="delivery-step fail">알림톡 실패</span><span>→</span>
 <span class="delivery-step ok">SMS 성공</span>
 </div>
-<div class="soft-panel" style="margin-top:12px">알림톡 실패 시 SMS로 자동 전환 · 두 채널 모두 실패해도 학습코드는 유지되며 보호자 화면에서 재발송 가능</div>
+<div class="soft-panel" style="margin-top:12px">알림톡 실패 시 SMS로 자동 전환 · 두 채널 모두 실패해도 학습코드는 유지 · 최종 실패 건은 이력에서 확인만 가능</div>
 </div>
 <div class="panel">
 <div class="panel-title">실패 건 처리</div>
@@ -10774,7 +11286,7 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
 <div class="row"><span class="k">SMS 전환 성공</span><strong>19건</strong></div>
 <div class="row"><span class="k">최종 실패</span><strong style="color:var(--red)">4건</strong></div>
 </div>
-<button class="btn primary" data-modal="실패 알림 재발송" style="width:100%;margin-top:12px">최종 실패 건 재발송</button>
+
 </div>
 </div>
 <div class="table-wrap"><div class="table-tools"><div class="table-tools-left"><input class="table-search" placeholder="수신자 / 메시지 검색"/><select class="filter"><option>전체 채널</option><option>알림톡</option><option>SMS</option><option>푸시</option></select></div></div>
@@ -10852,7 +11364,7 @@ body.detail-spec-active.desc-global-mode .detail-spec-marker-layer button{
     <tbody id="faqTableBody"><tr data-faq-row data-faq-category="회원/계정" data-faq-status="visible">
 <td>1</td>
 <td><span class="scope-badge">회원/계정</span></td>
-<td><strong>학생 학습코드를 잊어버렸어요.</strong><span class="faq-answer-preview">보호자 화면에서 해당 학생의 학습코드를 다시 확인하거나 재발송할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.</span></td>
+<td><strong>학생 학습코드를 잊어버렸어요.</strong><span class="faq-answer-preview">보호자 화면에서 해당 학생의 학습코드를 다시 확인할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.</span></td>
 <td><span class="badge green">노출중</span></td>
 <td>2026.09.22</td>
 <td><button class="btn" data-faq-id="faq-01" data-faq-title="학생 학습코드를 잊어버렸어요." data-modal="FAQ 수정">수정</button></td>
@@ -12126,7 +12638,7 @@ function detailTemplate(type,name){
     </div>
     <div class="operation-card"><h4>학습 이력</h4>
       <div class="history-list"><div class="history-row"><div class="history-time">오늘 08:41</div><div>3급 2단락 8매듭 완료</div><span class="badge green">완료</span></div><div class="history-row"><div class="history-time">어제 18:20</div><div>어휘특강 완료</div><span class="badge green">완료</span></div></div>
-      <div class="operation-actions"><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button><button class="btn" data-modal="알림톡 재발송">알림톡 재발송</button></div>
+      <div class="operation-actions"><button class="btn" data-modal="학생 코드 변경">학생 코드 변경</button></div>
     </div>
     <div class="danger-note">유효 이용권 보유 중에는 학생 삭제 불가</div>
   
@@ -13395,14 +13907,14 @@ const faqData = {
   "faq-01": {
     "category": "회원/계정",
     "question": "학생 학습코드를 잊어버렸어요.",
-    "answer": "보호자 화면에서 해당 학생의 학습코드를 다시 확인하거나 재발송할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.",
+    "answer": "보호자 화면에서 해당 학생의 학습코드를 다시 확인할 수 있습니다. 학습코드는 영문과 숫자로 구성된 6자리 코드입니다.",
     "visible": true,
     "order": 1
   },
   "faq-02": {
     "category": "회원/계정",
     "question": "학습코드를 받지 못했어요.",
-    "answer": "결제 완료 후 학생 휴대폰 번호로 학습코드를 발송합니다. 알림톡 발송에 실패하면 SMS로 자동 전환되며, 두 채널 모두 실패해도 학습코드는 정상 생성되어 있습니다. 보호자 화면에서 다시 발송할 수 있습니다.",
+    "answer": "결제 완료 후 학생 휴대폰 번호로 학습코드를 발송합니다. 알림톡 발송에 실패하면 SMS로 자동 전환되며, 두 채널 모두 실패해도 학습코드는 정상 생성되어 보호자 화면에서 확인할 수 있습니다.",
     "visible": true,
     "order": 2
   },
@@ -15818,6 +16330,36 @@ function specTextToBullets(value){
 function specDescribe(el, pageTitle, groupTitle){
   const label = specControlLabel(el);
 
+  if(pageTitle==='페이지 행동 분석'){
+    if(el.id==='behaviorCategoryFilter'){
+      return specBullets(
+        '사용자 페이지를 서비스·안내 / 회원·계정 / 구독·결제 / 학습 / 결과·리포트 구분으로 필터링합니다.',
+        '전체 구분 선택 시 분석 대상 전체 페이지를 조회합니다.'
+      );
+    }
+    if(el.id==='behaviorPageSearch'){
+      return specBullets(
+        '페이지명을 입력해 전체 사용자 페이지 목록에서 검색합니다.'
+      );
+    }
+    const behaviorDescriptions = [
+      ['.behavior-time-panel', specBullets(
+        '페이지별 평균 체류시간을 비교해 사용자가 상대적으로 오래 머무는 페이지를 확인합니다.',
+        '체류시간은 페이지가 활성 상태인 구간을 기준으로 집계합니다.'
+      )],
+      ['.behavior-guide-panel', specBullets(
+        '페이지 행동 분석에서 사용하는 체류시간·스크롤·CTA 클릭·이탈률의 집계 기준을 안내합니다.'
+      )],
+      ['.behavior-footnote', specBullets(
+        '1차에서는 모바일 앱의 페이지별 행동 지표를 제공합니다.',
+        '히트맵·세션 리플레이·채널별 행동 비교는 2차 범위로 분리합니다.'
+      )]
+    ];
+    for(const [selector,description] of behaviorDescriptions){
+      if(el.matches(selector)) return description;
+    }
+  }
+
   // Dashboard: manually authored descriptions. Do not copy current displayed values.
   const dashboardDisplayDescriptions = [
     ['.revenue-headline', specBullets(
@@ -15973,6 +16515,13 @@ function specDescribe(el, pageTitle, groupTitle){
   }
 
   if(el.matches('button')){
+    if(el.matches('.acq-channel-toggle')){
+      return specBullets(
+        '해당 유입 채널의 세부 유입처를 펼치거나 접습니다.',
+        '광고와 자연 유입 등 1차 세부 경로별 전환 수치를 확인할 수 있습니다.'
+      );
+    }
+
     const modal = el.dataset.modal;
     const go = el.dataset.go;
     const tab =
@@ -17354,20 +17903,37 @@ function detailSpecLabel(el){
   if(el.matches('.detail-grid .k')){
     return el.textContent?.trim() || '상세 정보';
   }
-  if(el.matches('.bar-row')){
-    return el.firstElementChild?.textContent?.trim() || '영역별 결과';
-  }
   if(el.matches('.tab-chip')){
     return `${el.textContent.trim()} 탭`;
   }
   if(el.matches('textarea')){
+    if(el.classList.contains('cs-internal-note-textarea')) return '내부 메모';
+    if(el.classList.contains('cs-answer-textarea')) return '답변 내용';
     return el.getAttribute('placeholder') || '내용 입력';
+  }
+  if(el.matches('.cs-inquiry-meta')) return '문의 기본 정보';
+  if(el.matches('.cs-inquiry-content')) return '문의 내용';
+  if(el.matches('.cs-file-row')) return '첨부파일';
+  if(el.matches('.cs-related-card')) return '관련 학생 계정';
+  if(el.matches('.history-list')) return '처리 이력';
+  if(el.matches('.admin-detail-top')) return '관리자 요약';
+  if(el.matches('.tx-receipt')) return '거래 요약';
+  if(el.matches('.ops-preview')) return '미리보기';
+  if(el.matches('.editor-preview')) return '학생 화면 미리보기';
+  if(el.matches('.linked-history-box')) return '연결 학습 이력';
+  if(el.matches('.history-row')) return '변경 이력';
+  if(el.matches('.result-card')){
+    return el.querySelector(':scope > h4')?.textContent?.trim() || '결과 상세';
+  }
+  if(el.matches('.note,.history-detail-note,.danger-note,.soft-panel')){
+    return '운영 기준';
   }
 
   const heading =
     el.querySelector(':scope > h4')?.textContent?.trim() ||
     el.querySelector(':scope > .panel-title')?.textContent?.trim() ||
     el.querySelector(':scope > .insight-title')?.textContent?.trim() ||
+    el.querySelector(':scope > .cs-section-kicker')?.textContent?.trim() ||
     el.querySelector(':scope > strong')?.textContent?.trim();
 
   if(heading && heading.length < 50 && !/[₩원%]|\d{2,}/.test(heading)) return heading;
@@ -17376,27 +17942,87 @@ function detailSpecLabel(el){
 
 function detailFieldDescription(label,type){
   const map = {
-    '회원 상태':specBullets('현재 계정의 이용 가능 상태를 표시합니다.','상태 변경 기능이 제공되는 경우 운영 정책에 따라 변경합니다.'),
+    '등록 학생':specBullets('해당 보호자 계정에 연결된 전체 학생 수를 표시합니다.'),
+    '이용중 학생':specBullets('현재 이용 가능한 구독을 보유한 연결 학생 수를 표시합니다.'),
+    '다음 결제 예정':specBullets('연결 학생의 다음 결제 예정 금액을 합산해 표시합니다.'),
+    '현재 급수':specBullets('학생에게 현재 적용 중인 학습 급수를 표시합니다.'),
+    '현재 위치':specBullets('학생이 현재 진행 중인 단락·매듭 위치를 표시합니다.'),
+    '학습코드':specBullets(
+      '학생이 학습 서비스에 접속할 때 사용하는 6자리 영문·숫자 코드를 표시합니다.',
+      '필요 시 학생 코드 변경 기능을 이용합니다.'
+    ),
+    '휴대폰':specBullets('계정에 등록된 휴대폰 번호를 표시합니다.','알림톡·SMS 발송 대상 확인 시 사용합니다.'),
+    '이메일':specBullets('계정에 등록된 이메일 주소를 표시합니다.'),
+    '가입일':specBullets('보호자 계정이 최초 생성된 일자를 표시합니다.'),
+    '회원 상태':specBullets('현재 계정의 이용 가능 상태를 표시합니다.','상태 변경이 필요한 경우 운영 정책에 따라 처리합니다.'),
+    '학년':specBullets('학생 계정에 등록된 학년 정보를 표시합니다.'),
+    '상품':specBullets('해당 학생에게 적용된 이용권 유형을 표시합니다.'),
     '이용 상태':specBullets('해당 학생 이용권의 현재 활성 상태를 표시합니다.'),
-    '학습코드':specBullets('학생이 학습 서비스에 접속할 때 사용하는 6자리 영문·숫자 코드를 표시합니다.','필요 시 코드 변경 또는 재발송 기능을 이용합니다.'),
-    '다음 결제':specBullets('해당 학생 이용권의 다음 자동결제 예정일을 표시합니다.'),
+    '현재 진도':specBullets('학생이 현재 진행 중인 단락·매듭 위치를 표시합니다.'),
+    '학습 진도율':specBullets('배정된 학습 범위 중 완료한 학습 비율을 표시합니다.'),
+    '수령인':specBullets('교재·자료 배송 시 사용하는 수령인 정보를 표시합니다.'),
+    '연락처':specBullets('배송 또는 상담에 사용하는 연락처를 표시합니다.'),
+    '주소':specBullets('보호자 계정에 저장된 배송지 주소를 표시합니다.'),
+    '개인정보 수집·이용 동의':specBullets('보호자의 개인정보 수집·이용 필수 동의 상태를 표시합니다.'),
+    '보호자 동의':specBullets('만 14세 미만 학생 등록 시 법정대리인 동의 완료 여부를 표시합니다.'),
+    '최근 동의일':specBullets('가장 최근 개인정보·약관 동의가 완료된 일시를 표시합니다.'),
+    '동의 일시':specBullets('해당 학생에 대한 법정대리인 동의가 완료된 일시를 표시합니다.'),
+    '약관 버전':specBullets('동의 당시 적용된 약관·개인정보 문서 버전을 표시합니다.'),
+    '동의 이력':specBullets('동의 일시와 당시 적용 문서 버전 이력을 확인합니다.'),
+    '상태':specBullets('현재 대상의 처리 또는 이용 상태를 표시합니다.'),
+    '시작일':specBullets('해당 학생 이용권의 시작일을 표시합니다.'),
     '다음 결제일':specBullets('해당 학생 이용권의 다음 자동결제 예정일을 표시합니다.'),
+    '다음 결제':specBullets('해당 학생 이용권의 다음 자동결제 예정일을 표시합니다.'),
     '자동갱신':specBullets('해당 이용권의 자동갱신 사용 여부를 표시합니다.'),
-    '결제수단':specBullets('현재 주문 또는 구독에 사용된 결제수단 정보를 표시합니다.'),
+    '결제수단':specBullets('현재 주문 또는 구독에 사용된 결제수단을 표시합니다.'),
+    '학생 수':specBullets('해당 주문에 포함된 결제 대상 학생 수를 표시합니다.'),
+    '승인일시':specBullets('결제가 최종 승인된 일시를 표시합니다.'),
+    '정상 이용':specBullets('주문에 포함된 학생 중 현재 정상 이용 중인 학생 수를 표시합니다.'),
+    '환불 완료':specBullets('주문에 포함된 학생 중 환불 처리가 완료된 학생 수를 표시합니다.'),
+    'PG 거래번호':specBullets('결제대행사에서 발급한 거래 식별번호를 표시합니다.','결제 확인 또는 PG사 문의 시 사용합니다.'),
+    '최종 결제일':specBullets('환불 대상 이용권의 가장 최근 결제일을 표시합니다.'),
+    '결제 후 학습':specBullets('해당 결제 이후 실제 학습 이용 이력이 있는지 표시합니다.','환불 가능 여부와 금액 계산 기준에 사용합니다.'),
+    '마지막 학습일':specBullets('환불 대상 학생의 가장 최근 학습일을 표시합니다.'),
+    '경과일':specBullets('결제일로부터 환불 요청 시점까지 경과한 일수를 표시합니다.'),
+    '적용 기준':specBullets('현재 환불 건에 적용되는 환불 정책 구간을 표시합니다.','학습 이용 여부와 결제 후 경과일을 기준으로 결정합니다.'),
+    '결제금액':specBullets('환불 계산의 기준이 되는 최초 결제금액을 표시합니다.'),
+    '이용기간 공제':specBullets('환불 정책에 따라 이용 기간에 해당하는 공제 금액을 표시합니다.'),
+    '환불금액':specBullets('환불 정책에 따라 계산된 최종 환불 예정 금액을 표시합니다.','관리자가 임의 금액으로 변경하지 않습니다.'),
+    '환불 가능 여부':specBullets('환불 정책 기준으로 현재 요청의 환불 가능 여부를 표시합니다.'),
+    '최종 환불금액':specBullets('환불 정책에 따라 계산된 최종 환불 예정 금액을 표시합니다.','관리자가 임의 금액으로 변경하지 않습니다.'),
     '결제 실패일':specBullets('자동결제가 실패한 일시를 표시합니다.'),
     '자동 재결제':specBullets('결제 실패 이후 자동 재결제 여부를 표시합니다.','현재 정책상 자동 재결제는 진행하지 않습니다.'),
     '추가 이용 기간':specBullets('결제 실패 후 추가 이용 가능 기간 제공 여부를 표시합니다.','현재 정책상 별도 유예기간을 제공하지 않습니다.'),
     '학습 제한':specBullets('결제 실패에 따른 학습 제한 적용 시점을 표시합니다.','실패 당일 24:00부터 해당 학생의 학습 이용을 제한합니다.'),
-    '환불 가능 여부':specBullets('환불 정책 기준으로 현재 요청의 환불 가능 여부를 표시합니다.'),
-    '최종 환불금액':specBullets('환불 정책에 따라 계산된 최종 환불 예정 금액을 표시합니다.','관리자가 임의 금액으로 변경하지 않습니다.'),
-    '보호자 동의':specBullets('만 14세 미만 학생 등록 시 법정대리인 동의 상태를 표시합니다.'),
-    '동의 이력':specBullets('개인정보·약관 동의의 일시와 당시 문서 버전 이력을 확인합니다.'),
     '정답률':specBullets('해당 학습 회차에서 산출된 정답률을 표시합니다.'),
     '다시 풀기':specBullets('오답 또는 재시도로 다시 풀이한 횟수를 표시합니다.'),
+    '소요시간':specBullets('학습 또는 평가 시작부터 완료까지의 실제 소요시간을 표시합니다.'),
+    '학습 중 종료':specBullets('학습 완료 전에 종료된 이력이 있는지 표시합니다.'),
+    '대상 어휘':specBullets('해당 어휘 특강에서 학습 대상으로 제공된 어휘 수를 표시합니다.'),
+    '최종 정답':specBullets('어휘 특강 종료 시 최종 정답 처리된 어휘 수를 표시합니다.'),
+    '재선택':specBullets('어휘 학습 중 오답 후 다시 선택한 횟수를 표시합니다.'),
+    '총점':specBullets('평가 영역 점수를 합산한 최종 점수를 표시합니다.','메타인지 점수는 별도 지표로 표시되는 경우 총점에서 제외합니다.'),
+    '추천 급수':specBullets('문해력 진단 결과에 따라 추천된 학습 급수를 표시합니다.'),
+    '시작 급수':specBullets('진단 전 학생에게 적용되어 있던 시작 급수를 표시합니다.'),
+    '배정 급수':specBullets('문해력 진단 결과에 따라 학생에게 최종 배정된 학습 급수를 표시합니다.'),
     '메타인지':specBullets('학생의 자기평가 응답 결과를 25점 기준으로 표시합니다.','평가 총점과는 별도 지표입니다.'),
-    '배정 급수':specBullets('문해력 진단 결과에 따라 학생에게 배정된 학습 급수를 표시합니다.'),
-    '처리 상태':specBullets('문의 또는 운영 요청의 현재 처리 단계를 표시하고 변경합니다.'),
-    '내부 메모':specBullets('운영자 간 공유할 내부 처리 메모를 작성합니다.','사용자에게는 노출되지 않습니다.')
+    '어휘':specBullets(type==='paragraph' ? '단락 평가 어휘 영역 점수를 표시합니다.' : '해당 결과의 어휘 영역 성취도를 표시합니다.'),
+    '독해':specBullets(type==='paragraph' ? '단락 평가 독해 영역 점수를 표시합니다.' : '해당 결과의 독해 영역 성취도를 표시합니다.'),
+    '기본 학습':specBullets('해당 단락에서 완료한 기본 학습 매듭 수를 표시합니다.'),
+    '단락 평가':specBullets('해당 단락의 평가 점수를 표시합니다.'),
+    '처리 상태':specBullets('문의 또는 운영 요청의 현재 처리 단계를 표시합니다.','미처리 / 처리중 / 완료 상태로 관리합니다.'),
+    '내부 메모':specBullets('운영자 간 공유할 내부 처리 메모를 작성합니다.','사용자에게는 노출되지 않습니다.'),
+    '답변 내용':specBullets('보호자에게 전달할 문의 답변을 작성하거나 확인합니다.','등록된 답변은 이후 수정할 수 있습니다.'),
+    '문의번호':specBullets('1:1 문의를 식별하는 고유 문의번호를 표시합니다.'),
+    '유형':specBullets('문의 또는 콘텐츠를 분류하는 유형 정보를 표시합니다.'),
+    '보호자':specBullets('문의 또는 주문과 연결된 보호자 계정을 표시합니다.'),
+    '학생':specBullets('문의 또는 주문과 연결된 학생 계정을 표시합니다.'),
+    '담당자':specBullets('현재 문의를 처리하는 운영 담당자를 표시합니다.'),
+    '접수일시':specBullets('문의가 최초 접수된 일시를 표시합니다.'),
+    '권한 그룹':specBullets('관리자 계정에 적용된 권한 그룹을 표시합니다.','권한 그룹에 따라 메뉴 조회·처리 가능 범위가 달라집니다.'),
+    '최근 로그인':specBullets('관리자 계정의 최근 로그인 일시를 표시합니다.'),
+    '비밀번호 변경':specBullets('관리자 계정의 최근 비밀번호 변경 일자를 표시합니다.'),
+    '계정 상태':specBullets('관리자 계정의 사용 가능 상태를 표시합니다.')
   };
   return map[label] || specBullets(`${label} 정보를 확인합니다.`);
 }
@@ -17410,11 +18036,18 @@ function detailSpecGroupTitle(el){
   if(el.matches('.history-detail-grid')) return '학습 이력';
   if(el.matches('.history-detail-note,.note,.danger-note,.soft-panel')) return '운영 기준';
   if(el.matches('.history-result-link')) return '연결 화면';
-  if(el.matches('.tx-receipt')) return '결제 요약';
-  if(el.matches('.cs-case-main')) return '문의·답변';
-  if(el.matches('.cs-case-side')) return '문의 정보';
+  if(el.matches('.tx-receipt')) return '거래 요약';
+  if(el.matches('.tx-box')) return el.querySelector('h4')?.textContent?.trim() || '거래 상세';
+  if(el.matches('.cs-answer-card')) return '답변 관리';
+  if(el.matches('.cs-case-info')) return el.querySelector('h4')?.textContent?.trim() || '문의 정보';
+  if(el.matches('.ops-form')) return '노출·운영 설정';
+  if(el.matches('.ops-preview')) return '미리보기·이력';
+  if(el.matches('.admin-detail-top')) return '관리자 요약';
+  if(el.matches('.admin-detail-actions')) return '관리자 계정 처리';
+
   return el.querySelector(':scope > h4')?.textContent?.trim() ||
          el.querySelector('.panel-title')?.textContent?.trim() ||
+         el.querySelector('.editor-section-head strong')?.textContent?.trim() ||
          '상세 정보';
 }
 
@@ -17427,25 +18060,79 @@ function detailSpecItemsForGroup(group){
   if(group.matches('.tab-row')){
     return [...group.querySelectorAll('.tab-chip')].filter(specIsVisible);
   }
-  if(group.matches('.operation-card,.detail-section,.cs-case-card,.cs-case-info,.result-card')){
-    const fields=[...group.querySelectorAll(':scope > .inline-field, :scope > .detail-grid > .k, :scope > .operation-actions > button, :scope > button')].filter(specIsVisible);
-    if(fields.length) return fields;
-    const th=[...group.querySelectorAll('thead th')].filter(specIsVisible);
-    if(th.length) return th;
-    return [group];
-  }
   if(group.matches('.metric-grid')){
     return [...group.querySelectorAll(':scope > .metric-card')].filter(specIsVisible);
   }
   if(group.matches('.history-detail-grid')){
     return [...group.querySelectorAll(':scope > div')].filter(specIsVisible);
   }
+  if(group.matches('.tx-receipt')){
+    const fields=[...group.querySelectorAll('.inline-field')].filter(specIsVisible);
+    return fields.length ? fields : [group];
+  }
+  if(group.matches('.tx-box')){
+    const fields=[...group.querySelectorAll('.inline-field')].filter(specIsVisible);
+    const controls=[...group.querySelectorAll('button')].filter(specIsVisible);
+    const tables=[...group.querySelectorAll('table')].filter(specIsVisible);
+    return [...fields,...tables,...controls].length ? [...fields,...tables,...controls] : [group];
+  }
+  if(group.matches('.operation-card,.detail-section,.cs-case-info,.result-card')){
+    const fields=[...group.querySelectorAll(':scope > .inline-field, :scope > .detail-grid > .k')].filter(specIsVisible);
+    const controls=[...group.querySelectorAll(':scope > button, :scope > .operation-actions > button')].filter(specIsVisible);
+    const tables=[...group.querySelectorAll(':scope > table')].filter(specIsVisible);
+    if(fields.length || controls.length || tables.length) return [...fields,...tables,...controls];
+    return [group];
+  }
+  if(group.matches('.cs-case-card')){
+    if(group.classList.contains('cs-answer-card')){
+      const items=[
+        group.querySelector('.cs-answer-empty-guide'),
+        group.querySelector('.cs-answer-meta'),
+        ...group.querySelectorAll('.cs-template-btn'),
+        group.querySelector('.cs-answer-textarea'),
+        ...group.querySelectorAll('.cs-create-answer-actions button,.cs-answer-edit-actions button')
+      ].filter(Boolean).filter(specIsVisible);
+      return items.length ? items : [group];
+    }
+    const inquiryItems=[
+      group.querySelector('.cs-inquiry-meta'),
+      group.querySelector('.cs-inquiry-content'),
+      group.querySelector('.cs-file-row'),
+      group.querySelector('.cs-internal-note-textarea'),
+      ...group.querySelectorAll('.cs-note-actions button')
+    ].filter(Boolean).filter(specIsVisible);
+    return inquiryItems.length ? inquiryItems : [group];
+  }
   if(group.matches('.result-grid')){
     return [...group.querySelectorAll(':scope > .result-card')].filter(specIsVisible);
   }
-  if(group.matches('.learning-hero,.history-detail-hero,.history-detail-note,.history-result-link,.note,.danger-note,.soft-panel,.tx-receipt')){
+  if(group.matches('.learning-hero,.history-detail-hero,.history-detail-note,.history-result-link,.note,.danger-note,.soft-panel,.admin-detail-top')){
     const buttons=[...group.querySelectorAll('button')].filter(specIsVisible);
     return buttons.length ? [group,...buttons] : [group];
+  }
+  if(group.matches('.ops-form')){
+    const controls=[...group.querySelectorAll('label,input,select,textarea,button,.segmented,.toggle-wrap')]
+      .filter(el=>specIsVisible(el));
+    const unique=[];
+    const seen=new Set();
+    controls.forEach(el=>{
+      const target=el.closest('label') || el;
+      if(!seen.has(target) && specIsVisible(target)){
+        seen.add(target); unique.push(target);
+      }
+    });
+    return unique.length ? unique.slice(0,18) : [group];
+  }
+  if(group.matches('.ops-preview')){
+    const items=[
+      group.querySelector('.preview-frame'),
+      group.querySelector('.editor-preview'),
+      group.querySelector('.history-list')
+    ].filter(Boolean).filter(specIsVisible);
+    return items.length ? items : [group];
+  }
+  if(group.matches('.admin-detail-actions')){
+    return [...group.querySelectorAll('button')].filter(specIsVisible);
   }
 
   const controls=[...group.querySelectorAll('button,textarea,input,select')].filter(specIsVisible);
@@ -17462,20 +18149,59 @@ function detailSpecDescribe(el,type,groupTitle){
     if(el.dataset.modal) return specBullets(`${txt} 팝업을 열어 관련 정보를 확인·입력·처리합니다.`);
     if(el.dataset.go) return specBullets(`${txt} 관련 관리 화면으로 이동합니다.`);
     if(el.classList.contains('history-result-go')) return specBullets('현재 이력과 연결된 학습 결과 화면으로 이동합니다.');
+    if(txt==='답변 등록') return specBullets('작성한 답변을 보호자에게 전달할 답변으로 등록합니다.','등록 후 문의 상태와 처리 이력에 반영합니다.');
+    if(txt==='답변 수정') return specBullets('등록된 답변을 수정 가능한 상태로 전환합니다.');
+    if(txt==='수정 저장') return specBullets('수정한 답변 내용을 저장하고 마지막 수정 정보를 갱신합니다.');
+    if(txt==='수정 취소') return specBullets('답변 수정 내용을 취소하고 기존 등록 답변으로 되돌립니다.');
+    if(txt==='내용 지우기') return specBullets('작성 중인 답변 내용을 초기화합니다.');
+    if(txt==='메모 저장') return specBullets('내부 CS 메모를 저장합니다.','내부 메모는 보호자에게 노출되지 않습니다.');
+    if(txt==='환불 대신 접수') return specBullets('현재 문의 대상 학생의 환불 요청을 관리자 대행으로 접수합니다.','접수 시 해당 학생의 학습 이용은 즉시 제한됩니다.');
     if(txt.includes('저장')) return specBullets('현재 입력하거나 변경한 내용을 저장합니다.');
     if(txt.includes('수정')) return specBullets('선택한 정보를 수정할 수 있는 상태로 전환합니다.');
-    if(txt.includes('재발송')) return specBullets('대상 학생에게 학습코드 안내 메시지를 다시 발송합니다.');
+    
+    if(txt.includes('비밀번호 재설정')) return specBullets('관리자 계정에 비밀번호 재설정 안내를 진행합니다.');
+    if(txt.includes('비활성화')) return specBullets('관리자 계정을 사용 불가 상태로 변경하기 위한 확인 절차를 진행합니다.');
+    if(txt.includes('권한 그룹 변경')) return specBullets('관리자 계정에 적용할 권한 그룹을 변경합니다.');
     return specBullets(`${txt} 기능을 실행합니다.`);
   }
 
-  if(el.matches('th')) return specBullets(`목록에서 ${label} 정보를 표시합니다.`);
+  if(el.matches('th')){
+    return specBullets(`목록에서 ${label} 정보를 표시합니다.`);
+  }
 
-  if(el.matches('.metric-card')) return detailFieldDescription(label,type);
-  if(el.matches('.inline-field')) return detailFieldDescription(label,type);
-  if(el.matches('.history-detail-grid > div')) return detailFieldDescription(label,type);
-  if(el.matches('.detail-grid .k')) return detailFieldDescription(label,type);
-  if(el.matches('.tab-chip')) return specBullets(`${el.textContent.trim()} 정보를 확인하기 위한 상세 탭입니다.`);
-  if(el.matches('textarea')) return specBullets('답변 또는 메모 내용을 입력합니다.','저장 후 해당 문의 처리 정보에 반영됩니다.');
+  if(el.matches('table')){
+    const title=groupTitle || '목록';
+    return specBullets(`${title}에 포함된 항목별 정보를 표 형태로 확인합니다.`);
+  }
+
+  if(el.matches('.metric-card,.inline-field,.history-detail-grid > div,.detail-grid .k')){
+    return detailFieldDescription(label,type);
+  }
+
+  if(el.matches('.tab-chip')){
+    return specBullets(`${el.textContent.trim()} 정보를 확인하기 위한 상세 탭입니다.`);
+  }
+
+  if(el.matches('.cs-inquiry-meta')){
+    return specBullets('문의 작성자, 접수일시, 문의 유형, 관련 학생 등 문의 기본 정보를 표시합니다.');
+  }
+  if(el.matches('.cs-inquiry-content')){
+    return specBullets('보호자가 작성한 실제 문의 내용을 확인합니다.','답변 작성 전 문의 의도와 요청사항을 확인하는 기준 정보입니다.');
+  }
+  if(el.matches('.cs-file-row')){
+    return specBullets('문의와 함께 등록된 첨부파일 유무와 파일을 확인합니다.');
+  }
+  if(el.matches('.cs-related-card')){
+    return specBullets('문의와 연결된 학생 계정과 학습코드를 확인합니다.','계정 정보 보기 버튼으로 해당 학생의 계정 관리 화면으로 이동할 수 있습니다.');
+  }
+  if(el.matches('.history-list')){
+    return specBullets('문의 접수부터 답변·상태 변경 등 주요 처리 이력을 시간순으로 확인합니다.');
+  }
+  if(el.matches('textarea')){
+    if(el.classList.contains('cs-internal-note-textarea')) return detailFieldDescription('내부 메모',type);
+    if(el.classList.contains('cs-answer-textarea')) return detailFieldDescription('답변 내용',type);
+    return specBullets('내용을 입력하거나 수정합니다.','저장 시 해당 상세 정보에 반영됩니다.');
+  }
 
   if(el.matches('.history-detail-note,.note,.danger-note,.soft-panel')){
     return detailTypePolicy[type] || specBullets('해당 상세 화면의 운영 기준과 주의사항을 안내합니다.');
@@ -17495,7 +18221,35 @@ function detailSpecDescribe(el,type,groupTitle){
 
   if(el.matches('.result-card')){
     const title=el.querySelector('h4')?.textContent?.trim() || groupTitle;
-    return specBullets(`${title}의 세부 결과와 처리 기준을 확인합니다.`);
+    const resultDescriptions={
+      '영역별 점수':specBullets('문해력 진단의 어휘·문장 이해·문단 이해·독해 영역별 점수를 확인합니다.'),
+      '메타인지 응답 5문항 · 100점 산정 제외':specBullets('메타인지 5개 자기평가 문항의 응답 결과를 확인합니다.','메타인지 점수는 진단 총점 100점 산정에서 제외하고 별도 25점 지표로 표시합니다.'),
+      '진단 정보':specBullets('진단에 사용된 콘텐츠 코드, 출제 방식, 완료 상태와 콘텐츠 버전을 확인합니다.'),
+      '학습 단계':specBullets('기본 학습이 진행되는 학습 단계 순서를 확인합니다.'),
+      '문항 결과':specBullets('문항별 유형, 정오답 결과와 다시 풀기 여부를 확인합니다.'),
+      '진행 상태':specBullets('학습 시작·제출 시간, 제한시간 초과와 이어하기 사용 여부를 확인합니다.'),
+      '어휘 결과':specBullets('어휘별 최초 선택과 최종 정답 결과를 확인합니다.'),
+      '처리 기준':specBullets('어휘 특강의 중도 종료·재진입 등 진행 데이터 처리 기준을 확인합니다.'),
+      '평가 구성':specBullets('단락 평가의 메타인지·어휘·독해 문항 구성과 점수 반영 기준을 확인합니다.'),
+      '응시 상태':specBullets('제한시간, 실제 소요시간, 제한시간 초과 여부와 결과 산출 상태를 확인합니다.'),
+      '콘텐츠 정보':specBullets('단락 평가에 사용된 콘텐츠 코드, 버전과 출제 방식을 확인합니다.'),
+      '단락 전체 학습 요약':specBullets('해당 단락의 기본 학습 완료, 어휘 특강, 단락 평가 결과를 종합 확인합니다.'),
+      '메타인지 평가점수와 별도':specBullets('메타인지 자기평가 결과를 단락 평가 100점과 분리해 25점 기준으로 확인합니다.'),
+      '매듭별 결과':specBullets('단락 내 매듭 구간별 완료 여부, 정답률과 다시 풀기 결과를 비교합니다.')
+    };
+    return resultDescriptions[title] || specBullets(`${title}의 세부 결과와 처리 기준을 확인합니다.`);
+  }
+
+  if(el.matches('.ops-preview,.editor-preview')){
+    return specBullets('현재 등록·수정된 내용이 실제 노출될 형태를 미리 확인합니다.');
+  }
+
+  if(el.matches('.history-row')){
+    return specBullets('해당 항목의 최근 변경 일시와 변경 내용을 확인합니다.');
+  }
+
+  if(el.matches('.admin-detail-top')){
+    return specBullets('관리자 계정의 기본 소속, 활성 상태와 보안 상태를 요약합니다.');
   }
 
   return detailTypePolicy[type] || specBullets(`${groupTitle} 정보를 확인합니다.`);
@@ -17507,8 +18261,9 @@ function detailSpecBuildGroups(type){
 
   function add(target,title,items){
     if(!target || !specIsVisible(target)) return;
-    items=(items || []).filter(specIsVisible);
+    items=(items || []).filter(Boolean).filter(specIsVisible);
     if(!items.length) items=[target];
+
     groups.push({
       target,
       title,
@@ -17520,55 +18275,211 @@ function detailSpecBuildGroups(type){
     });
   }
 
-  const top=[...root.children].filter(specIsVisible);
+  function addOperationCard(card){
+    if(!card || !specIsVisible(card)) return;
+    add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card));
+  }
 
-  // 계정 상세
-  const accountShell=root.querySelector('.account-shell');
-  if(accountShell){
-    const side=accountShell.querySelector('.account-side');
-    add(side,'계정 요약',detailSpecItemsForGroup(side));
-    const tabs=accountShell.querySelector('.tab-row');
-    add(tabs,'상세 탭',detailSpecItemsForGroup(tabs));
-    [...accountShell.querySelectorAll('.account-main > .operation-card, .account-main > .operation-grid > .operation-card, .account-main > .detail-section, .account-main > .danger-note, .account-main > .soft-panel')]
-      .filter(specIsVisible)
-      .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+  // 학습 실행 이력
+  if(['historyBasic','historyVocab','historyDiagnostic','historyParagraph'].includes(type)){
+    const hero=root.querySelector('.history-detail-hero');
+    const grid=root.querySelector('.history-detail-grid');
+    const note=root.querySelector('.history-detail-note');
+    const link=root.querySelector('.history-result-link');
+    add(hero,'학습 회차 요약',[hero]);
+    add(grid,'학습 이력',detailSpecItemsForGroup(grid));
+    if(note) add(note,'운영 기준',[note]);
+    if(link) add(link,'학습 결과 연결',[link,...link.querySelectorAll('button')]);
     return groups;
   }
 
-  // 문의 상세
-  const csLayout=root.querySelector('.cs-case-layout');
-  if(csLayout){
-    [...csLayout.querySelectorAll('.cs-case-main > .cs-case-card, .cs-case-side > .cs-case-info')]
-      .filter(specIsVisible)
-      .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
-    return groups;
-  }
+  // 보호자/학생 계정 상세
+  if(['guardian','student'].includes(type)){
+    const shell=root.querySelector('.account-shell');
+    if(shell){
+      const side=shell.querySelector('.account-side');
+      add(side,'계정 요약',detailSpecItemsForGroup(side));
 
-  // 운영 상세/콘텐츠 상세/관리자 상세: 카드 단위
-  const shell=root.querySelector('.ops-layout,.editor-shell,.admin-detail-shell,.transaction-modal');
-  if(shell && !root.querySelector('.learning-hero')){
-    const candidates=[...shell.querySelectorAll(':scope > .tx-receipt, :scope > .detail-section, :scope > .operation-card, :scope > .result-card, :scope > .panel, :scope > .ops-main > *, :scope > .ops-side > *, :scope > .admin-detail-main > *, :scope > .admin-detail-side > *')]
-      .filter(specIsVisible);
-    if(candidates.length){
-      candidates.forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+      const tabs=shell.querySelector('.tab-row');
+      add(tabs,'상세 탭',detailSpecItemsForGroup(tabs));
+
+      [...shell.querySelectorAll('.account-main > .operation-card, .account-main > .operation-grid > .operation-card')]
+        .filter(specIsVisible)
+        .forEach(addOperationCard);
+
+      [...shell.querySelectorAll('.account-main > .privacy-detail-section')]
+        .filter(specIsVisible)
+        .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+
+      [...shell.querySelectorAll('.account-main > .danger-note,.account-main > .soft-panel')]
+        .filter(specIsVisible)
+        .forEach(card=>add(card,'운영 기준',[card]));
+
       return groups;
     }
   }
 
-  // 학습 결과 / 학습 이력
-  top.forEach(block=>{
-    if(block.matches('.learning-hero,.history-detail-hero,.metric-grid,.history-detail-grid,.history-detail-note,.history-result-link,.result-card,.detail-section,.note')){
-      add(block,detailSpecGroupTitle(block),detailSpecItemsForGroup(block));
-      return;
+  // 구독/주문/환불 상세
+  if(['subscription','order','refund'].includes(type)){
+    const modal=root.querySelector('.transaction-modal');
+    if(modal){
+      const receipt=modal.querySelector('.tx-receipt');
+      add(receipt,'거래 요약',detailSpecItemsForGroup(receipt));
+
+      // receipt 내부 섹션/필드도 놓치지 않게 별도 세부 그룹
+      const txGrid=receipt?.querySelector('.tx-grid');
+      if(txGrid){
+        const inline=[...txGrid.querySelectorAll('.inline-field')].filter(specIsVisible);
+        if(inline.length) add(txGrid,type==='refund'?'환불 가능 여부·금액 계산':'결제 정보',inline);
+      }
+
+      [...modal.querySelectorAll(':scope > .tx-box')].filter(specIsVisible)
+        .forEach(box=>add(box,detailSpecGroupTitle(box),detailSpecItemsForGroup(box)));
+
+      return groups;
     }
-    if(block.matches('.result-grid')){
-      [...block.querySelectorAll(':scope > .result-card')].filter(specIsVisible)
+  }
+
+  // 학습 결과 상세
+  if(['diagnostic','learning','basic','vocab','paragraph','report'].includes(type)){
+    const hero=root.querySelector(':scope > .learning-hero');
+    if(hero) add(hero,'결과 요약',[hero]);
+
+    const metric=root.querySelector(':scope > .metric-grid');
+    if(metric) add(metric,'핵심 결과',detailSpecItemsForGroup(metric));
+
+    const historyGrid=root.querySelector(':scope > .history-detail-grid');
+    if(historyGrid) add(historyGrid,'학습 현황',detailSpecItemsForGroup(historyGrid));
+
+    [...root.querySelectorAll(':scope > .result-grid')].filter(specIsVisible).forEach(grid=>{
+      [...grid.querySelectorAll(':scope > .result-card')].filter(specIsVisible)
+        .forEach(card=>add(card,detailSpecGroupTitle(card),[card]));
+    });
+
+    [...root.querySelectorAll(':scope > .result-card')].filter(specIsVisible)
+      .forEach(card=>{
+        if(!card.closest('.result-grid')) add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card));
+      });
+
+    [...root.querySelectorAll(':scope > .history-detail-note,:scope > .note')].filter(specIsVisible)
+      .forEach(note=>add(note,'운영 기준',[note]));
+
+    return groups;
+  }
+
+  // 콘텐츠 상세
+  if(type==='content'){
+    const shell=root.querySelector('.editor-shell');
+    if(shell){
+      const panels=[...shell.querySelectorAll(':scope > .editor-panel')].filter(specIsVisible);
+      panels.forEach((panel,idx)=>{
+        if(idx===0){
+          const controls=[...panel.querySelectorAll('label,input,select,textarea,button,.segmented button')]
+            .filter(specIsVisible);
+          const unique=[];
+          const seen=new Set();
+          controls.forEach(el=>{
+            const target=el.closest('label') || el;
+            if(!seen.has(target) && specIsVisible(target)){
+              seen.add(target); unique.push(target);
+            }
+          });
+          add(panel,'콘텐츠 수정 정보',unique.slice(0,16));
+        }else{
+          const items=[
+            panel.querySelector('.editor-preview'),
+            panel.querySelector('.linked-history-box'),
+            panel.querySelector('.history-list')
+          ].filter(Boolean).filter(specIsVisible);
+          add(panel,'미리보기·연결 이력',items.length?items:[panel]);
+        }
+      });
+      return groups;
+    }
+  }
+
+  // 결제 실패 / 변경 이력 / 전화 문의
+  if(['paymentFail','contentHistory','phoneCs'].includes(type)){
+    [...root.querySelectorAll(':scope > .detail-section')].filter(specIsVisible)
+      .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
+
+    [...root.querySelectorAll(':scope > .note')].filter(specIsVisible)
+      .forEach(note=>add(note,'운영 기준',[note]));
+
+    return groups;
+  }
+
+  // 1:1 문의 상세
+  if(type==='cs'){
+    const layout=root.querySelector('.cs-case-layout');
+    if(layout){
+      const mainCards=[...layout.querySelectorAll('.cs-case-main > .cs-case-card')].filter(specIsVisible);
+      mainCards.forEach((card,idx)=>{
+        let title=detailSpecGroupTitle(card);
+        if(card.classList.contains('cs-answer-card')) title='답변 관리';
+        else if(card.querySelector('.cs-inquiry-content')) title='문의 내용';
+        else if(card.querySelector('.cs-internal-note-textarea')) title='내부 메모';
+        add(card,title,detailSpecItemsForGroup(card));
+      });
+
+      [...layout.querySelectorAll('.cs-case-side > .cs-case-info')].filter(specIsVisible)
+        .forEach(card=>{
+          const title=card.querySelector('h4')?.textContent?.trim() || '문의 정보';
+          let items=[];
+          if(title==='문의 정보') items=[...card.querySelectorAll('.inline-field')];
+          else if(title==='관련 정보') items=[...card.querySelectorAll('.cs-related-card')];
+          else if(title==='처리 이력') items=[...card.querySelectorAll('.history-list')];
+          add(card,title,items);
+        });
+
+      return groups;
+    }
+  }
+
+  // 운영 상세: 이벤트/공지/자료/팝업/배너
+  if(['event','notice','resource','servicePopup','mainBanner'].includes(type)){
+    const layout=root.querySelector('.ops-layout');
+    if(layout){
+      const form=layout.querySelector('.ops-form');
+      if(form) add(form,'노출·운영 설정',detailSpecItemsForGroup(form));
+
+      const preview=layout.querySelector('.ops-preview');
+      if(preview){
+        const previewItems=[
+          preview.querySelector('.preview-frame'),
+          preview.querySelector('.history-list')
+        ].filter(Boolean).filter(specIsVisible);
+        add(preview,'미리보기·변경 이력',previewItems.length?previewItems:[preview]);
+      }
+
+      return groups;
+    }
+  }
+
+  // 관리자 상세
+  if(type==='admin'){
+    const shell=root.querySelector('.admin-detail-shell');
+    if(shell){
+      const top=shell.querySelector('.admin-detail-top');
+      add(top,'관리자 요약',[top]);
+
+      [...shell.querySelectorAll('.operation-card')].filter(specIsVisible)
         .forEach(card=>add(card,detailSpecGroupTitle(card),detailSpecItemsForGroup(card)));
-      return;
+
+      const actions=shell.querySelector('.admin-detail-actions');
+      if(actions) add(actions,'관리자 계정 처리',detailSpecItemsForGroup(actions));
+
+      return groups;
     }
-    // empty decorative blocks are ignored
-    if((block.textContent||'').trim() || block.querySelector('button,input,textarea,select')){
+  }
+
+  // fallback
+  [...root.children].filter(specIsVisible).forEach(block=>{
+    if(block.matches('.learning-hero,.history-detail-hero,.metric-grid,.history-detail-grid,.history-detail-note,.history-result-link,.result-card,.detail-section,.note,.tx-receipt,.tx-box')){
       add(block,detailSpecGroupTitle(block),detailSpecItemsForGroup(block));
+    }else if(block.matches('.result-grid')){
+      [...block.querySelectorAll(':scope > .result-card')].filter(specIsVisible)
+        .forEach(card=>add(card,detailSpecGroupTitle(card),[card]));
     }
   });
 
@@ -17695,50 +18606,7 @@ function specRenderDetailModal(type,name){
     });
   });
 
-  if(detailTypePolicy[type]){
-    const policyTarget=detailModalBody.querySelector('.note,.history-detail-note,.danger-note,.soft-panel') || detailModalBody.firstElementChild;
-    if(policyTarget){
-      const gNo=groups.length+1;
-      const gKey=`dg${gNo}`;
-      detailSpecState.targets.set(gKey,policyTarget);
-
-      const gm=document.createElement('button');
-      gm.type='button';
-      gm.className='detail-spec-group-marker';
-      gm.dataset.detailSpecKey=gKey;
-      gm.textContent=String(gNo);
-      gm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(gKey);});
-      layer.appendChild(gm);
-
-      const gh=document.createElement('button');
-      gh.type='button';
-      gh.className='spec-group-head';
-      gh.dataset.detailSpecRow=gKey;
-      gh.innerHTML=`<b>${String(gNo).padStart(2,'0')}</b><strong>운영 기준</strong>`;
-      gh.addEventListener('click',()=>detailSpecFocus(gKey));
-      list.appendChild(gh);
-
-      const key=`di${gNo}-1`;
-      detailSpecState.targets.set(key,policyTarget);
-      const sm=document.createElement('button');
-      sm.type='button';
-      sm.className='detail-spec-sub-marker';
-      sm.dataset.detailSpecKey=key;
-      sm.textContent=`${gNo}-1`;
-      sm.addEventListener('click',e=>{e.stopPropagation();detailSpecFocus(key);});
-      layer.appendChild(sm);
-
-      const row=document.createElement('button');
-      row.type='button';
-      row.className='spec-desc-row';
-      row.dataset.detailSpecRow=key;
-      row.innerHTML=`<b>${gNo}-1</b><div><strong>정책·처리 기준</strong><span>${detailTypePolicy[type]}</span></div>`;
-      row.addEventListener('click',()=>detailSpecFocus(key));
-      list.appendChild(row);
-    }
-  }
-
-  if(!groups.length && !detailTypePolicy[type]){
+  if(!groups.length){
     list.innerHTML='<div class="global-desc-empty">현재 상세 팝업에 등록된 디스크립션이 없습니다.</div>';
   }
 
@@ -17808,7 +18676,159 @@ function specExitDetailModal(){
     }
   });
 
+  document.addEventListener('click',e=>{
+    if(!detailSpecState.active || !specState.open) return;
+    const changed=e.target.closest(
+      '#csAnswerCreateSave,#csAnswerEditBtn,#csAnswerEditSave,#csAnswerEditCancel,#csAnswerClearBtn,#csNoteSave,'+
+      '.cs-template-btn,.tab-chip'
+    );
+    if(!changed) return;
+    setTimeout(()=>specRenderDetailModal(detailSpecState.type,detailSpecState.name),60);
+  });
+
   window.addEventListener('resize',detailSpecSchedule);
+})();
+
+
+// v5.82 유입 채널 상세 + 페이지 행동 분석
+(function(){
+  const channelFilter=document.getElementById('acqChannelFilter');
+
+  function setChannelExpanded(key,expanded){
+    const parent=document.querySelector(`.acq-channel-parent[data-channel="${key}"]`);
+    const toggle=parent?.querySelector('[data-channel-toggle]');
+    const children=[...document.querySelectorAll(`.acq-channel-child[data-channel-child="${key}"]`)];
+    parent?.classList.toggle('expanded',expanded);
+    toggle?.setAttribute('aria-expanded',String(expanded));
+    children.forEach(row=>row.hidden=!expanded);
+  }
+
+  document.addEventListener('click',e=>{
+    const toggle=e.target.closest('[data-channel-toggle]');
+    if(!toggle) return;
+    const key=toggle.dataset.channelToggle;
+    const expanded=toggle.getAttribute('aria-expanded')==='true';
+    setChannelExpanded(key,!expanded);
+  });
+
+  channelFilter?.addEventListener('change',()=>{
+    const value=channelFilter.value;
+    document.querySelectorAll('.acq-channel-parent').forEach(row=>{
+      const show=value==='all' || row.dataset.channel===value;
+      row.hidden=!show;
+      if(!show) setChannelExpanded(row.dataset.channel,false);
+    });
+    document.querySelectorAll('.acq-channel-child').forEach(row=>{
+      if(value!=='all' && row.dataset.channelChild!==value) row.hidden=true;
+    });
+    if(value!=='all') setChannelExpanded(value,true);
+
+    if(typeof specState!=='undefined' && specState.open){
+      setTimeout(()=>specRenderPage('acquisition-conversion'),30);
+    }
+  });
+
+  const period=document.getElementById('behaviorPeriod');
+  const apply=document.getElementById('behaviorApply');
+  const categoryFilter=document.getElementById('behaviorCategoryFilter');
+  const pageSearch=document.getElementById('behaviorPageSearch');
+  const resultCount=document.getElementById('behaviorResultCount');
+  const paginationInfo=document.getElementById('behaviorPaginationInfo');
+  const pageNumbers=document.getElementById('behaviorPageNumbers');
+  const prevBtn=document.querySelector('[data-behavior-page-prev]');
+  const nextBtn=document.querySelector('[data-behavior-page-next]');
+
+  const pageSize=10;
+  let behaviorPage=1;
+
+  function filteredBehaviorRows(){
+    const category=categoryFilter?.value || 'all';
+    const keyword=(pageSearch?.value || '').trim().toLowerCase();
+
+    return [...document.querySelectorAll('[data-behavior-row]')].filter(row=>{
+      const categoryOk=category==='all' || row.dataset.category===category;
+      const name=(row.dataset.pageName || '').toLowerCase();
+      const searchOk=!keyword || name.includes(keyword);
+      return categoryOk && searchOk;
+    });
+  }
+
+  function renderBehaviorPagination(){
+    const allRows=[...document.querySelectorAll('[data-behavior-row]')];
+    const rows=filteredBehaviorRows();
+    const total=rows.length;
+    const totalPages=Math.max(1,Math.ceil(total/pageSize));
+    behaviorPage=Math.min(behaviorPage,totalPages);
+
+    allRows.forEach(row=>row.hidden=true);
+    const start=(behaviorPage-1)*pageSize;
+    rows.slice(start,start+pageSize).forEach(row=>row.hidden=false);
+
+    if(resultCount) resultCount.textContent=`총 ${total}개`;
+    if(paginationInfo){
+      paginationInfo.textContent=total
+        ? `${start+1}-${Math.min(start+pageSize,total)} / ${total}개`
+        : '0개';
+    }
+
+    if(pageNumbers){
+      pageNumbers.innerHTML='';
+      for(let i=1;i<=totalPages;i++){
+        const b=document.createElement('button');
+        b.type='button';
+        b.textContent=String(i);
+        b.classList.toggle('active',i===behaviorPage);
+        b.addEventListener('click',()=>{
+          behaviorPage=i;
+          renderBehaviorPagination();
+        });
+        pageNumbers.appendChild(b);
+      }
+    }
+
+    if(prevBtn) prevBtn.disabled=behaviorPage<=1;
+    if(nextBtn) nextBtn.disabled=behaviorPage>=totalPages;
+
+    if(typeof specState!=='undefined' && specState.open){
+      setTimeout(()=>specRenderPage('page-behavior-analysis'),20);
+    }
+  }
+
+  function applyBehavior(){
+    const periodLabel=document.getElementById('behaviorPeriodLabel');
+    if(periodLabel) periodLabel.textContent=period?.selectedOptions?.[0]?.textContent || '2026년 9월';
+
+    behaviorPage=1;
+    renderBehaviorPagination();
+  }
+
+  categoryFilter?.addEventListener('change',()=>{
+    behaviorPage=1;
+    renderBehaviorPagination();
+  });
+
+  pageSearch?.addEventListener('input',()=>{
+    behaviorPage=1;
+    renderBehaviorPagination();
+  });
+
+  prevBtn?.addEventListener('click',()=>{
+    if(behaviorPage>1){
+      behaviorPage-=1;
+      renderBehaviorPagination();
+    }
+  });
+
+  nextBtn?.addEventListener('click',()=>{
+    const totalPages=Math.max(1,Math.ceil(filteredBehaviorRows().length/pageSize));
+    if(behaviorPage<totalPages){
+      behaviorPage+=1;
+      renderBehaviorPagination();
+    }
+  });
+
+  apply?.addEventListener('click',applyBehavior);
+  renderBehaviorPagination();
 })();
 
 </script>
